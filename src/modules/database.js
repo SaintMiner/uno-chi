@@ -30,17 +30,22 @@ class DatabaseModule extends Module {
 
     loadModels() {
         this.client.models = [];
+        this.client.storage = [];
         var normalizedPath = require("path").join(__dirname, '../models');
         require("fs").readdirSync(normalizedPath).forEach(async (file) => {      
             let modelData =  require(`../models/${file}`);
             let Model = this.connection.loadSchema(modelData.name, modelData);
+            await Model.syncDB(function(err, result) { //migrate/update tables in database
+                if (err) throw err;
+            });
             Model.execute_query(`SELECT * FROM ${modelData.table_name}`, [], (err, res) => {
                 if(err) throw err;
-                this.client[modelData.table_name] = res.rows;
+                this.client.storage[modelData.table_name] = res.rows;
             });
             this.client.models.push(Model);
         });
     }
+
 }
 
 module.exports = DatabaseModule;

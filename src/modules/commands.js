@@ -35,7 +35,7 @@ class CommandsModule extends Module {
         let commandDir =  '../commands';
         let normalizedPath = require("path").join(__dirname, commandDir);
         require("fs").readdirSync(normalizedPath).forEach((file) => {
-            let command = new (require(`${commandDir}/${file}`));
+            let command = new (this.client, require(`${commandDir}/${file}`));
             this.#commands.push(command);            
         });
     }

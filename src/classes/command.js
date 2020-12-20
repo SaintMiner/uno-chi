@@ -1,5 +1,6 @@
 class Command {
-    constructor(settings) {
+    constructor(client, settings) {
+        this.client = client;
         this.settings = settings;
     }
 
