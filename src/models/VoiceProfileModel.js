@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'Profiles',
-    table_name: 'profiles',
+    name: 'VoiceProfiles',
+    table_name: 'voice_profiles',
     fields:{
         user_id     : "text",
         guild_id    : "text",
