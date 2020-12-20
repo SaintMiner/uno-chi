@@ -2,7 +2,7 @@ class Module {
 
     #name;
     $client;
-    
+
     constructor(client, settings) {
         this.name = settings.name;
         this.client = client;
@@ -10,7 +10,7 @@ class Module {
     }
 
     initModule() {
-        console.log(`Initialising ${this.name} module...`);
+        console.log(`Initialising [${this.name}] module...`);
     }
 }
 
