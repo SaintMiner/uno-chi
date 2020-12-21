@@ -1,4 +1,3 @@
-const { client } = require("./modules/commands");
 
 module.exports = function(client) {
     console.log('Initialising modules...');
