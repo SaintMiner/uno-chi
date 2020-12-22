@@ -1,4 +1,3 @@
-
 module.exports = function(client) {
     console.log('Initialising modules...');
     client.modules = [];

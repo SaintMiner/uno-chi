@@ -28,54 +28,33 @@ class DatabaseModule extends Module {
         });
     }
 
-     loadModels() {
+    loadModels() {
         this.client.models = [];
         this.client.storage = [];
         var normalizedPath = require("path").join(__dirname, '../models');
         console.log('Loading database models...');
-        let files =require("fs").readdirSync(normalizedPath);
+        let files = require("fs").readdirSync(normalizedPath);
+        
         for (const file of files) {
-            let modelData = require(`../models/${file}`);            
+            let modelData = require(`../models/${file}`);       
             let Model =  this.connection.loadSchema( modelData.name,  modelData);
             this.client.models.push(Model);
             //migrate tables in database
+            
+            
+            
             Model.syncDB((err, result) => { 
+
                 if (err) throw err;
-                // Model.execute_query(`SELECT * FROM ${modelData.table_name}`, [], (err, res) => {
-                //     if(err) throw err;
-                //     //fetch data from database to client local storage
-                //     this.client.storage[modelData.table_name] = Object.assign([], res.rows);
-                // });
-            });            
-            Model.stream({}, {raw: true}, (reader) => {
-                let row, data = [];
-                while (row = reader.readRow()) {
-                    data.push(row);
-                }                
-            }, function(err){
-                console.log(`All [${modelData.name}] model data fetched!`);
-            })
+                Model.execute_query(`SELECT * FROM ${modelData.table_name}`, [], (err, res) => {
+                    if(err) throw err;
+                    //fetch data from database to client local storage
+                    this.client.storage[modelData.table_name] = Object.assign([], res.rows);
+                });                
+            });
+
+            
         }
-        // await test.forEach(async (file) =>  {      
-        //     let modelData = await require(`../models/${file}`);
-        //     let Model = await this.connection.loadSchema(modelData.name, modelData);
-        //     //migrate tables in database
-        //     Model.syncDB((err, result) => { 
-        //         if (err) throw err;
-        //         Model.execute_query(`SELECT * FROM ${modelData.table_name}`, [], (err, res) => {
-        //             if(err) throw err;
-        //             //fetch data from database to client local storage
-        //             this.client.storage[modelData.table_name] = Object.assign([], res.rows);
-        //         });
-        //     });            
-        //     this.client.models.push(Model);
-        // });
-
-    }
-
-    saveData(model, data) {
-        console.log(data);
-        console.log(model);
     }
 
 }
