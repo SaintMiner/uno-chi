@@ -23,7 +23,7 @@ class DatabaseModule extends Module {
                     class: 'SimpleStrategy',
                     replication_factor: 3
                 },
-                migration: 'safe',
+                migration: 'alter',
             }
         });
     }

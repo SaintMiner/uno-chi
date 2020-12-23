@@ -3,8 +3,11 @@ module.exports = {
     table_name: 'voice_roles',
     fields:{
         guild_id    : "text",
-        role_id     : "text",
-        level       : "int"
+        role_id     : {
+            type: "list",
+            typeDef: "<varchar>"
+        },
+        level       : "int"  
     },
-    key:["guild_id", "role_id"]
+    key:["guild_id", "level"]
 };

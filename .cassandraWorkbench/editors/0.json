@@ -1,0 +1,1 @@
+{"id":"rWn8s4ga0Q1U3fFd","body":"  SELECT guild_id, level, role_id\n  FROM test.voice_roles\n  LIMIT 500;","filename":"script_2.cql","clusterName":"Cluster AllowAllAuthenticator","keyspace":"test","source":"action","modified":true}
