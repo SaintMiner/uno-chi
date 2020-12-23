@@ -18,6 +18,7 @@ function initEnviroment() {
     client.database.keyspace = process.env.KEYSPACE;
     client.database.contactPoints = process.env.CONTACTPOINTS.split(' ');
     client.database.localDataCenter = process.env.LOCALDATACENTER;
+    client.forceWeekday = false;
 }
 
 function initModules() {

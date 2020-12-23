@@ -6,7 +6,7 @@ class RollCommand extends Command {
         super(client, {
             slug: 'roll',
             permissions: [],
-            systemAdmin: true,
+            systemAdmin: false,
         });
     }
 
@@ -32,7 +32,7 @@ class RollCommand extends Command {
                                 for (let i = 1; i <= multiplier; i++) {
                                     let dice = +r.replace('d', '');
                                     if (dice > 10000) {
-                                        throw this.dropError(message, 'Dice can\' be more than 10000');                                
+                                        throw this.dropError(message, 'Dice can\'t be more than 10000');                                
                                     }
                                     temp = Math.floor(Math.random() * dice) + 1;
                                     rollsResult.push(temp);
@@ -72,7 +72,7 @@ class RollCommand extends Command {
             roll = Math.floor(Math.random() * 6) + 1;
             rollMessage += `${roll} [${roll}]`;
         }
-        message.channel.send(rollMessage);
+        message.channel.send(`\`\`\`${rollMessage}\`\`\``);
     }
     
 }

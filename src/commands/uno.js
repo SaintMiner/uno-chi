@@ -1,18 +1,18 @@
 const Command = require('../classes/command.js');
 
-class TemplateCommand extends Command {
+class UnoCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'useless', //how command can be executed
+            slug: 'uno', //how command can be executed
             permissions: [], //discord server permissions
             systemAdmin: false, //only system administrators can launch this command
         });
     }
 
     executeCustom(message, args) {
-        message.channel.send('The useless command');
+        message.channel.send('Поможет, если сможет...');
     }
 }
 
-module.exports = TemplateCommand;
+module.exports = UnoCommand;

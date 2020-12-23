@@ -1,6 +1,6 @@
 const Command = require('../classes/command.js');
 
-class RollCommand extends Command {
+class RestartCommand extends Command {
 
     constructor(client) {
         super(client, {
@@ -23,4 +23,4 @@ class RollCommand extends Command {
 
 }
 
-module.exports = RollCommand;
+module.exports = RestartCommand;

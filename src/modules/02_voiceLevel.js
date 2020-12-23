@@ -32,6 +32,7 @@ class VoiceLevelModule extends Module {
                                             .find(profile => profile.user_id == member.id && profile.guild_id == guild.id);
                                         
                                         if (profile) {
+                                            
                                             profile.experience += v.experience;
                                             if (profile.experience >= this.nextLevelExperience(profile.level)) {
                                                 profile.experience -= this.nextLevelExperience(profile.level);
@@ -61,7 +62,7 @@ class VoiceLevelModule extends Module {
                                                 voicepoint: 10,
                                             };
                                             this.client.storage['voice_profiles'].push(profile);
-                                            
+
                                             //requires refactoring
                                             let levelUpRoles = guildLevelRoles.find(role => role.level == profile.level);
                                             levelUpRoles.add_roles.forEach(role => {
@@ -91,6 +92,16 @@ class VoiceLevelModule extends Module {
         return (10+level)*10*level*level;
     }
 
+    getChannelExperience(voiceChannel) {
+        let experience = voiceChannel.experience;
+        let now = new Date();
+        let isWeekday = (now.getDay() == 0 || now.getDay() == 6)? true : false;
+        if (voiceChannel.support_weekday_double && (isWeekday || this.client.forceWeekday)) {
+            experience *= 2;
+        }
+        return experience;
+    }
+
     saveProfile(data) {
         let profile = new this.voiceProfileModel(data);
         profile.save(function(err){
@@ -98,7 +109,7 @@ class VoiceLevelModule extends Module {
         });
     }
 
-    saveProfiles() {        
+    saveProfiles() {
         if (this.client.storage['voice_profiles']) {
             if (this.client.storage['voice_profiles'].length) {
                 console.log(`Saving voice profiles...`);

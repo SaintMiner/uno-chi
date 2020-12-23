@@ -17,9 +17,9 @@ class CommandsModule extends Module {
         this.client.on('message', message => {
             if (message.author.id != this.client.user.id && !message.author.bot) {
                 if (message.content.startsWith(this.client.prefix)) {
-                    let args = message.content.slice(this.client.prefix.length).trim().split(/ +/g);
+                    let args = message.content.toLowerCase().slice(this.client.prefix.length).trim().split(/ +/g);
                     let commandSlug = args[0];
-                    let command = this.commands.find(c => c.settings.slug == commandSlug);
+                    let command = this.commands.find(c => c.settings.slug.toLowerCase() == commandSlug);
                     if (command) {
                         command.execute(message, args.slice(1), this.client.modules);
                     } else {
