@@ -15,7 +15,6 @@ class Command {
                 if (!message.member.hasPermission('ADMINISTRATOR')) {
                     this.settings.permissions.forEach(permission => {
                         if (!message.member.hasPermission(permission)) {
-                            console.log(message.member.hasPermission(permission));
                             throw this.dropError(message, "You don't have permissions to call this command!");
                         }
                     });
