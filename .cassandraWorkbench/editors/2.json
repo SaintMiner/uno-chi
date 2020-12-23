@@ -1,0 +1,1 @@
+{"id":"Qf03d79slPYOr2uF","body":"  SELECT room_id, guild_id, experience, owner_id\n  FROM test.voice_rooms\n  LIMIT 500;","filename":"script_1.cql","clusterName":"Cluster AllowAllAuthenticator","keyspace":"test","source":"action","modified":true}

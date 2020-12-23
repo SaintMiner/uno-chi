@@ -4,11 +4,13 @@ class RollCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'roll'
+            slug: 'roll',
+            permissions: [],
+            systemAdmin: true,
         });
     }
 
-    execute(message, args) {
+    executeCustom(message, args) {
         let roll = 0;        
         let rollMessage = '';
         if (args.length) {

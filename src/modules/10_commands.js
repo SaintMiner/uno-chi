@@ -2,7 +2,7 @@ const Module = require('../classes/module.js');
 
 class CommandsModule extends Module {
     
-    #commands = [];
+    commands = [];
     
 
     constructor(client) {
@@ -19,7 +19,7 @@ class CommandsModule extends Module {
                 if (message.content.startsWith(this.client.prefix)) {
                     let args = message.content.slice(this.client.prefix.length).trim().split(/ +/g);
                     let commandSlug = args[0];
-                    let command = this.#commands.find(c => c.settings.slug == commandSlug);
+                    let command = this.commands.find(c => c.settings.slug == commandSlug);
                     if (command) {
                         command.execute(message, args.slice(1), this.client.modules);
                     } else {
@@ -35,8 +35,9 @@ class CommandsModule extends Module {
         let commandDir =  '../commands';
         let normalizedPath = require("path").join(__dirname, commandDir);
         require("fs").readdirSync(normalizedPath).forEach((file) => {
-            let command = new (this.client, require(`${commandDir}/${file}`));
-            this.#commands.push(command);            
+            console.log(this.client.user.id);
+            let command = new (require(`${commandDir}/${file}`))(this.client);
+            this.commands.push(command);            
         });
     }
 }

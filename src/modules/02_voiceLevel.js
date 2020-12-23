@@ -22,21 +22,35 @@ class VoiceLevelModule extends Module {
                     this.client.storage['guilds'].forEach(guild => {
                         this.client.guilds.fetch(guild.guild_id)
                         .then(guild => {
+                            const guildLevelRoles = this.client.storage['voice_roles'].filter(role => role.guild_id == guild.id);
                             const voiceChannels = this.client.storage['voice_rooms'].filter(v => v.guild_id == guild.id);
+
                             voiceChannels.forEach(v => {
                                 this.client.channels.fetch(v.room_id).then(voice => {
                                     voice.members.forEach(member => {
                                         let profile = this.client.storage['voice_profiles']
-                                        .find(profile => profile.user_id == member.id && profile.guild_id == guild.id);
-                                        let guildLevelRoles = this.client.storage['voice_roles']
-                                        .filter(role => role.guild_id == guild.id);
-                                            if (profile) {
+                                            .find(profile => profile.user_id == member.id && profile.guild_id == guild.id);
+                                        
+                                        if (profile) {
                                             profile.experience += v.experience;
                                             if (profile.experience >= this.nextLevelExperience(profile.level)) {
                                                 profile.experience -= this.nextLevelExperience(profile.level);
                                                 profile.level++;
-                                                let levelUpRoles = guildLevelRoles.filter(role => role.level == profile.level);
                                                 profile.voicepoint += 10*profile.level;
+
+                                                //requires refactoring
+                                                let levelUpRoles = guildLevelRoles.find(role => role.level == profile.level);
+                                                levelUpRoles.add_roles.forEach(role => {
+                                                    guild.roles.fetch(role).then(r => {
+                                                        member.roles.add(r);
+                                                    });
+                                                });
+                                                levelUpRoles.remove_roles.forEach(role => {
+                                                    guild.roles.fetch(role).then(r => {
+                                                        member.roles.remove(r);
+                                                    });
+                                                });
+                                                ///////////////////////
                                             }
                                         } else {
                                             profile = {
@@ -47,8 +61,21 @@ class VoiceLevelModule extends Module {
                                                 voicepoint: 10,
                                             };
                                             this.client.storage['voice_profiles'].push(profile);
+                                            
+                                            //requires refactoring
+                                            let levelUpRoles = guildLevelRoles.find(role => role.level == profile.level);
+                                            levelUpRoles.add_roles.forEach(role => {
+                                                guild.roles.fetch(role).then(r => {
+                                                    member.roles.add(r);
+                                                });
+                                            });
+                                            levelUpRoles.remove_roles.forEach(role => {
+                                                guild.roles.fetch(role).then(r => {
+                                                    member.roles.remove(r);
+                                                });
+                                            });
+                                            /////////////////////////
                                         }
-                                        this.saveProfile(profile);
                                     });
                                 }).catch(e => console.error);
                             });

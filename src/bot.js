@@ -12,6 +12,7 @@ client.on('ready', () => {
 
 function initEnviroment() {
     client.timeOptions = {hour: 'numeric', minute: 'numeric', second: 'numeric'};
+    client.system_administrators = process.env.SYSTEM_ADMINISTRATORS.split(' ');
     client.prefix = process.env.PREFIX;
     client.database = {};
     client.database.keyspace = process.env.KEYSPACE;
