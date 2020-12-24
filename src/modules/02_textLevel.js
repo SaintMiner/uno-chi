@@ -16,6 +16,7 @@ class TextLevelModule extends Module {
     startTextLevelSystem() {
         this.client.on('message', message => {
             if (message.author.id != this.client.user.id && !message.author.bot) {
+                const currentGuild = this.client.storage['guilds'].find(g => g.guild_id == message.guild.id);
                 if (!message.content.startsWith(this.client.prefix)) {
                     let profile = this.client.storage['text_profiles'].find(profile => profile.user_id == message.author.id && profile.guild_id == message.guild.id);
                     if (profile) {
@@ -24,6 +25,11 @@ class TextLevelModule extends Module {
                         if (profile.experience >= this.nextLevelExperience(profile.level)) {
                             profile.experience -= this.nextLevelExperience(profile.level);
                             profile.level++;
+                            if (currentGuild) {
+                                this.client.channels.fetch(currentGuild.alert_channel_id).then(c => {
+                                    c.send(`${message.member} - Достиг \`${profile.level}\` тестового уровня...`);
+                                }).catch(e => console.error);
+                            }
                         }
                     } else {
                         profile = {
@@ -33,6 +39,13 @@ class TextLevelModule extends Module {
                             experience: 1,
                             level: 1,
                         };
+                        if (currentGuild) {
+                            if (currentGuild.alert_channel_id) {
+                                this.client.channels.fetch(currentGuild.alert_channel_id).then(c => {
+                                    c.send(`${message.member} - Теперь часть текстовой системы.`);
+                                }).catch(e => console.error);
+                            }
+                        }
                         this.client.storage['text_profiles'].push(profile);
                     }
                 }

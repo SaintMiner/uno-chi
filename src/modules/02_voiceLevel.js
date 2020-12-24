@@ -104,7 +104,7 @@ class VoiceLevelModule extends Module {
                                             if (currentGuild) {
                                                 if (currentGuild.alert_channel_id) {
                                                     this.client.channels.fetch(currentGuild.alert_channel_id).then(c => {
-                                                        c.send(`${member} - Теперь часть системы.`);
+                                                        c.send(`${member} - Теперь часть голосовой системы.`);
                                                     }).catch(e => console.error);
                                                 }
                                             }

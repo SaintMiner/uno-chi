@@ -1,6 +1,6 @@
 const Command = require('../classes/command.js');
 
-class TemplateCommand extends Command {
+class SetCommand extends Command {
 
     commandSetVoiceHelp = (message) => this.dropError(message, 'Command: `set voice <room_id*> <xp*[-100 - 100]> -<settings> <owner_id>`');
 
@@ -196,4 +196,4 @@ class TemplateCommand extends Command {
     }
 }
 
-module.exports = TemplateCommand;
+module.exports = SetCommand;
