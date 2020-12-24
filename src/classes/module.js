@@ -1,7 +1,6 @@
 class Module {
 
     #name;
-    $client;
 
     constructor(client, settings) {
         this.name = settings.name;

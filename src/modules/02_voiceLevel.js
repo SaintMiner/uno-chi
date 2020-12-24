@@ -24,13 +24,12 @@ class VoiceLevelModule extends Module {
                         .then(guild => {
                             const guildLevelRoles = this.client.storage['voice_roles'].filter(role => role.guild_id == guild.id);
                             const voiceChannels = this.client.storage['voice_rooms'].filter(v => v.guild_id == guild.id);
-
+                            const currentGuild = this.client.storage['guilds'].find(g => g.guild_id == guild.id);
                             voiceChannels.forEach(v => {
                                 this.client.channels.fetch(v.room_id).then(voice => {
-                                    voice.members.forEach(member => {
+                                    voice.members.forEach(async member => {
                                         let profile = this.client.storage['voice_profiles']
                                             .find(profile => profile.user_id == member.id && profile.guild_id == guild.id);
-                                        
                                         if (profile) {
                                             
                                             profile.experience += v.experience;
@@ -38,20 +37,35 @@ class VoiceLevelModule extends Module {
                                                 profile.experience -= this.nextLevelExperience(profile.level);
                                                 profile.level++;
                                                 profile.voicepoint += 10*profile.level;
-
                                                 //requires refactoring
                                                 let levelUpRoles = guildLevelRoles.find(role => role.level == profile.level);
-                                                levelUpRoles.add_roles.forEach(role => {
-                                                    guild.roles.fetch(role).then(r => {
-                                                        member.roles.add(r);
-                                                    });
-                                                });
-                                                levelUpRoles.remove_roles.forEach(role => {
-                                                    guild.roles.fetch(role).then(r => {
-                                                        member.roles.remove(r);
-                                                    });
-                                                });
+                                                if (levelUpRoles) {
+                                                    if (levelUpRoles.add_roles) {
+                                                        if (levelUpRoles.add_roles.length) {
+                                                            await levelUpRoles.add_roles.forEach(role => {
+                                                                guild.roles.fetch(role).then(r => {
+                                                                    member.roles.add(r);
+                                                                });
+                                                            });
+                                                        }
+                                                    }
+                                                    if (levelUpRoles.remove_roles) {
+                                                        if (levelUpRoles.remove_roles.length) {
+                                                            await levelUpRoles.remove_roles.forEach(role => {
+                                                                guild.roles.fetch(role).then(r => {
+                                                                    member.roles.remove(r);
+                                                                });
+                                                            });
+                                                        }
+                                                    }
+                                                }
                                                 ///////////////////////
+                                                if (currentGuild) {
+                                                    this.client.channels.fetch(currentGuild.alert_channel_id).then(c => {
+                                                        c.send(`${member} - Достиг \`${profile.level}\` голосового уровня...`);
+                                                    }).catch(e => console.error);
+                                                }
+                                                
                                             }
                                         } else {
                                             profile = {
@@ -65,19 +79,37 @@ class VoiceLevelModule extends Module {
 
                                             //requires refactoring
                                             let levelUpRoles = guildLevelRoles.find(role => role.level == profile.level);
-                                            levelUpRoles.add_roles.forEach(role => {
-                                                guild.roles.fetch(role).then(r => {
-                                                    member.roles.add(r);
-                                                });
-                                            });
-                                            levelUpRoles.remove_roles.forEach(role => {
-                                                guild.roles.fetch(role).then(r => {
-                                                    member.roles.remove(r);
-                                                });
-                                            });
+                                            if (levelUpRoles) {
+                                                if (levelUpRoles.add_roles) {
+                                                    if (levelUpRoles.add_roles.length) {
+                                                    levelUpRoles.add_roles.forEach(role => {
+                                                        guild.roles.fetch(role).then(r => {
+                                                            member.roles.add(r);
+                                                        });
+                                                    });
+                                                }
+
+                                                if (levelUpRoles.remove_roles) {
+                                                    if (levelUpRoles.remove_roles.length) {
+                                                        console.log(levelUpRoles.remove_roles);
+                                                        levelUpRoles.remove_roles.forEach(role => {
+                                                            guild.roles.fetch(role).then(r => {
+                                                                member.roles.remove(r);
+                                                            });
+                                                        });
+                                                    }
+                                                }
+                                            }
                                             /////////////////////////
+                                            if (currentGuild) {
+                                                if (currentGuild.alert_channel_id) {
+                                                    this.client.channels.fetch(currentGuild.alert_channel_id).then(c => {
+                                                        c.send(`${member} - Теперь часть системы.`);
+                                                    }).catch(e => console.error);
+                                                }
+                                            }
                                         }
-                                    });
+                                    }});
                                 }).catch(e => console.error);
                             });
                         })
