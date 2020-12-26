@@ -28,12 +28,21 @@ class InfoCommand extends Command {
 
         if (author.voice_profile) {
             let nextLevel = (10+author.voice_profile.level)*10*author.voice_profile.level*author.voice_profile.level;
+            let totalSeconds = author.voice_profile.time_spent
+            let days = Math.floor(totalSeconds / (3600 * 24));
+            totalSeconds %= 60 * 60 * 24;
+            let hours = (`0` + (Math.floor(totalSeconds / 3600))).slice(-2);
+            totalSeconds %= 3600;
+            let minutes = (`0` + (Math.floor(totalSeconds / 60))).slice(-2);
+            let seconds = (`0` + (totalSeconds % 60)).slice(-2);
+            let timeString =`${days} Дней ${hours}:${minutes}:${seconds}`;
             let stats 
             = `Уровень ${author.voice_profile.level} (${author.voice_profile.experience} XP)
-             Прогресс до след. уровня: ${Math.floor(author.voice_profile.experience/nextLevel*100)}%`;
+             Прогресс до след. уровня: ${Math.floor(author.voice_profile.experience/nextLevel*100)}%
+             Времени затрачено: ${timeString}`;
             info.addField('Голосовой', stats);
         }
-
+        
         if (author.text_profile) {
             let nextLevel = author.text_profile.level*20+(author.text_profile.level-1)*20;
             let stats 

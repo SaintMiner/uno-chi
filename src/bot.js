@@ -19,6 +19,7 @@ function initEnviroment() {
     client.database.contactPoints = process.env.CONTACTPOINTS.split(' ');
     client.database.localDataCenter = process.env.LOCALDATACENTER;
     client.forceWeekday = false;
+    client.voice_tick = process.env.VOICE_TICK;
 }
 
 function initModules() {

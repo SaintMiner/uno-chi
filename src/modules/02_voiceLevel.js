@@ -15,7 +15,7 @@ class VoiceLevelModule extends Module {
     }
 
     startVoiceLevelSystem() {
-        let interval = 9 * 1000;
+        let interval = this.client.voice_tick * 1000;
         setInterval(() => {
             if (this.client.storage['guilds']) {
                 if (this.client.storage['guilds'].length) {
@@ -33,10 +33,15 @@ class VoiceLevelModule extends Module {
                                         if (profile) {
                                             
                                             profile.experience += v.experience;
+                                            if (profile.time_spent) {
+                                                profile.time_spent += +this.client.voice_tick;
+                                            } else {
+                                                profile.time_spent = +this.client.voice_tick;
+                                            }
                                             if (profile.experience >= this.nextLevelExperience(profile.level)) {
                                                 profile.experience -= this.nextLevelExperience(profile.level);
                                                 profile.level++;
-                                                profile.voicepoint += 10*profile.level;
+                                                profile.voicepoint += 10*profile.level;                                            
                                                 //requires refactoring
                                                 let levelUpRoles = guildLevelRoles.find(role => role.level == profile.level);
                                                 if (levelUpRoles) {
@@ -74,6 +79,7 @@ class VoiceLevelModule extends Module {
                                                 experience: v.experience,
                                                 level: 1,
                                                 voicepoint: 10,
+                                                time_spent: +this.client.voice_tick,
                                             };
                                             this.client.storage['voice_profiles'].push(profile);
 

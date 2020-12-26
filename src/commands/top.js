@@ -30,14 +30,19 @@ class TopCommand extends Command {
                 .setDescription('Голосовая система')
                 .setTimestamp();
             top = top.slice(0, 5);
-            await this.client.guilds.fetch(message.guild.id).then(async guild => {
-                await top.forEach(async (profile, index) => {
-                    await guild.members.fetch(profile.user_id).then(m => {
-                        info.addField(`#${index+1} ${m.user.tag}`, `Уровень ${profile.level} (${profile.experience} XP)`);
-                    });
-                    if (index == top.length-1) message.channel.send(info); //REFACTORING
+            const getVoiceTop = async() => {
+                await this.client.guilds.fetch(message.guild.id).then(async guild => {
+                    let place = 1;
+                    for await (const profile of top) {
+                        await guild.members.fetch(profile.user_id).then(m => {
+                            info.addField(`#${place} ${m.user.tag}`, `Уровень ${profile.level} (${profile.experience} XP)`);
+                        });
+                        place++;
+                    }
+                    message.channel.send(info);
                 });
-            });
+            }
+            getVoiceTop()    ;
         }
 
         if (text_profiles.length) {
@@ -54,14 +59,19 @@ class TopCommand extends Command {
                 .setDescription('Текстовая система')
                 .setTimestamp();
             top = top.slice(0, 5);
-            await this.client.guilds.fetch(message.guild.id).then(async guild => {
-                await top.forEach(async (profile, index) => {
-                    await guild.members.fetch(profile.user_id).then(m => {
-                        info.addField(`#${index+1} ${m.user.tag}`, `Уровень ${profile.level} (${profile.experience} XP)`);
-                    });
-                    if (index == top.length-1) message.channel.send(info); //REFACTORING
+            const getTextTop = async() => {
+                await this.client.guilds.fetch(message.guild.id).then(async guild => {
+                    let place = 1;
+                    for await (const profile of top) {
+                        await guild.members.fetch(profile.user_id).then(m => {
+                            info.addField(`#${place} ${m.user.tag}`, `Уровень ${profile.level} (${profile.experience} XP)`);
+                        });
+                        place++;
+                    }
+                    message.channel.send(info);
                 });
-            });
+            }
+            getTextTop();
         }
     }
 }
