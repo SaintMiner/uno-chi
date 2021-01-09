@@ -15,6 +15,7 @@ class TextLevelModule extends Module {
 
     startTextLevelSystem() {
         this.client.on('message', message => {
+            if (!message.guild) return;
             if (message.author.id != this.client.user.id && !message.author.bot) {
                 const currentGuild = this.client.storage['guilds'].find(g => g.guild_id == message.guild.id);
                 if (!message.content.startsWith(this.client.prefix)) {

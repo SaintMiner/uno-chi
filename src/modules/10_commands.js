@@ -15,6 +15,7 @@ class CommandsModule extends Module {
 
     commandCather() {
         this.client.on('message', message => {
+            if (!message.guild) return;
             if (message.author.id != this.client.user.id && !message.author.bot) {
                 if (message.content.startsWith(this.client.prefix)) {
                     let args = message.content.toLowerCase().slice(this.client.prefix.length).trim().split(/ +/g);

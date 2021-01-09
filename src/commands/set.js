@@ -22,14 +22,21 @@ class SetCommand extends Command {
                 let voice_room = this.client.storage['voice_rooms']
                     .find(v => v.room_id == args[1] && v.guild_id == message.guild.id);
 
-                if (!voice_room) newRoom = true;
-                voice_room = {
-                    room_id: args[1],
-                    experience: +args[2],
-                    guild_id: message.guild.id,
-                    support_weekday_double: false,
-                    owner_id: args[4],
-                };
+                if (!voice_room) {
+                    newRoom = true;
+                    voice_room = {
+                        room_id: args[1],
+                        experience: +args[2],
+                        guild_id: message.guild.id,
+                        support_weekday_double: false,
+                        owner_id: args[4],
+                    };
+                } else {
+                    voice_room.room_id = args[1];
+                    voice_room.experience = +args[2];
+                    voice_room.owner_id = args[4];
+                }
+
                 this.setVoice(message, args[3], voice_room, newRoom);                
             break;
 
@@ -63,10 +70,15 @@ class SetCommand extends Command {
         }
 
         let guild = this.client.storage['guilds'].find(g => g.guild_id == message.guild.id);
-        guild = {
-            guild_id: message.guild.id,
-            alert_channel_id: alert,
-        };
+        if (!guild) {
+            guild = {
+                guild_id: message.guild.id,
+                alert_channel_id: alert,
+            };
+            this.client.storage['guilds'].push(guild);
+        } else {
+            guild.alert_channel_id = alert;
+        }
 
         guild = new this.guildModel(guild);
         guild.save(function(err){

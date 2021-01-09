@@ -11,6 +11,7 @@ class TemplateCommand extends Command {
     }
 
     executeCustom(message, args) {
+        return this.dropError(message, 'Всё... Выключено!');;
         let old_profiles = require('../../profiles.json');
         let voiceProfileModel = this.client.models.find(m => m._properties.name == 'VoiceProfiles');
         let new_profiles = old_profiles.map(profile => {
