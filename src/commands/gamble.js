@@ -30,7 +30,7 @@ class TemplateCommand extends Command {
     executeCustom(message, args) {
         switch(args[0]) {
             case 'roulette':
-                this.roulette(message, args);
+                this.roulette(message, args, message.author.id, message.guild.id);
             break;
             default: 
                 this.dropError(message, 'Available games: `roulette`')
@@ -38,9 +38,9 @@ class TemplateCommand extends Command {
         }
     }
 
-    async roulette(message, args) {
+    async roulette(message, args, user_id, guild_id) {
         let voice_profile = this.client.storage['voice_profiles']
-            .find(voice_profile => voice_profile.guild_id == message.guild.id && voice_profile.user_id == message.author.id);
+            .find(voice_profile => voice_profile.guild_id == guild_id && voice_profile.user_id == user_id);
         if (!voice_profile) return this.dropError(message, 'Ты кто?');
         if (!this.validateRouletteBet(message, args, voice_profile)) return;
         
@@ -59,8 +59,8 @@ class TemplateCommand extends Command {
         
 
         this.bets.push({
-            guild_id: message.guild.id,
-            user_id: message.author.id,
+            guild_id: guild_id,
+            user_id: user_id,
             place: args[1],
             bet: args[2]
         });
@@ -88,35 +88,22 @@ class TemplateCommand extends Command {
 
         winners = winners.concat(this.bets.filter(bet => bet.place == number));
         winners.forEach(bet => bet.place = "number");
-
         result.sectors.forEach(sector => {
-            // console.log(sector);
-            // console.log(this.multipliers[`${sector}`]);
             winners = winners.concat(this.bets.filter(bet => bet.place == sector));
         });
-        // console.log(result.color);
-        // console.log(this.multipliers[`${result.color}`]);
         winners = winners.concat(this.bets.filter(bet => bet.place == result.color));
+
         if (!isZero) {
             if (isEven) {
-                // console.log('even');;
-                // console.log(this.multipliers['even']);
                 winners = winners.concat(this.bets.filter(bet => bet.place == 'even'));
             } else {
-                // console.log('odd');
-                // console.log(this.multipliers['odd']);
                 winners = winners.concat(this.bets.filter(bet => bet.place == 'odd'));
             }
         }
         
         
-        
-        // console.log(this.bets);
         let guilds = [...new Set(this.bets.map(bet => bet.guild_id))];
-        // console.log('guilds');
-        // console.log(guilds);
-        // console.log('winners');
-        // console.log(winners);
+        
         let colorSquare;
         switch (result.color) {
             case 'red': colorSquare = '🟥'; break;

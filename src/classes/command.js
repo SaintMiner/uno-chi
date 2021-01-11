@@ -31,7 +31,9 @@ class Command {
     }
 
     dropError(message, errorText) {
-        message.channel.send(errorText);
+        if (message) {
+            message.channel.send(errorText);
+        }
     }
 }
 

@@ -13,20 +13,20 @@ class TemplateCommand extends Command {
 
     executeCustom(message, args) {
         let code = Math.random().toString(36).substring(2, 18).toUpperCase();
-
-        if (!this.validateAuth(message)) return;
+        let voice_profile = this.client.storage['voice_profiles']
+            .find(profile => profile.user_id == message.author.id && profile.guild_id == message.guild.id);
+        if (!this.validateAuth(message, voice_profile)) return;
+        message.channel.send(`${message.guild.name}: \`${code}\``);
         // message.author.send(`${message.guild.name}: \`${code}\``);
         this.rouletteWebsocketModule.players.push({
             code: code,
             user_id: message.author.id,
             guild_id: message.guild.id,
+            voice_profile: voice_profile
         });
-        console.log(this.rouletteWebsocketModule.players);
     }
 
-    validateAuth(message) {
-        let voice_profile = this.client.storage['voice_profiles']
-            .find(profile => profile.user_id == message.author.id && profile.guild_id == message.guild.id);
+    validateAuth(message, voice_profile) {
         
         if (!voice_profile) {
             this.dropError(message, 'Для начала стань частью системы...');

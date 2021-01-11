@@ -14,16 +14,52 @@ class RouletteWebsocket extends Module {
     }
 
     init() {
-        this.server = http.createServer(function(request, response) {
-            console.log((new Date()) + ' Received request for ' + request.url);
-            if (request.method == "POST") {
-                request.on('data', (data) => {
-                    console.log(data);
-                });
+        this.server = http.createServer((request, response) => {
+            const { headers, method, url } = request;
+            switch (url) {
+                case '/auth':
+                    console.log((new Date()) + ' Received request for ' + request.url);
+                    if (request.method == "POST") {
+                        let body = [];
+                        request.on('data', (chunk) => {
+                            body.push(chunk);
+                          }).on('end',async () => {
+                            body = JSON.parse(Buffer.concat(body).toString());
+                            // console.log(body.code);
+                            // console.log(headers.code);
+                            console.log(body.code);
+                            let player = this.players.find(player => player.code == body.code);
+                            if (!player) {
+                                response.writeHead(400);
+                                response.write('Invalid code');
+                                response.end();
+                            } else {
+                                response.writeHead(200);
+                                await this.client.users.fetch(player.user_id).then(p => {
+                                    let response_data = {
+                                        voicepoint: player.voice_profile.voicepoint,
+                                        tag: p.tag,
+                                        avatar: p.avatar,
+                                        user_id: p.id,
+                                    }
+                                    response.write(JSON.stringify(response_data));
+                                });
+                                response.end();
+                            }
+                        });
+                    } else {
+                        response.writeHead(400);
+                        response.write('This is POST method');
+                        response.end();
+                    }
+                    
+                break;
+                default:
+                    response.writeHead(404);
+                    response.end();
             }
-            response.writeHead(404);
-            response.end();
         });
+
         this.server.listen(this.client.server_port, () => {
             console.log((new Date()) + ` Server is listening on port ${this.client.server_port}`);
         });
