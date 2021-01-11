@@ -42,7 +42,7 @@ class TopCommand extends Command {
                     message.channel.send(info);
                 });
             }
-            getVoiceTop()    ;
+            getVoiceTop();
         }
 
         if (text_profiles.length) {

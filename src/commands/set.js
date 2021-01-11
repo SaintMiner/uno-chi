@@ -47,7 +47,50 @@ class SetCommand extends Command {
             case 'alert':
                 this.setAlert(message, args[1]);
             break;
+
+            case 'roulette':
+                this.setRoulette(message, args[1]);
+            break;
         }
+    }
+
+    async setRoulette(message, roullete) {
+        if (roullete) {            
+            await this.client.channels.fetch(roullete).then(a => {
+                if (a) {
+                    if (a.type != 'text') {
+                        this.dropError(message, 'The roullete channel must be text channel!');
+                        roullete = null;
+                        return false;
+                    }
+                } else {
+                    roullete = null;
+                }
+            }).catch(e => {
+                this.dropError(message, 'This channel does not exist!');
+                roullete = null;
+                return false;
+            });
+        } else {
+            roullete = null;
+        }
+
+        let guild = this.client.storage['guilds'].find(g => g.guild_id == message.guild.id);
+        if (!guild) {
+            guild = {
+                guild_id: message.guild.id,
+                roullete_channel_id: roullete,
+            };
+            this.client.storage['guilds'].push(guild);
+        } else {
+            guild.roullete_channel_id = roullete;
+        }
+
+        guild = new this.guildModel(guild);
+        guild.save(function(err){
+            if(err) console.log(err);
+        });
+        message.channel.send('Saved!');
     }
 
     async setAlert(message, alert) {

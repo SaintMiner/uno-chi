@@ -16,6 +16,7 @@
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "express-cassandra": "^2.5.0",
+    "random": "^2.2.0",
     "require.async": "^0.1.1"
   }
 }
