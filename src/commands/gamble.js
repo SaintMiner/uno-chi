@@ -177,11 +177,12 @@ class TemplateCommand extends Command {
             console.log(place);
             this.dropError(message, 'Такое место недоступно на столе!');
             this.dropError(message, this.commandHelp);
-            return;            
+            return;
         }
 
         if (bet < 1) {
             this.dropError(message, 'Ставка не меньше 1!');
+            return;
         }
         
         if (voice_profile.voicepoint == 0) {

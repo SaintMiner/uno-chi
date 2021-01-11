@@ -20,6 +20,8 @@ function initEnviroment() {
     client.database.localDataCenter = process.env.LOCALDATACENTER;
     client.forceWeekday = false;
     client.voice_tick = process.env.VOICE_TICK;
+    client.unrecognized_command = process.env.UNRECOGNIZED_COMMAND.toLowerCase() == 'true';
+    client.server_port = process.env.SERVER_PORT;
 }
 
 function initModules() {

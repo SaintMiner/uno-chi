@@ -24,7 +24,9 @@ class CommandsModule extends Module {
                     if (command) {
                         command.execute(message, args.slice(1), this.client.modules);
                     } else {
-                        message.channel.send('Unrecognized command');
+                        if (this.client.unrecognized_command) {
+                            message.channel.send('Unrecognized command');
+                        }
                     }
                 }
             }
