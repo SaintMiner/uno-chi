@@ -140,7 +140,7 @@ class RouletteWebsocket extends Module {
                 connectedPlayers.push({
                     voicepoint: connection.player.voice_profile.voicepoint,
                     username: u.username,   
-                    tag: u.tag,
+                    tag: u.discriminator,
                     avatar: u.avatar,
                     user_id: connection.player.user_id,
                 });
