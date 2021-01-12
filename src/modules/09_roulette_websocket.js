@@ -155,7 +155,9 @@ class RouletteWebsocket extends Module {
     sendStartRoulette (number) {
         this.tableBets = [];
         this.sendMessageToAll({spin: number});
-        setTimeout(this.sendConnectedPlayers(), 2000);        
+        setTimeout(() => {
+            this.sendConnectedPlayers()
+        }, 2000);        
     }
 }
 
