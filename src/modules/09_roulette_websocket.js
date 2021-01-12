@@ -11,6 +11,7 @@ class RouletteWebsocket extends Module {
         this.init();
         this.connections = [];
         this.players = [];
+        this.tableBets = [];
     }
 
     init() {
@@ -111,7 +112,8 @@ class RouletteWebsocket extends Module {
                                 .find(command => command.settings.slug == 'gamble');
                             // console.log(gambleCommand);
                             let res = gambleCommand.roulette(null, [null, data.place, data.bet], player.user_id, player.guild_id);
-                            this.sendMessageToAll({bets: res});
+                            this.tableBets = res;
+                            this.sendMessageToAll({bets: this.tableBets});
                         break;
                     }
                 });
@@ -147,9 +149,11 @@ class RouletteWebsocket extends Module {
             });
         }
         this.sendMessageToAll({players: connectedPlayers});
+        this.sendMessageToAll({bets: this.tableBets});
     }
 
     sendStartRoulette (number) {
+        this.tableBets = [];
         this.sendMessageToAll({spin: number});
         setTimeout(this.sendConnectedPlayers(), 2000);        
     }
