@@ -16,8 +16,8 @@ class TemplateCommand extends Command {
         let voice_profile = this.client.storage['voice_profiles']
             .find(profile => profile.user_id == message.author.id && profile.guild_id == message.guild.id);
         if (!this.validateAuth(message, voice_profile)) return;
-        message.channel.send(`${message.guild.name}: \`${code}\``);
-        // message.author.send(`${message.guild.name}: \`${code}\``);
+        // message.channel.send(`${message.guild.name}: \`${code}\``);
+        message.author.send(`${message.guild.name}: \`${code}\``);
         this.rouletteWebsocketModule.players.push({
             code: code,
             user_id: message.author.id,
