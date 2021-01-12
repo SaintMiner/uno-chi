@@ -22,7 +22,7 @@ class RouletteWebsocket extends Module {
             response.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
             switch (url) {
                 case '/auth':
-                    console.log((new Date()) + ' Received request for ' + request.url);
+                    // console.log((new Date()) + ' Received request for ' + request.url);
                     if (request.method == "POST") {
                         let body = [];
                         request.on('data', (chunk) => {
@@ -68,7 +68,7 @@ class RouletteWebsocket extends Module {
         });
 
         this.server.listen(this.client.server_port, () => {
-            console.log((new Date()) + ` Server is listening on port ${this.client.server_port}`);
+            // console.log((new Date()) + ` Server is listening on port ${this.client.server_port}`);
         });
         
         this.wsServer = new WebSocketServer({
@@ -136,7 +136,7 @@ class RouletteWebsocket extends Module {
         let connectedPlayers = [];
         for await (const connection of this.connections) {
             await this.client.users.fetch(connection.player.user_id).then(u => {
-                console.log(u);
+                // console.log(u);
                 connectedPlayers.push({
                     voicepoint: connection.player.voice_profile.voicepoint,
                     username: u.username,   

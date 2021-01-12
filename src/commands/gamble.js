@@ -152,42 +152,34 @@ class GambleCommand extends Command {
     validateRouletteBet(message, args, voice_profile) {
         let bet = +args[2];
         let place = args[1];
-        console.log(bet);
-        console.log(place);
         if (!place || !bet) {
-            console.log('place, bet');
             this.dropError(message, 'Укажи место ставки и ставку!');
             this.dropError(message, this.commandHelp);
             return;
         }
 
         if (!Number.isInteger(bet)) {
-            console.log('integer');
             this.dropError(message, 'Ставка только целое число!');
             return;
         }
 
         if ( (Number.isNaN(+place) && !this.places.includes(place)) || +place < 0 || +place > 36) {
-            console.log('place');
             this.dropError(message, 'Такое место недоступно на столе!');
             this.dropError(message, this.commandHelp);
             return;
         }
 
         if (bet < 1) {
-            console.log('1');
             this.dropError(message, 'Ставка не меньше 1!');
             return;
         }
         
         if (voice_profile.voicepoint == 0) {
-            console.log('vp0');
             this.dropError(message, 'У тебя ничего не осталось o/');
             return;
         }
 
         if (voice_profile.voicepoint < bet) {
-            console.log('vp');
             this.dropError(message, 'Не хватает, ставь меньше!');
             return;
         }
