@@ -4,7 +4,7 @@ const { MessageEmbed } = require('discord.js');
 const random = require('random');
 const seedrandom = require('seedrandom');
 
-class TemplateCommand extends Command {
+class GambleCommand extends Command {
 
     constructor(client) {
         super(client, {
@@ -38,11 +38,11 @@ class TemplateCommand extends Command {
         }
     }
 
-    async roulette(message, args, user_id, guild_id) {
+    roulette(message, args, user_id, guild_id) {
         let voice_profile = this.client.storage['voice_profiles']
             .find(voice_profile => voice_profile.guild_id == guild_id && voice_profile.user_id == user_id);
         if (!voice_profile) return this.dropError(message, 'Ты кто?');
-        if (!this.validateRouletteBet(message, args, voice_profile)) return;
+        if (!this.validateRouletteBet(message, args, voice_profile)) return 'Validation error';
         
         if (!this.rouletteLaunched) {
             this.dropError(message, `Рулетка будет запущена через ${this.rouletteSecondsBeforeLauch} секунд`);
@@ -64,11 +64,15 @@ class TemplateCommand extends Command {
             place: args[1],
             bet: args[2]
         });
+        let table = this.bets.map(bet => bet.place);
+        return [...new Set(table)];
     };
 
     startRoulette(message, args) {
         random.use(seedrandom(`nleebsu-${new Date().getTime()}`));
         let number = random.int(0, 36);
+        this.client.modules
+            .find(m => m.name == 'RouletteWebsocket').sendStartRoulette(number);
         let isZero = false;
         let isDoubleZero = false;
         let isEven = false;
@@ -148,36 +152,42 @@ class TemplateCommand extends Command {
     validateRouletteBet(message, args, voice_profile) {
         let bet = +args[2];
         let place = args[1];
-
+        console.log(bet);
+        console.log(place);
         if (!place || !bet) {
+            console.log('place, bet');
             this.dropError(message, 'Укажи место ставки и ставку!');
             this.dropError(message, this.commandHelp);
             return;
         }
 
         if (!Number.isInteger(bet)) {
+            console.log('integer');
             this.dropError(message, 'Ставка только целое число!');
             return;
         }
 
         if ( (Number.isNaN(+place) && !this.places.includes(place)) || +place < 0 || +place > 36) {
-            console.log(place);
+            console.log('place');
             this.dropError(message, 'Такое место недоступно на столе!');
             this.dropError(message, this.commandHelp);
             return;
         }
 
         if (bet < 1) {
+            console.log('1');
             this.dropError(message, 'Ставка не меньше 1!');
             return;
         }
         
         if (voice_profile.voicepoint == 0) {
+            console.log('vp0');
             this.dropError(message, 'У тебя ничего не осталось o/');
             return;
         }
 
         if (voice_profile.voicepoint < bet) {
+            console.log('vp');
             this.dropError(message, 'Не хватает, ставь меньше!');
             return;
         }
@@ -187,4 +197,4 @@ class TemplateCommand extends Command {
     
 }
 
-module.exports = TemplateCommand;
+module.exports = GambleCommand;

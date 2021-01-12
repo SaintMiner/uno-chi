@@ -16,6 +16,10 @@ class RouletteWebsocket extends Module {
     init() {
         this.server = http.createServer((request, response) => {
             const { headers, method, url } = request;
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader('Content-Type', 'application/json');
+            response.setHeader("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS");
+            response.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
             switch (url) {
                 case '/auth':
                     console.log((new Date()) + ' Received request for ' + request.url);
@@ -27,7 +31,7 @@ class RouletteWebsocket extends Module {
                             body = JSON.parse(Buffer.concat(body).toString());
                             // console.log(body.code);
                             // console.log(headers.code);
-                            console.log(body.code);
+                            // console.log(body.code);
                             let player = this.players.find(player => player.code == body.code);
                             if (!player) {
                                 response.writeHead(400);
@@ -47,6 +51,9 @@ class RouletteWebsocket extends Module {
                                 response.end();
                             }
                         });
+                    } else if(request.method == "OPTIONS") {
+                        response.writeHead(200);
+                        response.end();
                     } else {
                         response.writeHead(400);
                         response.write('This is POST method');
@@ -69,30 +76,81 @@ class RouletteWebsocket extends Module {
             autoAcceptConnections: false
         });
 
-        this.wsServer.on('request', function(request) {
+        this.wsServer.on('request', (request) => {
             // if (!originIsAllowed(request.origin)) {
             //     // Make sure we only accept requests from an allowed origin
             //     request.reject();
             //     console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
             //     return;
             // }
-              
-            var connection = request.accept('json', request.origin);
-            console.log((new Date()) + ' Connection accepted.');
-            this.connections.push(connection);
-            connection.on('message', (message) => {
-                // console.log(message)
-                this.connections.forEach(function(client) {
-                    if (message.type === 'utf8') {
-                        // console.log('Received Message: ' + message.utf8Data);
-                        client.sendUTF(JSON.stringify(message));
+            
+            try {
+                if (!Array.isArray(request.requestedProtocols) || !request.requestedProtocols[1] || request.requestedProtocols[0] != 'access_code') {
+                    return request.reject(1002, 'Invalid requestedProtocols');
+                }
+                // console.log(request);
+                let code = request.requestedProtocols[1].toUpperCase();
+                let player = this.players.find(player => player.code == code);
+                // console.log(player)
+                if (!player) {
+                    return request.reject(1002, 'Invalid code');
+                }
+                
+                let connection = request.accept('access_code', request.origin);
+                connection.player = player;
+                this.connections.push(connection);
+                this.sendConnectedPlayers();
+                connection.on('message', (message) => {
+                    let data = JSON.parse(message.utf8Data);
+                    let key = Object.keys(data)[0].toLowerCase();
+                    switch (key) {
+                        case 'bet':
+                            data = data.bet;
+                            let gambleCommand = this.client.modules
+                                .find(m => m.name == 'Commands').commands
+                                .find(command => command.settings.slug == 'gamble');
+                            // console.log(gambleCommand);
+                            let res = gambleCommand.roulette(null, [null, data.place, data.bet], player.user_id, player.guild_id);
+                            this.sendMessageToAll({bets: res});
+                        break;
                     }
                 });
-            });
-            connection.on('close', function(reasonCode, description) {
-                console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
-            });
+                connection.on('close', (reasonCode, description) => {
+                    this.connections.splice(this.connections.indexOf(connection), 1);
+                    this.sendConnectedPlayers();
+                });
+            } catch (e) {
+                console.error(e);
+                return e;
+            }
         });
+    }
+
+    sendMessageToAll(data) {
+        this.connections.forEach((client) => {
+            client.sendUTF(JSON.stringify(data));
+        });
+    }
+
+    async sendConnectedPlayers () {
+        let connectedPlayers = [];
+        for await (const connection of this.connections) {
+            await this.client.users.fetch(connection.player.user_id).then(u => {
+                console.log(u);
+                connectedPlayers.push({
+                    voicepoint: connection.player.voice_profile.voicepoint,
+                    username: u.username,   
+                    tag: u.tag,
+                    avatar: u.avatar,
+                    user_id: connection.player.user_id,
+                });
+            });
+        }
+        this.sendMessageToAll({players: connectedPlayers});
+    }
+
+    sendStartRoulette (number) {
+        this.sendMessageToAll({spin: number});
     }
 }
 
