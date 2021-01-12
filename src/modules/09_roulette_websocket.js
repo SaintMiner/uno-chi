@@ -151,6 +151,7 @@ class RouletteWebsocket extends Module {
 
     sendStartRoulette (number) {
         this.sendMessageToAll({spin: number});
+        setTimeout(this.sendConnectedPlayers(), 2000);        
     }
 }
 
