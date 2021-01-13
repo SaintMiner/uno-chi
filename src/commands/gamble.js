@@ -64,7 +64,7 @@ class GambleCommand extends Command {
             place: args[1],
             bet: args[2]
         });
-        let table = this.bets.map(bet => bet.place);
+        let table = this.bets.map(bet => { return {bet: bet.place, user_id: bet.user_id}});
         return [...new Set(table)];
     };
 

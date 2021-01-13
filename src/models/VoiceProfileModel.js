@@ -7,7 +7,9 @@ module.exports = {
         experience  : "int",
         level       : "int",
         voicepoint  : "int",
-        time_spent  : "int"
+        time_spent  : "int",
+        pray_date   : "timestamp",
+        pray_streak : "int",
     },
     key:["user_id", "guild_id"]
 };

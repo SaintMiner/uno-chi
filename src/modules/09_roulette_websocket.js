@@ -89,7 +89,7 @@ class RouletteWebsocket extends Module {
                 if (!Array.isArray(request.requestedProtocols) || !request.requestedProtocols[1] || request.requestedProtocols[0] != 'access_code') {
                     return request.reject(1002, 'Invalid requestedProtocols');
                 }
-                // console.log(request);
+                console.log(request);
                 let code = request.requestedProtocols[1].toUpperCase();
                 let player = this.players.find(player => player.code == code);
                 // console.log(player)
