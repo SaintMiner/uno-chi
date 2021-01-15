@@ -26,11 +26,11 @@ class PrayCommand extends Command {
             if (new Date(last_pray_date).setHours(0, 0, 0, 0) != new Date(now).setHours(0, 0, 0, 0)) {
                 if (voice_profile.pray_date) {
                     const diffTime = Math.abs(now - last_pray_date);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                    if (diffDays == 1) {
+                    const diffDays = diffTime / (1000 * 60 * 60 * 24); 
+                    if (diffDays <= 2) {
                         voice_profile.pray_date = now.getTime();
                         voice_profile.pray_streak++;
-                    } else if (diffDays > 1) {
+                    } else if (diffDays > 2) {
                         voice_profile.pray_date = now.getTime();
                         voice_profile.pray_streak = 1;
                     }
