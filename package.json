@@ -19,5 +19,8 @@
     "random": "^2.2.0",
     "require.async": "^0.1.1",
     "websocket": "^1.0.33"
+  },
+  "devDependencies": {
+    "decache": "^4.6.0"
   }
 }
