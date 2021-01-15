@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const decache = require('decache');
 const { Client } = require('discord.js');
 const client = new Client();
 
@@ -26,6 +27,7 @@ function initEnviroment() {
 
 function initModules() {
     require('./moduleLoader.js')(client);
+	decache('./moduleLoader.js');
 }
 
 
