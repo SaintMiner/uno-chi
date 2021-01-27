@@ -6,27 +6,33 @@ class TemplateCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'vadd', //how command can be executed
-            permissions: ['ADMINISTRATOR'], //discord server permissions
-            systemAdmin: false, //only system administrators can launch this command
+            slug: 'vadd',
+            description: 'COMMAND_VADD_DESCRIPTION',
+            category: 'Administration',
+            aliases: [],
+            usages: ['vadd <@who> <xp>'],
+            permissions: ['ADMINISTRATOR'],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
     }
 
     executeCustom(message, args) {
         let who = message.mentions.members.first();
         if (Number.isNaN(args[1]) || !args[1]) {
-            return this.commandVaddHelp(message);
+            return this.reply(this.getCommandHelp());
         }
         if (!who) {
-            return this.dropError(message, 'Его нет');
+            return this.reply('Будь добр, укажи персону');
         }
-        let who_profile = this.client.storage['voice_profiles']
-            .find(vp => vp.user_id == who.user.id && vp.guild_id == message.guild.id);
-        if (!who_profile) {
-            return this.dropError(message, 'Его нет в системе');
+
+        let whoProfile = this.client.getVoiceProfile(who.user.id, message.guild.id);
+        if (!whoProfile) {
+            return this.reply('Указанная персона - не найдена в системе');
         } else {
-            who_profile.experience += +args[1];
-            return this.dropError(message, 'Добавилено!');
+            whoProfile.experience += +args[1];
+            return this.reply('Добавилено!');
         }
 
     }

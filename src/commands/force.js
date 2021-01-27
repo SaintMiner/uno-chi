@@ -6,9 +6,15 @@ class ForceCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'force', //how command can be executed
-            permissions: [], //discord server permissions
-            systemAdmin: true, //only system administrators can launch this command
+            slug: 'force',
+            description: 'COMMAND_FORCE_DESCRIPTION',
+            category: 'System',
+            aliases: [],
+            usages: ['force weekday <hours>'],
+            permissions: [],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: true,
         });
     }
 

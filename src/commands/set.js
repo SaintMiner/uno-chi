@@ -6,9 +6,19 @@ class SetCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'set', //how command can be executed
-            permissions: ['ADMINISTRATOR'], //discord server permissions
-            systemAdmin: false, //only system administrators can launch this command
+            slug: 'set',
+            description: 'COMMAND_SET_DESCRIPTION',
+            category: 'Administration',
+            aliases: [],
+            usages: [
+                'set voice <voice_channel_id> <xp [-100 - 100]> -<settings> <owner_id>',
+                'set alert <text_channel_id>',
+                'set roulette <text_channel_id>'
+            ],
+            permissions: ['ADMINISTRATOR'],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
         this.voiceRoomModel = this.client.models.find(m => m._properties.name == 'VoiceRooms');
         this.voiceRoleModel = this.client.models.find(m => m._properties.name == 'VoiceRoles');

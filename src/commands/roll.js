@@ -5,8 +5,14 @@ class RollCommand extends Command {
     constructor(client) {
         super(client, {
             slug: 'roll',
+            description: 'COMMAND_ROLL_DESCRIPTION',
+            category: 'Games',
+            aliases: [],
+            usages: ['roll', 'roll <cube>', 'roll d10', 'roll 10d23'],
             permissions: [],
-            systemAdmin: false,
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
     }
 

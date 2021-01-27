@@ -4,17 +4,22 @@ class TemplateCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'auth', //how command can be executed
-            permissions: [], //discord server permissions
-            systemAdmin: false, //only system administrators can launch this command
+            slug: 'vadd',
+            description: 'COMMAND_AUTH_DESCRIPTION',
+            category: 'Games',
+            aliases: [],
+            usages: ['auth'],
+            permissions: [],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
         this.rouletteWebsocketModule = this.client.modules.find(m => m.name == 'RouletteWebsocket');
     }
 
     executeCustom(message, args) {
         let code = Math.random().toString(36).substring(2, 18).toUpperCase();
-        let voice_profile = this.client.storage['voice_profiles']
-            .find(profile => profile.user_id == message.author.id && profile.guild_id == message.guild.id);
+        let voice_profile = this.client.getVoiceProfile(message.author.id, message.guild.id);
         if (!this.validateAuth(message, voice_profile)) return;
         // message.channel.send(`${message.guild.name}: \`${code}\``);
         message.author.send(`${message.guild.name}: \`${code}\``);

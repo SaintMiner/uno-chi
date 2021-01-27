@@ -4,9 +4,15 @@ class InfoCommand extends Command {
     
     constructor(client) {
         super(client, {
-            slug: 'info', //how command can be executed
-            permissions: [], //discord server permissions
-            systemAdmin: false, //only system administrators can launch this command
+            slug: 'info',
+            description: 'COMMAND_INFO_DESCRIPTION',
+            category: 'Misc',
+            aliases: ['i'],
+            usages: ['info', 'info <@who>'],
+            permissions: [],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
     }
 

@@ -1,1 +1,1 @@
-{"id":"hfLVAMo60GKxOniJ","body":"  SELECT user_id, guild_id, experience, level, voicepoint\n  FROM test.voice_profiles\n  LIMIT 500;","filename":"script_3.cql","clusterName":"Cluster AllowAllAuthenticator","keyspace":"test","source":"action","modified":true}
+{"id":"2VH5Yfd4GBDewNut","body":"ALTER TYPE unochi2.time_spent\nRENAME\n\troom_id TO name AND \n\ttime TO time\n;","filename":"script_4.cql","clusterName":"Cluster AllowAllAuthenticator","keyspace":"unochi2","source":"action","modified":true}

@@ -8,10 +8,17 @@ class GambleCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'gamble', //how command can be executed
-            permissions: [], //discord server permissions
-            systemAdmin: false, //only system administrators can launch this command
+            slug: 'gamble',
+            description: 'COMMAND_GAMBLE_DESCRIPTION',
+            category: 'Games',
+            aliases: [],
+            usages: ['gamble roulette <place> <bet>'],
+            permissions: [],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
+        
         this.rouletteData = require('../json/roulette.json');
         this.multipliers = this.rouletteData.multipliers;
         this.places = Object.keys(this.multipliers);
@@ -39,8 +46,7 @@ class GambleCommand extends Command {
     }
 
     roulette(message, args, user_id, guild_id) {
-        let voice_profile = this.client.storage['voice_profiles']
-            .find(voice_profile => voice_profile.guild_id == guild_id && voice_profile.user_id == user_id);
+        let voice_profile = this.client.getVoiceProfile(user_id, guild_id);
         if (!voice_profile) return this.dropError(message, 'Ты кто?');
         if (!this.validateRouletteBet(message, args, voice_profile)) return 'Validation error';
         

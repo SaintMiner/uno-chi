@@ -6,8 +6,10 @@ class DatabaseModule extends Module {
         super(client, {
             name: 'Database'
         });
+        this.kek = 'kek';
         this.connectDatabase();
         this.loadModels();
+        this.loadFunctions();
     }
 
     connectDatabase() {
@@ -19,6 +21,12 @@ class DatabaseModule extends Module {
                 queryOptions: {consistency: ExpressCassandra.consistencies.one}
             },
             ormOptions: {
+                udts: {
+                    time_spent: {
+                        name: 'text',
+                        time: 'int',
+                    },
+                },
                 defaultReplicationStrategy : {
                     class: 'SimpleStrategy',
                     replication_factor: 3
@@ -57,6 +65,20 @@ class DatabaseModule extends Module {
         }
     }
 
+    loadFunctions() {
+        this.client.getVoiceProfile = (user_id, guild_id) => this.getVoiceProfile(user_id, guild_id);
+        this.client.getVoiceProfileFromMessage = (message) => this.getVoiceProfileFromMessage(message);
+    }
+
+    getVoiceProfile(user_id, guild_id) {
+        let profile = this.client.storage['voice_profiles']
+            .find(voice_profile => voice_profile.guild_id == guild_id && voice_profile.user_id == user_id);
+        return profile;
+    }
+
+    getVoiceProfileFromMessage(message) {
+        return this.getVoiceProfile(message.author.id, message.guild.id);
+    }
 }
 
 module.exports = DatabaseModule;

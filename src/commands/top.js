@@ -5,9 +5,15 @@ class TopCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'top', //how command can be executed
-            permissions: [], //discord server permissions
-            systemAdmin: false, //only system administrators can launch this command
+            slug: 'top',
+            description: 'COMMAND_TOP_DESCRIPTION',
+            category: 'Misc',
+            aliases: ['t'],
+            usages: ['top'],
+            permissions: [],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
     }
 

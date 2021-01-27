@@ -7,9 +7,15 @@ class PrayCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'pray', //how command can be executed
-            permissions: [], //discord server permissions
-            systemAdmin: false, //only system administrators can launch this command
+            slug: 'pray',
+            description: 'COMMAND_PRAY_DESCRIPTION',
+            category: 'Misc',
+            aliases: [],
+            usages: ['pray'],
+            permissions: [],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
     }
 

@@ -9,7 +9,11 @@ module.exports = {
             type : "boolean",
             default : false,
         },
-        owner_id : "text"
+        owner_id : "text",
+        settings: {
+            type: "map",
+            typeDef: "<varchar, boolean>"
+        },
     },
     key:["room_id", "guild_id"]
 };

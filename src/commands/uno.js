@@ -4,14 +4,21 @@ class UnoCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'uno', //how command can be executed
-            permissions: [], //discord server permissions
-            systemAdmin: false, //only system administrators can launch this command
+            slug: 'uno',
+            description: 'COMMAND_UNO_DESCRIPTION',
+            category: 'Misc',
+            aliases: [],
+            usages: ['uno'],
+            permissions: [],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
     }
 
     executeCustom(message, args) {
         message.channel.send('Поможет, если сможет...');
+        console.log(this.client.storage['voice_profiles']);
     }
 }
 

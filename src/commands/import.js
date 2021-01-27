@@ -4,9 +4,15 @@ class TemplateCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'importold', //how command can be executed
-            permissions: [], //discord server permissions
-            systemAdmin: true, //only system administrators can launch this command
+            slug: 'importold',
+            description: 'COMMAND_IMPORT_DESCRIPTION',
+            category: 'System',
+            aliases: [],
+            usages: null,
+            permissions: [],
+            whiteListedUsers: [],
+            isHidden: true,
+            isPrivate: true,
         });
     }
 

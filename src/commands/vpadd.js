@@ -4,16 +4,23 @@ class TemplateCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'vpadd', //how command can be executed
-            permissions: ['ADMINISTRATOR'], //discord server permissions
-            systemAdmin: false, //only system administrators can launch this command
+            slug: 'vpadd',
+            description: 'COMMAND_VPADD_DESCRIPTION',
+            category: 'Administration',
+            aliases: [],
+            usages: ['uno'],
+            permissions: ['ADMINISTRATOR'],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
     }
 
     executeCustom(message, args) {
         let who = message.mentions.members.first();
         if (Number.isNaN(args[1]) || !args[1]) {
-            return this.commandVaddHelp(message);
+            // this.commandVaddHelp(message);
+            return ;
         }
         if (!who) {
             return this.dropError(message, 'Его нет');

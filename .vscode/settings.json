@@ -3,7 +3,7 @@
     "cassandraWorkbench.activeKeyspace": [
         [
             "Cluster AllowAllAuthenticator",
-            "test"
+            "unochi2"
         ]
     ]
 }

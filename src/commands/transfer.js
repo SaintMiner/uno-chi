@@ -5,16 +5,15 @@ class TemplateCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'transfer', //how command can be executed
-            description: '', //command description
-            alias: [], //command alias
-            hidden: true, //if commands should be hidden from help
-            permissions: [], //discord server permissions
-            onlyOwner: false, //only owner can launch this command
-            whitelistedUsers: [], //whitelisted users that can execute this command
-
-            //your variable port
-            systemAdmin: false, //only system administrators can launch this command
+            slug: 'transfer',
+            description: 'COMMAND_TRANSFER_DESCRIPTION',
+            category: 'Administration',
+            aliases: [],
+            usages: ['transfer <@from> <@to> <amount>'],
+            permissions: ['ADMINISTRATOR'],
+            whiteListedUsers: [],
+            isHidden: false,
+            isPrivate: false,
         });
     }
 
