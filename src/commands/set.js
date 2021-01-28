@@ -188,9 +188,8 @@ class SetCommand extends Command {
     async setVoice(message, roomSettings, voiceChannel, newRoom) {        
         if (await this.validateSetVoice(message, roomSettings, voiceChannel)) {
             if (roomSettings) {
-                if (roomSettings.includes('w')) {
-                    voiceChannel.support_weekday_double = true;
-                }
+                voiceChannel.support_weekday_double = roomSettings.includes('w');                    
+                voiceChannel.settings.mining = roomSettings.includes('m');
             }
 
             if(newRoom) this.client.storage['voice_rooms'].push(voiceChannel);
@@ -224,7 +223,6 @@ class SetCommand extends Command {
 
     async validateSetVoice(message, roomSettings, voiceChannel) {
         let roomSettingsReges = /-\w*/g;
-        console.log(voiceChannel.experience);
         if (!voiceChannel.room_id || isNaN(voiceChannel.experience)) {
             this.commandSetVoiceHelp(message);
             return false;
