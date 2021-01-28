@@ -108,7 +108,7 @@ class RouletteWebsocket extends Module {
                         case 'bet':
                             data = data.bet;
                             let gambleCommand = this.client.modules
-                                .find(m => m.name == 'Commands').commands
+                                .find(m => m.name == 'Commands module').commands
                                 .find(command => command.settings.slug == 'gamble');
                             // console.log(gambleCommand);
                             let res = gambleCommand.roulette(null, [null, data.place, data.bet], player.user_id, player.guild_id);
