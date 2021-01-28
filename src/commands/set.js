@@ -188,6 +188,9 @@ class SetCommand extends Command {
     async setVoice(message, roomSettings, voiceChannel, newRoom) {        
         if (await this.validateSetVoice(message, roomSettings, voiceChannel)) {
             if (roomSettings) {
+                if (!voiceChannel.settings) {
+                    voiceChannel.settings = {};
+                }
                 voiceChannel.support_weekday_double = roomSettings.includes('w');                    
                 voiceChannel.settings.mining = roomSettings.includes('m');
             }
