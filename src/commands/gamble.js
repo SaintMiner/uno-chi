@@ -51,7 +51,7 @@ class GambleCommand extends Command {
         if (!this.validateRouletteBet(message, args, voice_profile)) return 'Validation error';
         
         if (!this.rouletteLaunched) {
-            this.dropError(message, `Рулетка будет запущена через ${this.rouletteSecondsBeforeLauch} секунд`);
+            if (message) this.dropError(message, `Рулетка будет запущена через ${this.rouletteSecondsBeforeLauch} секунд`);
             this.rouletteLaunched = true;
             this.bets = [];
             this.rouletteWheel = setTimeout(() => {
