@@ -36,7 +36,6 @@ function initEnviroment() {
 
 function initModules() {
     require('./moduleLoader.js')(client);
-	decache('./moduleLoader.js');
 }
 
 client.login(process.env.BOT_TOKEN);

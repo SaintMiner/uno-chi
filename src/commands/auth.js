@@ -4,7 +4,7 @@ class TemplateCommand extends Command {
 
     constructor(client) {
         super(client, {
-            slug: 'vadd',
+            slug: 'auth',
             description: 'COMMAND_AUTH_DESCRIPTION',
             category: 'Games',
             aliases: [],
