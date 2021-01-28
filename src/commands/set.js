@@ -224,8 +224,8 @@ class SetCommand extends Command {
 
     async validateSetVoice(message, roomSettings, voiceChannel) {
         let roomSettingsReges = /-\w*/g;
-
-        if (!voiceChannel.room_id || !voiceChannel.experience) {
+        console.log(voiceChannel.experience);
+        if (!voiceChannel.room_id || isNaN(voiceChannel.experience)) {
             this.commandSetVoiceHelp(message);
             return false;
         } else {

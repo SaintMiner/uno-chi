@@ -48,7 +48,7 @@ class InfoCommand extends Command {
             let seconds = (`0` + (totalSeconds % 60)).slice(-2);
             let timeString =`${days} Дней ${hours}:${minutes}:${seconds}`;
             let stats 
-            = `Уровень ${chekingUser.voice_profile.level} (${chekingUser.voice_profile.experience} XP)
+            = `Уровень ${chekingUser.voice_profile.level} (${Math.floor(chekingUser.voice_profile.experience)} XP)
              Прогресс до след. уровня: ${Math.floor(chekingUser.voice_profile.experience/nextLevel*100)}%
              Времени затрачено: ${timeString}
              Voice Points: ${chekingUser.voice_profile.voicepoint}

@@ -45,7 +45,7 @@ class VoiceLevelModule extends Module {
                             profile.level++;
                             profile.voicepoint += 10*profile.level;                                            
                             let levelUpRoles = guildLevelRoles.find(role => role.level == profile.level);
-                            this.processRoles(member, levelUpRoles);
+                            this.processRoles(member, levelUpRoles, guild);
                             if (currentGuild.alert_channel_id) {
                                 this.client.channels.fetch(currentGuild.alert_channel_id).then(c => {
                                     c.send(`${member} - Достиг \`${profile.level}\` голосового уровня...`);
@@ -68,7 +68,7 @@ class VoiceLevelModule extends Module {
                         this.client.storage['voice_profiles'].push(profile);
 
                         let levelUpRoles = guildLevelRoles.find(role => role.level == profile.level);
-                        this.processRoles(member, levelUpRoles);
+                        this.processRoles(member, levelUpRoles, guild);
 
                         if (currentGuild.alert_channel_id) {
                             this.client.channels.fetch(currentGuild.alert_channel_id).then(c => {
@@ -114,7 +114,7 @@ class VoiceLevelModule extends Module {
         }
     }
 
-    async processRoles(member, roles) {
+    async processRoles(member, roles, guild) {
         if (roles) {
             for await (const role of roles.add_roles) {
                 await guild.roles.fetch(role).then(r => {
