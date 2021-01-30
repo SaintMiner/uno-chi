@@ -8,6 +8,11 @@
     "start": "node ./src/bot.js",
     "dev": "nodemon ./src/bot.js"
   },
+
+  "_moduleAliases": {
+    "@core"      : "./src/core"
+  },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -16,7 +21,11 @@
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "express-cassandra": "^2.5.0",
+    "glob": "^7.1.6",
     "i18n": "^0.13.2",
+    "module-alias": "^2.2.2",
+    "moment": "^2.29.1",
+    "pretty-console-logs": "^0.3.0",
     "random": "^2.2.0",
     "require.async": "^0.1.1",
     "websocket": "^1.0.33"

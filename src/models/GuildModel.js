@@ -3,8 +3,14 @@ module.exports = {
     table_name: 'guilds',
     fields:{
         guild_id        : "text",
-        alert_channel_id: "text",
-        roullete_channel_id: "text"
+        channels: {
+            type: "map",
+            typeDef: "<varchar, varchar>"
+        },
+        settings: {
+            type: "map",
+            typeDef: "<varchar, varchar>"
+        }
     },
     key:["guild_id"]
 };

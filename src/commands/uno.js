@@ -17,7 +17,7 @@ class UnoCommand extends Command {
     }
 
     executeCustom(message, args) {
-        message.channel.send('Поможет, если сможет...');
+        message.reply('Поможет, если сможет...');
         console.log(this.client.storage['voice_profiles']);
     }
 }

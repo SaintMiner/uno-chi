@@ -1,22 +1,14 @@
 require('dotenv').config();
+require('module-alias/register');
 
-const decache = require('decache');
 const { Client } = require('discord.js');
 const client = new Client();
-const { I18n } = require('i18n');
 
-const i18n = new I18n({
-    locales: ['en', 'ru'],
-    directory: `${__dirname}/json/locales`,
-    defaultLocale: process.env.DEFAULT_LANGUAGE || 'en',
-    register: global
-});
 
-client.on('ready', () => {
-    initEnviroment();
-    let now = new Intl.DateTimeFormat('ru-RU', client.timeOptions).format(new Date());
-    console.log(`${now} | Starting ${client.user.tag}!`);
-    initModules();
+const Core = require('./core');
+
+client.on('ready', () => {    
+    core = new Core(client);
 });
 
 function initEnviroment() {
@@ -32,11 +24,6 @@ function initEnviroment() {
     client.voice_tick = process.env.VOICE_TICK;
     client.unrecognizedCommand = process.env.UNRECOGNIZED_COMMAND.toLowerCase() == 'true';
     client.server_port = process.env.SERVER_PORT;
-}
-
-function initModules() {
-    require('./moduleLoader.js')(client);
-	decache('./moduleLoader.js');
 }
 
 client.login(process.env.BOT_TOKEN);
