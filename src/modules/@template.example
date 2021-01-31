@@ -1,0 +1,11 @@
+const Module = require('@core/classes/module');
+
+class TemplateModule extends Module {
+    constructor() {
+        super();
+    }
+
+    
+}
+
+module.exports = TemplateModule

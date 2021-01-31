@@ -10,15 +10,15 @@ class Core {
         this.version = `UnoCore ${process.env.CORE_VERSION}`;
         this.badge = `[${this.version}] `;
         this.launchedAt = moment().format('DD.MM.YYYY HH:mm:ss');
-        info(`[${this.launchedAt}] ${client.user.tag} has logged in successfully!`);
-        info(this.badge, `Initialising...`);
         this.client = client;
-        this.init();
     }
     
     init() {
-        this.moduleLoader = new ModuleLoader(this.client);
+        info(`[${this.launchedAt}] ${this.client.user.tag} has logged in successfully!`);
+        info(this.badge, `Initialising...`);
+        this.moduleLoader = new ModuleLoader(this);
         this.moduleLoader.loadModules();
+        this.moduleLoader.initModules();
 
         this.i18n = new I18n({
             locales: ['en', 'ru'],
@@ -27,6 +27,15 @@ class Core {
             register: global
         });
     }
+
+    getConfiguration() {
+        return this.moduleLoader.modules.get('EnviromentModule').configuration;
+    }
+
+    getConnection() {
+        return this.moduleLoader.modules.get('DatabaseModule').connection;
+    }
+    
 }
 
 module.exports = Core;
