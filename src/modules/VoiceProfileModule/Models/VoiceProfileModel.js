@@ -7,7 +7,6 @@ module.exports = {
         experience  : "int",
         level       : "int",
         voicepoint  : "int",
-        time_spent  : "int",
         time_spents  : {
             type: "frozen",
             typeDef: "<list<time_spent>>"            

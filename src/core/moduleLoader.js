@@ -34,7 +34,7 @@ class ModuleLoader {
             }); 
         }
         
-        glob.sync( `${pathToModules}/*.js` ).forEach(( file ) => {
+        glob.sync( `${pathToModules}/**/index.js` ).forEach(( file ) => {
             let module = new (require(path.resolve( file )));
 
             //Checks if the required is module

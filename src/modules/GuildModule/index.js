@@ -4,7 +4,7 @@ const { info, warn, error, log } = require('pretty-console-logs');
 class GuildModule extends Module {
     constructor() {
         super(2);
-        this.guildModel = require('./GuildModule/Models/GuildModel');
+        this.guildModel = require('./Models/GuildModel');
         this.guilds = [];
     }
     
@@ -13,15 +13,13 @@ class GuildModule extends Module {
     }
 
     async loadGuilds() {
-        this.guildConnector = core.getConnection().loadSchema('GuildModel', this.guildModel);
-        await this.guildConnector.syncDBAsync().catch(err => {throw err});
+        this.guildModel = core.getConnection().loadSchema('GuildModel', this.guildModel);
+        await this.guildModel.syncDBAsync().catch(err => {throw err});
         await this.fetchGuilds();
-        await this.saveGuild({guild_id: '24'});
-        console.log(this.guilds);
     }
 
     async fetchGuilds() {
-        await this.guildConnector.findAsync({}, {raw: true}).then(result => this.guilds = result);
+        await this.guildModel.findAsync({}, {raw: true}).then(result => this.guilds = result);
     }
 
     findGuild(guild_id) {
@@ -29,9 +27,9 @@ class GuildModule extends Module {
     }
 
     async saveGuild(guild) {
-        let record = new this.guildConnector(guild);
+        let record = new this.guildModel(guild);
         await record.saveAsync().catch(err => error(`[${this.name}] ${err}`));
-        await this.fetchGuilds()
+        await this.fetchGuilds();
     }
 }
 
