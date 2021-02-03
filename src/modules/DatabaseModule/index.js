@@ -34,10 +34,11 @@ class DatabaseModule extends Module {
             }
         });
         info(`[${this.name}] Connected to database`);
+        core.getConnection = () => this.getConnection();
     }
-
-    loadModel(model) {
-        console.log(model);
+    
+    getConnection() {
+        return this.connection;
     }
 }
 

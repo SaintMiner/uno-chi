@@ -35,7 +35,10 @@ class ModuleLoader {
         }
         
         glob.sync( `${pathToModules}/**/index.js` ).forEach(( file ) => {
-            let module = new (require(path.resolve( file )));
+            let loadedFile = require(path.resolve( file ));
+            if (typeof loadedFile != 'function') return;
+
+            let module = new loadedFile();
 
             //Checks if the required is module
             if (!(module instanceof ModuleClass)) return;
@@ -46,7 +49,7 @@ class ModuleLoader {
                 warn(this.badge, `Module with class name "${module.name}" already exists. Using first!`);
             }
         });
-
+        
         this.modules =  new Map([...this.modules].sort((a , b) => {
             if (a[1].order > b[1].order) return 1;
             if (a[1].order < b[1].order) return -1;

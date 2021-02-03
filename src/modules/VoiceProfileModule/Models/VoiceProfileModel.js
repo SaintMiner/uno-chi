@@ -6,7 +6,7 @@ module.exports = {
         guild_id    : "text",
         experience  : "int",
         level       : "int",
-        voicepoint  : "int",
+        voicepoints  : "int",
         time_spents  : {
             type: "frozen",
             typeDef: "<list<time_spent>>"            

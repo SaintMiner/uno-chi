@@ -27,15 +27,7 @@ class Core {
             register: global
         });
     }
-
-    getConfiguration() {
-        return this.moduleLoader.modules.get('EnviromentModule').configuration;
-    }
-
-    getConnection() {
-        return this.moduleLoader.modules.get('DatabaseModule').connection;
-    }
-    
+        
 }
 
 module.exports = Core;

@@ -25,7 +25,7 @@ class TextProfileModule extends Module {
         return this.textProfiles.find(tp => tp.user_id == user_id);
     }
 
-    async saveGuild(textProfile) {
+    async save(textProfile) {
         let record = new this.textProfilesModel(textProfile);
         await record.saveAsync().catch(err => error(`[${this.name}] ${err}`));
         await this.fetchTextProfiles();
