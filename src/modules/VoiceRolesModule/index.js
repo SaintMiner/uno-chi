@@ -32,11 +32,18 @@ class VoiceRoleModule extends Module {
         return this.voiceRoles.filter(vr => vr.guild_id == guild_id);
     }
 
-    processUserByLevel(member, level) {
+    async processUserByLevel(member, level) {
         let guildRoles = this.getGuildVoiceRoles(member.guild.id);
-        let levelRoles = guildRoles.filter(vr => vr.level == level);
-        console.log(levelRoles);
-        console.log(member.guild.id);
+        let levelRoles = guildRoles.find(vr => vr.level == level);
+        
+        if (levelRoles) {
+            for await (const role of levelRoles.add_roles) {
+                await member.guild.roles.fetch(role).then(r => member.roles.add(r));
+            }
+            for await (const role of levelRoles.remove_roles) {
+                await member.guild.roles.fetch(role).then(r => member.roles.remove(r));
+            }
+        }
     }
 
     

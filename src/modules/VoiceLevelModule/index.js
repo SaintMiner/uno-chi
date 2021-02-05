@@ -33,11 +33,10 @@ class VoiceLevelModule extends Module {
     }
 
     tickMember(member, room, guild) {
-        this.voiceRoleModule.processUserByLevel(member, 10);
-
         let profile = this.voiceProfileModule.findVoiceProfile(member.id, guild.guild_id);
+
         if (profile) {
-            profile.experience += this.getVoiceRoomExperience(room);
+            profile.experience += this.getVoiceRoomExperience(room);            
         } else {
             profile = {};
             Object.assign(profile, this.voiceProfileModule.getVoiceProfileTemplate());
@@ -50,7 +49,8 @@ class VoiceLevelModule extends Module {
         if (profile.experience >= this.getNextLevelExperienceCount(profile.level)) {
             profile.experience -= this.getNextLevelExperienceCount(profile.level);
             profile.level++;
-            profile.voicepoints += 10*profile.level;
+            profile.voicepoints += 10 * profile.level;
+            this.voiceRoleModule.processUserByLevel(member, profile.level);
         }
     }
 
@@ -60,11 +60,12 @@ class VoiceLevelModule extends Module {
         if (room.settings) {
             experience = +room.settings.experience || 0
         }
+        
         return experience;
     }
 
     getNextLevelExperienceCount(level) {
-        return (10+level)*10*level*level;
+        return (10 + level) * 10 * level * level;
     }
 
     
