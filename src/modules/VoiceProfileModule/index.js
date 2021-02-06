@@ -46,10 +46,8 @@ class VoiceProfileModule extends Module {
     }
 
     saveAll() {
-        info(`[${this.name}] Saving voice profiles`);
-        this.voiceProfiles.forEach(profile => {
-            this.save(profile);
-        })
+        info(`[${this.name}] Saving voice profiles (${moment().format('DD.MM.YYYY HH:mm:ss')})`);
+        this.voiceProfiles.forEach(profile => this.save(profile));
     }
 
     
