@@ -5,6 +5,7 @@ const { info } = require('pretty-console-logs');
 
 const Basic = require('./classes/basic');
 
+const ConfigurationLoader = require('./configuration-loader');
 const ExtensionManager = require('./extension-manager');
 const CommandManager = require('./command-manager');
 const CommandBuilder = require('./command-builder');
@@ -20,6 +21,8 @@ class UnoCore extends Basic{
     initialize() {
         info(`[${this.launchedAt}] ${this.client.user.tag} has logged in successfully!`);
         
+        this.configurationLoader = new ConfigurationLoader();
+
         this.i18n = new I18n({
             locales: ['en', 'ru'],
             directory: `${__dirname}/json/locales`,
@@ -36,6 +39,8 @@ class UnoCore extends Basic{
         this.extensionManager.extensions.forEach(extension => {
             this.commandBuilder.build(extension.commands());
         });
+
+        this.commandManager.initialize();
     }
         
 }

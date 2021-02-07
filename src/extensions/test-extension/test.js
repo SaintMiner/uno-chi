@@ -4,7 +4,7 @@ function action() {
 
 const command = {
     slug: 'test',
-    category: 'String',
+    description: 'String',
     category: 'String',
 
     usages: ['Array', 'of', 'Strings'],

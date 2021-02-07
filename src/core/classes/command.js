@@ -21,31 +21,31 @@ class Command {
         this.loadSettings(settings);        
     }
 
-    execute(message, args) {
-        this.message = message;
+    // execute(message, args) {
+    //     this.message = message;
 
-        if (this.isPrivate) {
-            if (!this.canExecutePrivate(this.message.author.id)) {
-                return this.reply(__('YOU_DONT_HAVE_PERMISSION'))
-            };
-        }
+    //     if (this.isPrivate) {
+    //         if (!this.canExecutePrivate(this.message.author.id)) {
+    //             return this.reply(__('YOU_DONT_HAVE_PERMISSION'))
+    //         };
+    //     }
         
-        if (!message.member.hasPermission(this.permissions)) {
-            return this.reply(__('YOU_DONT_HAVE_PERMISSION'));
-        }
+    //     if (!message.member.hasPermission(this.permissions)) {
+    //         return this.reply(__('YOU_DONT_HAVE_PERMISSION'));
+    //     }
         
-        this.executeCustom(message, args);
+    //     this.executeCustom(message, args);
         
-        this.message = null;
-    }
+    //     this.message = null;
+    // }
 
-    executeCustom(message, args) {
-        message.channel.send('The useless command');
-    }
+    // executeCustom(message, args) {
+    //     message.channel.send('The useless command');
+    // }
     
-    canExecutePrivate(user_id) {
-        return this.whiteListedUsers.find(user => user == user_id) || this.client.systemAdministrators.find(user => user == user_id);
-    }
+    // canExecutePrivate(user_id) {
+    //     return this.whiteListedUsers.find(user => user == user_id) || this.client.systemAdministrators.find(user => user == user_id);
+    // }
 
     loadSettings(settings) {
         this.slug = settings.slug;
@@ -57,30 +57,33 @@ class Command {
         this.isHidden = settings.isHidden || false;
         this.isPrivate = settings.isPrivate || false;
         this.category = settings.category || 'Uncategorized';
+
+        this.childrens = settings.childrens || [];
+        this.execute = settings.execute;
     }
 
-    getCommandHelp() {        
-        let help = new MessageEmbed()
-            .setColor("#580ad6")
-            .setTitle(this.slug)
-            .addFields(
-                { name: 'Usage', value: this.usages},
-                { name: 'Description', value: __(this.description)},
-            )
-            .setTimestamp();
-        if (this.aliases.length) {
-            // help.addField('Aliases', this.aliases.map(alias => `\`${this.client.prefix}${alias}\``));
-        }
-        return help;
-    }
+    // getCommandHelp() {        
+    //     let help = new MessageEmbed()
+    //         .setColor("#580ad6")
+    //         .setTitle(this.slug)
+    //         .addFields(
+    //             { name: 'Usage', value: this.usages},
+    //             { name: 'Description', value: __(this.description)},
+    //         )
+    //         .setTimestamp();
+    //     if (this.aliases.length) {
+    //         // help.addField('Aliases', this.aliases.map(alias => `\`${this.client.prefix}${alias}\``));
+    //     }
+    //     return help;
+    // }
 
-    dropError(message, errorText) {
-        message.channel.send(errorText);
-    }
+    // dropError(message, errorText) {
+    //     message.channel.send(errorText);
+    // }
 
-    reply(text) {
-        this.message.channel.send(text);
-    }
+    // reply(text) {
+    //     this.message.channel.send(text);
+    // }
 }
 
 module.exports = Command;

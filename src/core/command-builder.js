@@ -6,14 +6,10 @@ class CommandBuilder extends Basic{
     build(commands) {
         if (!Array.isArray(commands)) return;
         
-        let list = [];
-
-        commands.forEach(command => {
-            console.log(command);
-            console.log(new Command(command));
-            
-        });
+        commands.forEach(command => core.commandManager.addCommand(new Command(command)));        
     }
+
+    
 
 }
 
