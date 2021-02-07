@@ -8,11 +8,9 @@
     "start": "node ./src/bot.js",
     "dev": "nodemon ./src/bot.js"
   },
-
   "_moduleAliases": {
-    "@core"      : "./src/core"
+    "@core": "./src/core"
   },
-
   "keywords": [],
   "author": "",
   "license": "ISC",

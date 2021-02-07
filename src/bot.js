@@ -6,25 +6,8 @@ const client = new Client();
 
 
 const Core = require('./core');
-core = new Core(client);
+core = new Core(client, `UnoCore ${process.env.CORE_VERSION}`);
 
-client.on('ready', () => {
-    core.init();
-});
-
-// function initEnviroment() {
-//     client.i18n = i18n;
-//     client.timeOptions = {hour: 'numeric', minute: 'numeric', second: 'numeric'};
-//     client.systemAdministrators = process.env.SYSTEM_ADMINISTRATORS.split(' ');
-//     client.prefix = process.env.PREFIX;
-//     client.database = {};
-//     client.database.keyspace = process.env.KEYSPACE;
-//     client.database.contactPoints = process.env.CONTACTPOINTS.split(' ');
-//     client.database.localDataCenter = process.env.LOCALDATACENTER;
-//     client.forceWeekday = false;
-//     client.voice_tick = process.env.VOICE_TICK;
-//     client.unrecognizedCommand = process.env.UNRECOGNIZED_COMMAND.toLowerCase() == 'true';
-//     client.server_port = process.env.SERVER_PORT;
-// }
+client.on('ready', () => core.initialize());
 
 client.login(process.env.BOT_TOKEN);

@@ -11,14 +11,13 @@ const { MessageEmbed } = require('discord.js');
     @attribute {permissions} - array of strings | discord server permissions | https://discord.js.org/#/docs/main/stable/class/Permissions
     @attribute {whiteListedUsers} - array of strings, | list of whitelisted users id
     
-    @attribute {isHidden} - boolean | Hide command in help list
+    @attribute {isHidden} - boolean | Hide command from help list
     @attribute {isPrivate} - boolean | allows only .env configured admins or command whitelisted users execute this command
 
 */
 
 class Command {
-    constructor(client, settings) {
-        this.client = client;
+    constructor(settings) {
         this.loadSettings(settings);        
     }
 
@@ -54,7 +53,7 @@ class Command {
         this.aliases = Array.isArray(settings.aliases) ? settings.aliases.map(v => v.toLowerCase()) : [];
         this.permissions = Array.isArray(settings.permissions) ? settings.permissions : [];
         this.whiteListedUsers = Array.isArray(settings.whiteListedUsers) ? settings.whiteListedUsers : [];
-        this.usages = Array.isArray(settings.usages) ? settings.usages.map(usage => `\`${this.client.prefix}${usage}\``) : [`\`${this.client.prefix}${this.slug}\``];
+        // this.usages = Array.isArray(settings.usages) ? settings.usages.map(usage => `\`${this.client.prefix}${usage}\``) : [`\`${this.client.prefix}${this.slug}\``];
         this.isHidden = settings.isHidden || false;
         this.isPrivate = settings.isPrivate || false;
         this.category = settings.category || 'Uncategorized';
@@ -70,7 +69,7 @@ class Command {
             )
             .setTimestamp();
         if (this.aliases.length) {
-            help.addField('Aliases', this.aliases.map(alias => `\`${this.client.prefix}${alias}\``));
+            // help.addField('Aliases', this.aliases.map(alias => `\`${this.client.prefix}${alias}\``));
         }
         return help;
     }

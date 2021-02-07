@@ -13,6 +13,10 @@ class VoiceProfileModule extends Module {
         core.findVoiceProfile = (user_id) => this.findVoiceProfile(user_id);
     }
 
+    commands() {
+        return require('./commands');
+    }
+
     async loadVoiceProfiles() {
         this.voiceProfilesModel = core.getConnection().loadSchema('VoiceProfilesModel', this.voiceProfilesModel);
         await this.voiceProfilesModel.syncDBAsync().catch(err => {throw err});
