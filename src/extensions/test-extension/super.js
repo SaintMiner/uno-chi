@@ -1,4 +1,5 @@
-function superPuper() {
+function superPuper(message, args) {
+    console.log(args);
     console.log('p100 super!');
 }
 
@@ -36,6 +37,9 @@ const command = {
             isPrivate: false,
 
             execute: superTest,
+            childrens: [
+                require('./test'),
+            ]
         }
     ],
 }

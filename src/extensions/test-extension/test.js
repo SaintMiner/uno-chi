@@ -16,7 +16,9 @@ const command = {
     isPrivate: false,
 
     execute: action,
-    childrens: [],
+    childrens: [
+        require('./super'),
+    ],
 }
 
 module.exports = command;
