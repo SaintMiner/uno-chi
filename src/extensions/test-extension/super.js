@@ -1,6 +1,7 @@
 function superPuper(message, args) {
     console.log(args);
     console.log('p100 super!');
+    message.channel.send(JSON.stringify(args));
 }
 
 function superTest() {

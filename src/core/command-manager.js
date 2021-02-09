@@ -1,4 +1,5 @@
 const Basic = require('./classes/basic');
+const Command = require('./classes/command');
 
 class CommandManager extends Basic {
 
@@ -47,12 +48,37 @@ class CommandManager extends Basic {
         }
     }
 
+    mergeAll() {
+        this.commands = this.merge(this.commands);
+    }
+
+    merge(commands) {
+        let slugs = [...new Set(commands.map(command => command.slug))];
+        let merged = [];
+        slugs.forEach(slug => {
+            let filtered = commands.filter(command => command.slug == slug && slug);
+            let unique = filtered.find(command => command.slug == slug);
+            if (!unique) return;
+
+            let tempSettings = {};
+            Object.assign(tempSettings, unique.rawSettings);
+            tempSettings.childrens = [];
+            let temp = new Command(tempSettings);
+            
+            let rawChildrens = [];
+            filtered.forEach(command => rawChildrens = rawChildrens.concat(command.childrens));
+            temp.childrens = this.merge(rawChildrens);
+
+            merged.push(temp);
+        });        
+        return merged;
+    }
+
     getExecutionInstruction(string) {
         let args = {};
         let argumentPrefix = '-';
 
-        let parts = string.toLowerCase()
-            .slice(core.configuration.prefix.length)
+        let parts = string.slice(core.configuration.prefix.length)
             .trim()
             .split(/ +/g)
             .filter(part => !!part);
@@ -72,7 +98,9 @@ class CommandManager extends Basic {
             });            
         }
 
-        return {commandment: parts, args};
+        let commandment = parts.map(part => part.toLowerCase());
+
+        return {commandment, args};
     }
 }
 

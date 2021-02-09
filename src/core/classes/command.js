@@ -21,23 +21,19 @@ class Command {
         this.loadSettings(settings);        
     }
 
-    // execute(message, args) {
-    //     this.message = message;
-
-    //     if (this.isPrivate) {
-    //         if (!this.canExecutePrivate(this.message.author.id)) {
-    //             return this.reply(__('YOU_DONT_HAVE_PERMISSION'))
-    //         };
-    //     }
+    execute(message, args) {
+        // if (this.isPrivate) {
+        //     if (!this.canExecutePrivate(this.message.author.id)) {
+        //         return this.reply(__('YOU_DONT_HAVE_PERMISSION'))
+        //     };
+        // }
         
-    //     if (!message.member.hasPermission(this.permissions)) {
-    //         return this.reply(__('YOU_DONT_HAVE_PERMISSION'));
-    //     }
+        // if (!message.member.hasPermission(this.permissions)) {
+        //     return this.reply(__('YOU_DONT_HAVE_PERMISSION'));
+        // }
         
-    //     this.executeCustom(message, args);
-        
-    //     this.message = null;
-    // }
+        this.executeCustom(message, args);
+    }
 
     // executeCustom(message, args) {
     //     message.channel.send('The useless command');
@@ -48,15 +44,19 @@ class Command {
     // }
 
     loadSettings(settings) {
+        this.rawSettings = settings;
         this.slug = settings.slug;
         this.description = settings.description || 'COMMAND_NO_DESCRIPTION';
         this.aliases = Array.isArray(settings.aliases) ? settings.aliases.map(v => v.toLowerCase()) : [];
         this.permissions = Array.isArray(settings.permissions) ? settings.permissions : [];
         this.whiteListedUsers = Array.isArray(settings.whiteListedUsers) ? settings.whiteListedUsers : [];
-        // this.usages = Array.isArray(settings.usages) ? settings.usages.map(usage => `\`${this.client.prefix}${usage}\``) : [`\`${this.client.prefix}${this.slug}\``];
+        this.usages = Array.isArray(settings.usages) ?
+            settings.usages.map(usage => `\`${core.configuration.prefix}\``) :
+            [`\`${core.configuration.prefix}${this.slug}\``];
         this.isHidden = settings.isHidden || false;
         this.isPrivate = settings.isPrivate || false;
         this.category = settings.category || 'Uncategorized';
+        this.executeCustom = settings.execute;
 
         if (Array.isArray(settings.childrens)) {
             this.childrens = settings.childrens.map(children => new Command(children));

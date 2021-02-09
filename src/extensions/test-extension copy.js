@@ -5,6 +5,7 @@ class TestExtensionCopy extends TE {
     commands() {
         return [
             require('./test-extension/super'),
+            require('./test-extension/test'),
         ]
     }
 

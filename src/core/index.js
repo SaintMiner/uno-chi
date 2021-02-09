@@ -41,6 +41,7 @@ class UnoCore extends Basic{
         });
 
         this.commandManager.initialize();
+        this.commandManager.mergeAll();
     }
         
 }

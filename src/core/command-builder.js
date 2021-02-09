@@ -6,7 +6,8 @@ class CommandBuilder extends Basic{
     build(commands) {
         if (!Array.isArray(commands)) return;
         
-        commands.forEach(command => core.commandManager.addCommand(new Command(command)));        
+        commands.forEach(command => core.commandManager.addCommand(new Command(command)));
+        
     }
 
     
