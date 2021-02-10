@@ -26,6 +26,7 @@ class CommandManager extends Basic {
     }
 
     addCommand(command) {
+        if (!command.slug) return;
         this.commands.push(command);
     }
 
@@ -50,6 +51,7 @@ class CommandManager extends Basic {
 
     mergeAll() {
         this.commands = this.merge(this.commands);
+        this.commands.forEach(command => console.log(command.extensions));
     }
 
     merge(commands) {
@@ -57,6 +59,7 @@ class CommandManager extends Basic {
         let merged = [];
         slugs.forEach(slug => {
             let filtered = commands.filter(command => command.slug == slug && slug);
+            
             let unique = filtered.find(command => command.slug == slug);
             if (!unique) return;
 
@@ -68,6 +71,10 @@ class CommandManager extends Basic {
             let rawChildrens = [];
             filtered.forEach(command => rawChildrens = rawChildrens.concat(command.childrens));
             temp.childrens = this.merge(rawChildrens);
+            
+            let extensions = [];
+            filtered.forEach(command => extensions = extensions.concat(command.extensions));
+            temp.extensions = extensions;
 
             merged.push(temp);
         });        

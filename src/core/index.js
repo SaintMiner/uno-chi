@@ -37,7 +37,7 @@ class UnoCore extends Basic{
         this.commandManager = new CommandManager();
 
         this.extensionManager.extensions.forEach(extension => {
-            this.commandBuilder.build(extension.commands());
+            this.commandBuilder.build(extension.commands(), extension.name);
         });
 
         this.commandManager.initialize();

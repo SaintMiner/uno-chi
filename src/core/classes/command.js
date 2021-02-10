@@ -57,7 +57,7 @@ class Command {
         this.isPrivate = settings.isPrivate || false;
         this.category = settings.category || 'Uncategorized';
         this.executeCustom = settings.execute;
-
+        this.extensions = settings.extensions;
         if (Array.isArray(settings.childrens)) {
             this.childrens = settings.childrens.map(children => new Command(children));
         } else {
