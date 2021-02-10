@@ -1,16 +1,14 @@
 const ExpressCassandra = require('express-cassandra');
 
-const { info, warn, error, log } = require('pretty-console-logs');
+const { info } = require('pretty-console-logs');
 
-const Module = require('@core/classes/module');
+const Extension = require('@core/classes/extension');
 
-class DatabaseModule extends Module {
+class DatabaseExtension extends Extension {
     constructor() {
-        super(1);
-    }
-
-    init() {
-        let configuration = core.getConfiguration();
+        super();
+        let configuration = core.configuration;
+        
         info(`[${this.name}] Connecting to database...`);
         this.connection = ExpressCassandra.createClient({
             clientOptions: {
@@ -20,12 +18,6 @@ class DatabaseModule extends Module {
                 queryOptions: {consistency: ExpressCassandra.consistencies.one}
             },
             ormOptions: {
-                udts: {
-                    time_spent: {
-                        name: 'text',
-                        time: 'int',
-                    },
-                },
                 defaultReplicationStrategy : {
                     class: 'SimpleStrategy',
                     replication_factor: 3
@@ -34,6 +26,7 @@ class DatabaseModule extends Module {
             }
         });
         info(`[${this.name}] Connected to database`);
+
         core.getConnection = () => this.getConnection();
     }
     
@@ -42,4 +35,4 @@ class DatabaseModule extends Module {
     }
 }
 
-module.exports = DatabaseModule
+module.exports = DatabaseExtension

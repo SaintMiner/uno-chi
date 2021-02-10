@@ -11,7 +11,7 @@ class CommandManager extends Basic {
             if (message.author.bot) return;
             if (!message.content.startsWith(core.configuration.prefix)) return;
 
-                let commandment = message.content
+            let commandment = message.content
                 .toLowerCase()
                 .slice(core.configuration.prefix.length)
                 .trim()
@@ -44,19 +44,19 @@ class CommandManager extends Basic {
             command = this.commands.find(command => command.slug == slug);
         }
 
-        if (command) {            
+        if (command) {
             command.execute(message, instruction.args);
         }
     }
 
     mergeAll() {
         this.commands = this.merge(this.commands);
-        this.commands.forEach(command => console.log(command.extensions));
     }
 
     merge(commands) {
         let slugs = [...new Set(commands.map(command => command.slug))];
         let merged = [];
+
         slugs.forEach(slug => {
             let filtered = commands.filter(command => command.slug == slug && slug);
             
@@ -77,7 +77,8 @@ class CommandManager extends Basic {
             temp.extensions = extensions;
 
             merged.push(temp);
-        });        
+        });    
+
         return merged;
     }
 

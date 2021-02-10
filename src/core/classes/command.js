@@ -22,6 +22,26 @@ class Command {
     }
 
     execute(message, args) {
+        let guild = core.findGuild(message.guild.id);
+        let hasGuildPermission = false;
+        
+        this.extensions.forEach(extension => {
+            if (core.extensionManager.extensions.get(extension).isPublic) {
+                hasGuildPermission = true;
+            }
+        })
+
+        if (guild.extensions && !hasGuildPermission) {        
+            hasGuildPermission = this.extensions.some(extension => guild.extensions.includes(extension));
+        }
+        
+
+        
+        if (!hasGuildPermission) {
+            return message.channel.send(`Your guild does't have permission for this command! Сontact with your administrators.`);
+        }
+        // console.log(guild);
+        // console.log(this.extensions);
         // if (this.isPrivate) {
         //     if (!this.canExecutePrivate(this.message.author.id)) {
         //         return this.reply(__('YOU_DONT_HAVE_PERMISSION'))
@@ -63,7 +83,7 @@ class Command {
         } else {
             this.childrens = [];
         }
-        this.execute = settings.execute;
+        this.executeCustom = settings.execute;
     }
 
     // getCommandHelp() {        

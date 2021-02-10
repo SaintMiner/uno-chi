@@ -10,6 +10,10 @@ module.exports = {
         settings: {
             type: "map",
             typeDef: "<varchar, varchar>"
+        },
+        extensions: {
+            type: "list",
+            typeDef: "<varchar>"
         }
     },
     key:["guild_id"]

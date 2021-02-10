@@ -15,11 +15,7 @@ class ExtensionManager extends Basic {
             if (a.order < b.order) return -1;
         });        
         
-        this.initializeModules(extensions);
-    }
-
-    initializeModules(extensions) {        
-        extensions.forEach(extension => this.addExtension(extension.extension));        
+        extensions.forEach(extension => this.addExtension(extension.extension));
     }
 
     addExtension(extension) {

@@ -1,16 +1,15 @@
-const Module = require('@core/classes/module');
+const Extension = require('@core/classes/extension');
 const { info, warn, error, log } = require('pretty-console-logs');
 
-class GuildModule extends Module {
+class GuildExtension extends Extension {
     constructor() {
-        super(2);
+        super();
         this.guildModel = require('./Models/GuildModel');
         this.guilds = [];
-    }
-    
-    init() {
+        this.isPublic = false;
         this.loadGuilds();
         core.getGuilds = () => this.getGuilds();
+        core.findGuild = (guild_id) => this.findGuild(guild_id);
     }
 
     async loadGuilds() {
@@ -38,4 +37,4 @@ class GuildModule extends Module {
     }
 }
 
-module.exports = GuildModule
+module.exports = GuildExtension

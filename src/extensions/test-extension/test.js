@@ -1,9 +1,9 @@
-function action() {
-    console.log('test');
+function action(message) {
+    message.channel.send('pong!');
 }
 
 const command = {
-    slug: 'test',
+    slug: 'ping',
     description: 'String',
     category: 'String',
 
