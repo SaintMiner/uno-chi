@@ -1,6 +1,8 @@
 const Basic = require('./classes/basic');
 const Command = require('./classes/command');
 
+const { info } = require('pretty-console-logs');
+
 class CommandManager extends Basic {
 
     commands = [];
@@ -51,6 +53,15 @@ class CommandManager extends Basic {
 
     mergeAll() {
         this.commands = this.merge(this.commands);
+        info(`[${this.name}] (${this.getCommandCount(this.commands)}) commands loaded`);
+    }
+
+    getCommandCount(commands, count = 0) {
+        commands.forEach(command => {
+            count++;
+            count += this.getCommandCount(command.childrens);
+        });
+        return count;
     }
 
     merge(commands) {

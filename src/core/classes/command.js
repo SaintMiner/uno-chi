@@ -23,6 +23,8 @@ class Command {
 
     execute(message, args) {
         let guild = core.findGuild(message.guild.id);
+        if (!guild) return;
+        
         let hasGuildPermission = false;
         
         this.extensions.forEach(extension => {
@@ -32,7 +34,13 @@ class Command {
         })
 
         if (guild.extensions && !hasGuildPermission) {        
-            hasGuildPermission = this.extensions.some(extension => guild.extensions.includes(extension));
+            hasGuildPermission = this.extensions.some(extension => {
+                if (guild.extensions) {
+                    if (guild.extensions[extension]) {                  
+                        return guild.extensions[extension].has == 'true';
+                    }
+                }
+            });
         }
         
 
@@ -51,8 +59,9 @@ class Command {
         // if (!message.member.hasPermission(this.permissions)) {
         //     return this.reply(__('YOU_DONT_HAVE_PERMISSION'));
         // }
-        
-        this.executeCustom(message, args);
+        if (this.executeCustom) {
+            this.executeCustom(message, args);
+        }
     }
 
     // executeCustom(message, args) {

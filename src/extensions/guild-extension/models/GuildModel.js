@@ -12,8 +12,8 @@ module.exports = {
             typeDef: "<varchar, varchar>"
         },
         extensions: {
-            type: "list",
-            typeDef: "<varchar>"
+            type: "frozen",
+            typeDef: "<map<varchar, map<varchar, varchar>>>"
         }
     },
     key:["guild_id"]
