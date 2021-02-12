@@ -27,7 +27,20 @@ class GuildExtension extends Extension {
     }
 
     async fetchGuilds() {
-        await this.guildModel.findAsync({}, {raw: true}).then(result => this.guilds = result);
+        await this.guildModel.findAsync({}, {raw: true})
+            .then(result => this.guilds = result.map(guild => {
+                if (!guild.channels) guild.channels = {};
+                if (!guild.settings) guild.settings = {};
+                if (!guild.extensions) guild.extensions = {};
+
+                return guild;
+            }));
+    }
+
+    saveLocal(guild) {
+        if (guild.template) {
+            this.guilds.push(guild);
+        }
     }
 
     async save(guild) {
@@ -39,10 +52,6 @@ class GuildExtension extends Extension {
         let guild = this.guilds.find(g => g.guild_id == guild_id);
         if (!guild) {
             guild = this.getTemplate(guild_id);
-        } else {
-            if (!guild.channels) {
-                guild.channels = {};
-            }
         }
         return guild;
     }
@@ -57,6 +66,7 @@ class GuildExtension extends Extension {
             channels: {},
             extensions: {},
             settings: {},
+            template: true,
         }
     }
 }

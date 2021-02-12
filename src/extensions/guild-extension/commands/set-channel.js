@@ -1,15 +1,20 @@
 function setChannel(message, args) {
+    const guildExtension = core.getExtension('GuildExtension');
     let guild = core.findGuild(message.guild.id);
+    console.log(guildExtension);
     console.log(guild);
-    if (args.alert) {
-        guild.channels.alert = args.alert[0];
-    }
+    core.client.channels.fetch(args.alert[0]).then(c => {
+        if (args.alert) {
+            guild.channels.alert = args.alert[0];
+        }
 
-    if (args.roulette) {
-        guild.channels.alert = args.roulette[0];
-    }
+        if (args.roulette) {
+            guild.channels.alert = args.roulette[0];
+        }
 
-    console.log(guild);
+        guildExtension.saveLocal(guild);
+        guildExtension.save(guild);
+    });
 }
 
 const channel = {

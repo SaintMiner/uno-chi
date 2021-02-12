@@ -1,10 +1,10 @@
-const Module = require('@core/classes/module');
+const Extension = require('@core/classes/extension');
 const { info, warn, error, log } = require('pretty-console-logs');
 
-class VoiceProfileModule extends Module {
+class VoiceProfileModule extends Extension {
     constructor() {
-        super(2);
-        this.voiceProfilesModel = require('./Models/VoiceProfileModel');
+        super();
+        this.voiceProfilesModel = require('./models/voice-profile-model');
         this.voiceProfiles = [];
     }
 
@@ -14,7 +14,9 @@ class VoiceProfileModule extends Module {
     }
 
     commands() {
-        return require('./commands');
+        return [
+            require('./commands/info'),
+        ];
     }
 
     async loadVoiceProfiles() {

@@ -41,7 +41,10 @@ class CommandManager extends Basic {
             command = this.commands.find(command => command.slug == slug) || {childrens: []};
             return this.callCommand(message, instruction, command);
         } else if (parent) {
-            command = parent.childrens.find(command => command.slug == slug);            
+            command = parent.childrens.find(command => command.slug == slug);
+            if (!command) {
+                command = parent;
+            }
         } else {
             command = this.commands.find(command => command.slug == slug);
         }

@@ -16,10 +16,16 @@ class ExtensionManager extends Basic {
         });        
         
         extensions.forEach(extension => this.addExtension(extension.extension));
+
+        core.getExtension = (name) => this.getExtension(name);
     }
 
     addExtension(extension) {
         this.extensions.set(extension.name, new extension());
+    }
+
+    getExtension(name) {
+        return this.extensions.get(name);
     }
 
 }

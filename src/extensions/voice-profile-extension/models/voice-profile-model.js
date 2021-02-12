@@ -8,8 +8,8 @@ module.exports = {
         level       : "int",
         voicepoints  : "int",
         time_spents  : {
-            type: "frozen",
-            typeDef: "<list<time_spent>>"            
+            type: "map",
+            typeDef: "<varchar, int>"
         },
         pray_date   : "timestamp",
         pray_streak : "int",

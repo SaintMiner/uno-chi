@@ -48,25 +48,20 @@ class Command {
         if (!hasGuildPermission) {
             return message.channel.send(`Your guild does't have permission for this command! Сontact with your administrators.`);
         }
-        // console.log(guild);
-        // console.log(this.extensions);
+        
         // if (this.isPrivate) {
         //     if (!this.canExecutePrivate(this.message.author.id)) {
         //         return this.reply(__('YOU_DONT_HAVE_PERMISSION'))
         //     };
         // }
         
-        // if (!message.member.hasPermission(this.permissions)) {
-        //     return this.reply(__('YOU_DONT_HAVE_PERMISSION'));
-        // }
+        if (!message.member.hasPermission(this.permissions)) {
+            return;
+        }
         if (this.executeCustom) {
             this.executeCustom(message, args);
         }
     }
-
-    // executeCustom(message, args) {
-    //     message.channel.send('The useless command');
-    // }
     
     // canExecutePrivate(user_id) {
     //     return this.whiteListedUsers.find(user => user == user_id) || this.client.systemAdministrators.find(user => user == user_id);
