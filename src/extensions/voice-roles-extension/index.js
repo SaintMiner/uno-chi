@@ -1,15 +1,19 @@
-const Module = require('@core/classes/module');
+const Extension = require('@core/classes/extension');
 
-class VoiceRoleModule extends Module {
+const setVoiceRoles = require('./commands/set-voice-roles');
+
+class VoiceRoleExtension extends Extension {
     constructor() {
-        super(2);
-        this.voiceRolesModel = require('./Models/VoiceRoleModel');
+        super();
+        this.voiceRolesModel = require('./models/voice-role-model');
         this.voiceRoles = [];
+        this.loadVoiceRoles();
     }
 
-    init() {
-        this.loadVoiceRoles();
-        core.getGuildVoiceRoles = (guild_id) => this.getGuildVoiceRoles(guild_id);
+    commands() {
+        return [
+            setVoiceRoles,
+        ]
     }
 
     async loadVoiceRoles() {
@@ -22,10 +26,24 @@ class VoiceRoleModule extends Module {
         await this.voiceRolesModel.findAsync({}, {raw: true}).then(result => this.voiceRoles = result);
     }
 
+    saveLocal(voiceRole) {
+        if (voiceRole.template) {
+            this.voiceRoles.push(voiceRole);
+        }
+    }
+
     async save(voiceRole) {
         let record = new this.voiceRolesModel(voiceRole);
         await record.saveAsync().catch(err => error(`[${this.name}] ${err}`));
-        await this.fetchVoiceRoles();
+    }
+
+    getTemplate(guild_id = '', level = 0, add_roles = [], remove_roles = []) {
+        return {
+            guild_id: guild_id,
+            level: level,
+            add_roles: add_roles,
+            remove_roles: remove_roles
+        };
     }
 
     getGuildVoiceRoles(guild_id) {
@@ -49,4 +67,4 @@ class VoiceRoleModule extends Module {
     
 }
 
-module.exports = VoiceRoleModule
+module.exports = VoiceRoleExtension;

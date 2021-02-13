@@ -35,10 +35,11 @@ class CommandManager extends Basic {
     callCommand(message, instruction, parent = null) {
         let slug = instruction.commandment[0];
         instruction.commandment = instruction.commandment.slice(1);
+        
         let command = null;
-
-        if (instruction.commandment[0]) {            
-            command = this.commands.find(command => command.slug == slug) || {childrens: []};
+        if (instruction.commandment[0]) {
+            let list = parent ? parent.childrens : this.commands;
+            command = list.find(command => command.slug == slug) || {childrens: []};
             return this.callCommand(message, instruction, command);
         } else if (parent) {
             command = parent.childrens.find(command => command.slug == slug);

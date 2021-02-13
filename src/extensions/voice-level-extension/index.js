@@ -1,26 +1,42 @@
-const Module = require('@core/classes/module');
+const Extension = require('@core/classes/extension');
+
 const { info, warn, error, log } = require('pretty-console-logs');
 
-class VoiceLevelModule extends Module {
+const setVoice = require('./commands/set-voice');
+
+class VoiceLevelExtension extends Extension {
     
-    init() {
-        this.tickInterval = core.getConfiguration().voice_tick * 1000;
+    
+    constructor() {
+        super();
+        this.voiceProfileExtension = core.getExtension('VoiceProfileExtension');
+        this.voiceRoleExtension = core.getExtension('VoiceRoleExtension');
+        this.voiceRoomExtension = core.getExtension('VoiceRoomExtension');
+
+        this.tickInterval = core.configuration.voice_tick * 1000;
         this.saveInterval = 5 * 60 * 1000;
-        this.voiceProfileModule = core.moduleLoader.modules.get('VoiceProfileModule');
-        this.voiceRoleModule = core.moduleLoader.modules.get('VoiceRoleModule');
+        
+
+        if (!(this.voiceProfileExtension && this.voiceRoleExtension && this.voiceRoomExtension)) return;
 
         setInterval(() => {
             core.getGuilds().forEach(guild => this.tickGuild(guild));
         }, this.tickInterval);
         setInterval(() => {
-            this.voiceProfileModule.saveAll();;
+            this.voiceProfileExtension.saveAll();;
         }, this.saveInterval);
+    }
+
+    command() {
+        return [
+            setVoice,
+        ]
     }
 
     tickGuild(guild) {
         core.client.guilds.fetch(guild.guild_id)
         .then(g => {
-            const rooms = core.getGuildVoiceRooms(guild.guild_id);
+            const rooms = this.voiceRoomExtension.getGuildVoiceRooms(guild.guild_id);
             rooms.forEach(room => this.tickVoiceRoom(room, guild));
         })
         .catch(err => error(`${err}. GuildID: [${guild.guild_id}]`));        
@@ -33,24 +49,24 @@ class VoiceLevelModule extends Module {
     }
 
     tickMember(member, room, guild) {
-        let profile = this.voiceProfileModule.findVoiceProfile(member.id, guild.guild_id);
+        let profile = this.voiceProfileExtension.findVoiceProfile(member.id, guild.guild_id);
 
         if (profile) {
             profile.experience += this.getVoiceRoomExperience(room);            
         } else {
             profile = {};
-            Object.assign(profile, this.voiceProfileModule.getVoiceProfileTemplate());
+            Object.assign(profile, this.voiceProfileExtension.getVoiceProfileTemplate());
             profile.user_id = member.id;
             profile.guild_id = guild.guild_id;
             profile.experience = this.getVoiceRoomExperience(room);
-            this.voiceProfileModule.voiceProfiles.push(profile);
+            this.voiceProfileExtension.voiceProfiles.push(profile);
         }
 
         if (profile.experience >= this.getNextLevelExperienceCount(profile.level)) {
             profile.experience -= this.getNextLevelExperienceCount(profile.level);
             profile.level++;
             profile.voicepoints += 10 * profile.level;
-            this.voiceRoleModule.processUserByLevel(member, profile.level);
+            this.voiceRoleExtension.processUserByLevel(member, profile.level);
         }
     }
 
@@ -71,4 +87,4 @@ class VoiceLevelModule extends Module {
     
 }
 
-module.exports = VoiceLevelModule
+module.exports = VoiceLevelExtension;

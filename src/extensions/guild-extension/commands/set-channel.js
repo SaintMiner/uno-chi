@@ -1,20 +1,25 @@
+let set = require('@commands/set');
+
 function setChannel(message, args) {
     const guildExtension = core.getExtension('GuildExtension');
     let guild = core.findGuild(message.guild.id);
-    console.log(guildExtension);
-    console.log(guild);
-    core.client.channels.fetch(args.alert[0]).then(c => {
-        if (args.alert) {
-            guild.channels.alert = args.alert[0];
-        }
+    let alert = args.alert ? args.alert[0] : null;
+    let roulette = args.roulette ? args.roulette[0] : null;
+    
+    if (alert) {
+        core.client.channels.fetch(alert).then(c => {
+            guild.channels.alert = alert;
+        });
+    }
 
-        if (args.roulette) {
-            guild.channels.alert = args.roulette[0];
-        }
+    if (roulette) {
+        core.client.channels.fetch(roulette).then(c => {
+            guild.channels.roulette = roulette;
+        });
+    }
 
-        guildExtension.saveLocal(guild);
-        guildExtension.save(guild);
-    });
+    guildExtension.saveLocal(guild);
+    guildExtension.save(guild);
 }
 
 const channel = {
@@ -34,23 +39,6 @@ const channel = {
     childrens: [],
 }
 
-const set = {
-    slug: 'set',
-    description: 'String',
-    category: 'String',
-
-    usages: [],
-    aliases: [],
-    permissions: [],
-    whiteListedUsers: [],
-
-    isHidden: false,
-    isPrivate: false,
-
-    execute: null,
-    childrens: [
-        channel
-    ],
-}
+set.childrens.push(channel);
 
 module.exports = set;

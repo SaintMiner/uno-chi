@@ -9,6 +9,7 @@ class ExtensionManager extends Basic {
     initialize() {
         this.extensionLoader = new ExtensionLoader();
         let extensions = this.extensionLoader.initialize();
+        core.getExtension = (name) => this.getExtension(name);
 
         extensions = extensions.sort((a , b) => {
             if (a.order > b.order) return 1;
@@ -17,7 +18,6 @@ class ExtensionManager extends Basic {
         
         extensions.forEach(extension => this.addExtension(extension.extension));
 
-        core.getExtension = (name) => this.getExtension(name);
     }
 
     addExtension(extension) {

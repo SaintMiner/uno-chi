@@ -1,16 +1,14 @@
 const Extension = require('@core/classes/extension');
 const { info, warn, error, log } = require('pretty-console-logs');
 
-class VoiceProfileModule extends Extension {
+class VoiceProfileExtension extends Extension {
     constructor() {
         super();
         this.voiceProfilesModel = require('./models/voice-profile-model');
         this.voiceProfiles = [];
-    }
-
-    init() {
+        
         this.loadVoiceProfiles();
-        core.findVoiceProfile = (user_id) => this.findVoiceProfile(user_id);
+        core.findVoiceProfile = (user_id, guild_id) => this.findVoiceProfile(user_id, guild_id);
     }
 
     commands() {
@@ -26,7 +24,11 @@ class VoiceProfileModule extends Extension {
     }
 
     async fetchVoiceProfiles() {
-        await this.voiceProfilesModel.findAsync({}, {raw: true}).then(result => this.voiceProfiles = result);
+        await this.voiceProfilesModel.findAsync({}, {raw: true}).then(result => {
+            this.voiceProfiles = result.map(profile => {
+                if (!profile.time_spents) profile.time_spents = {};
+            });
+        });
     }
 
     findVoiceProfile(user_id, guild_id) {
@@ -41,7 +43,7 @@ class VoiceProfileModule extends Extension {
             level: 1,
             pray_date: null,
             pray_streak: 0,
-            time_spents: [],
+            time_spents: {},
             voicepoints: 0
         }
     }
@@ -59,4 +61,4 @@ class VoiceProfileModule extends Extension {
     
 }
 
-module.exports = VoiceProfileModule
+module.exports = VoiceProfileExtension

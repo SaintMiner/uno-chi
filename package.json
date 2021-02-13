@@ -9,7 +9,8 @@
     "dev": "nodemon ./src/bot.js"
   },
   "_moduleAliases": {
-    "@core": "./src/core"
+    "@core": "./src/core",
+    "@commands": "./src/commands"
   },
   "keywords": [],
   "author": "",

@@ -1,13 +1,10 @@
-const Module = require('@core/classes/module');
+const Extension = require('@core/classes/extension');
 
-class TextProfileModule extends Module {
+class TextProfileExtension extends Extension {
     constructor() {
-        super(2);
-        this.textProfilesModel = require('./Models/TextProfileModel');
+        super();
+        this.textProfilesModel = require('./models/text-profile-model');
         this.textProfiles = [];
-    }
-
-    init() {
         this.loadTextProfiles();
     }
 
@@ -34,4 +31,4 @@ class TextProfileModule extends Module {
     
 }
 
-module.exports = TextProfileModule
+module.exports = TextProfileExtension;

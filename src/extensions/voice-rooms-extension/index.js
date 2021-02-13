@@ -1,15 +1,11 @@
-const Module = require('@core/classes/module');
+const Extension = require('@core/classes/extension');
 
-class VoiceRoomModule extends Module {
+class VoiceRoomExtension extends Extension {
     constructor() {
-        super(2);
-        this.voiceRoomsModel = require('./Models/VoiceRoomModel');
+        super();
+        this.voiceRoomsModel = require('./models/voice-room-model');
         this.voiceRooms = [];
-    }
-
-    init() {
-        this.loadVoiceRooms();
-        core.getGuildVoiceRooms = (guild_id) => this.getGuildVoiceRooms(guild_id);
+        this.loadVoiceRooms();        
     }
 
     async loadVoiceRooms() {
@@ -35,4 +31,4 @@ class VoiceRoomModule extends Module {
     
 }
 
-module.exports = VoiceRoomModule
+module.exports = VoiceRoomExtension
