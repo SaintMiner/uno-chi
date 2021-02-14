@@ -20,7 +20,11 @@ class VoiceLevelExtension extends Extension {
         if (!(this.voiceProfileExtension && this.voiceRoleExtension && this.voiceRoomExtension)) return;
 
         setInterval(() => {
-            core.getGuilds().forEach(guild => this.tickGuild(guild));
+            core.getGuilds().forEach(guild => {
+                if (guild.settings.is_active == 'true') {
+                    this.tickGuild(guild)
+                }
+            });
         }, this.tickInterval);
         setInterval(() => {
             this.voiceProfileExtension.saveAll();;
@@ -45,14 +49,39 @@ class VoiceLevelExtension extends Extension {
     tickVoiceRoom(room, guild) {
         core.client.channels.fetch(room.room_id).then(channel => {
             channel.members.forEach(member => this.tickMember(member, room, guild));
-        }).catch(err => error(err));
+        }).catch(err => {});
     }
 
     tickMember(member, room, guild) {
         let profile = this.voiceProfileExtension.findVoiceProfile(member.id, guild.guild_id);
-
+        
         if (profile) {
-            profile.experience += this.getVoiceRoomExperience(room);            
+            profile.experience += this.getVoiceRoomExperience(room);
+            if (!profile.time_spents) {
+                profile.time_spents = {};
+            }
+
+            if (!profile.time_spents.global) {
+                profile.time_spents.global = 0;
+            }
+
+            if (+room.settings.mining) {
+                if (profile.time_spents[room.room_id]) {
+                    profile.time_spents[room.room_id] += +core.configuration.voice_tick;
+                } else {
+                    profile.time_spents[room.room_id] = +core.configuration.voice_tick;
+                }
+
+                let miningPayDay = 1 * 60 * 60;
+
+                if (profile.time_spents[room.room_id] >= miningPayDay) {
+                    profile.time_spents[room.room_id] -= miningPayDay;
+                    profile.voicepoints += +room.settings.mining
+                }
+            }
+
+            profile.time_spents.global += +core.configuration.voice_tick;
+            
         } else {
             profile = {};
             Object.assign(profile, this.voiceProfileExtension.getVoiceProfileTemplate());
@@ -72,9 +101,13 @@ class VoiceLevelExtension extends Extension {
 
     getVoiceRoomExperience(room) {
         let experience = 0;
+        let weekday = new Date().getDay();
 
         if (room.settings) {
             experience = +room.settings.experience || 0
+            if (room.settings.weekend == 'true' && ((weekday === 6) || (weekday === 0))) {
+                experience *= 2;
+            }
         }
         
         return experience;

@@ -27,6 +27,7 @@ class VoiceProfileExtension extends Extension {
         await this.voiceProfilesModel.findAsync({}, {raw: true}).then(result => {
             this.voiceProfiles = result.map(profile => {
                 if (!profile.time_spents) profile.time_spents = {};
+                return profile;
             });
         });
     }
@@ -43,7 +44,7 @@ class VoiceProfileExtension extends Extension {
             level: 1,
             pray_date: null,
             pray_streak: 0,
-            time_spents: {},
+            time_spents: {global: 0},
             voicepoints: 0
         }
     }

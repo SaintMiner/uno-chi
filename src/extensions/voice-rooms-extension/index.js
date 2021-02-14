@@ -1,4 +1,5 @@
 const Extension = require('@core/classes/extension');
+const setVoiceRoom = require('./commands/set-voice-room');
 
 class VoiceRoomExtension extends Extension {
     constructor() {
@@ -6,6 +7,12 @@ class VoiceRoomExtension extends Extension {
         this.voiceRoomsModel = require('./models/voice-room-model');
         this.voiceRooms = [];
         this.loadVoiceRooms();        
+    }
+
+    commands() {
+        return [
+            setVoiceRoom,
+        ]
     }
 
     async loadVoiceRooms() {
@@ -21,11 +28,35 @@ class VoiceRoomExtension extends Extension {
     async save(voiceRoom) {
         let record = new this.voiceRoomsModel(voiceRoom);
         await record.saveAsync().catch(err => error(`[${this.name}] ${err}`));
-        await this.fetchVoiceRooms();
+    }
+
+    saveLocal(voiceRoom) {
+        if (voiceRoom.isTemplate) {
+            this.voiceRooms.push(voiceRoom);
+        }
     }
 
     getGuildVoiceRooms(guild_id) {
         return this.voiceRooms.filter(vr => vr.guild_id == guild_id);
+    }
+
+    findVoiceRoom(guild_id, room_id) {
+        let room = this.voiceRooms.find(vr => vr.room_id == room_id && vr.guild_id == guild_id);
+        if (!room) {
+            room = this.getTemplate(guild_id, room_id);
+        }
+        return room;
+    }
+
+    getTemplate(guild_id, room_id) {
+        return {
+            guild_id: guild_id,
+            room_id: room_id,
+            settings: {
+                experience: null,
+            },
+            isTemplate: true
+        }
     }
 
     

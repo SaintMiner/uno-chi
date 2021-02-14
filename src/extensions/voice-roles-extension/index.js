@@ -1,4 +1,5 @@
 const Extension = require('@core/classes/extension');
+const { error } = require('pretty-console-logs');
 
 const setVoiceRoles = require('./commands/set-voice-roles');
 
@@ -48,6 +49,14 @@ class VoiceRoleExtension extends Extension {
 
     getGuildVoiceRoles(guild_id) {
         return this.voiceRoles.filter(vr => vr.guild_id == guild_id);
+    }
+
+    findVoiceRole(guild_id, level) {
+        let record = this.voiceRoles.find(vr => vr.guild_id == guild_id && vr.level == level);
+        if (!record) {
+            record = this.getTemplate(guild_id, level);
+        }
+        return record;
     }
 
     async processUserByLevel(member, level) {

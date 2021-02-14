@@ -15,5 +15,5 @@ module.exports = [
     {extension: VoiceProfileExtension},
     {extension: VoiceRoomExtension},
     {extension: VoiceRolesExtension},
-    // {extension: VoiceLevelExtension},
+    {extension: VoiceLevelExtension},
 ];

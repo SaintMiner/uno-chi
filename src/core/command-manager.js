@@ -114,8 +114,11 @@ class CommandManager extends Basic {
             rawArguments.forEach(arg => {
                 if (arg.startsWith(argumentPrefix)) {
                     selectedAttribute = arg.substring(1);
-                    args[selectedAttribute] = [];
+                    args[selectedAttribute] = null;
                 } else if (selectedAttribute) {
+                    if (!Array.isArray(args[selectedAttribute])) {
+                        args[selectedAttribute] = [];
+                    }
                     args[selectedAttribute].push(arg);
                 }
             });            
