@@ -7,6 +7,8 @@ const VoiceLevelExtension = require('./voice-level-extension');
 const VoiceRolesExtension = require('./voice-roles-extension');
 const VoiceRoomExtension = require('./voice-rooms-extension');
 const TextProfileExtension = require('./text-profile-extension');
+const GambleExtension = require('./gamble-extension');
+const RouletteWebsocket = require('./roulette-websocket');
 
 module.exports = [
     {extension: DatabaseExtension},
@@ -16,4 +18,6 @@ module.exports = [
     {extension: VoiceRoomExtension},
     {extension: VoiceRolesExtension},
     {extension: VoiceLevelExtension},
+    {extension: RouletteWebsocket},
+    {extension: GambleExtension},
 ];

@@ -5,17 +5,15 @@ function setChannel(message, args) {
     let guild = core.findGuild(message.guild.id);
     let alert = args.alert ? args.alert[0] : null;
     let roulette = args.roulette ? args.roulette[0] : null;
-    
+    console.log(roulette);
     if (alert) {
-        core.client.channels.fetch(alert).then(c => {
-            guild.channels.alert = alert;
-        });
+        if (!message.guild.channels.resolve(alert)) return;
+        guild.channels.alert = alert;
     }
-
+    
     if (roulette) {
-        core.client.channels.fetch(roulette).then(c => {
-            guild.channels.roulette = roulette;
-        });
+        if (!message.guild.channels.resolve(roulette)) return;
+        guild.channels.roulette = roulette;
     }
 
     guildExtension.saveLocal(guild);
