@@ -21,7 +21,7 @@ class Command {
         this.loadSettings(settings);        
     }
 
-    execute(message, args) {
+    execute(message, args, overage) {
         let guild = core.findGuild(message.guild.id);
         if (!guild) return;
         
@@ -59,7 +59,7 @@ class Command {
             return;
         }
         if (this.executeCustom) {
-            this.executeCustom(message, args);
+            this.executeCustom(message, args, overage);
         }
     }
     

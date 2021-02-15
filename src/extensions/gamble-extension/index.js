@@ -44,7 +44,9 @@ class GambleExtension extends Extension {
         if (!this.validateRouletteBet(message, args, voice_profile)) return 'Validation error';
         
         if (!this.rouletteLaunched) {
-            message.channel.send(`Рулетка будет запущена через ${this.rouletteSecondsBeforeLauch} секунд`);
+            if (message) {
+                message.channel.send(`Рулетка будет запущена через ${this.rouletteSecondsBeforeLauch} секунд`);
+            }
             this.rouletteLaunched = true;
             this.bets = [];
             this.rouletteWheel = setTimeout(() => {

@@ -82,10 +82,13 @@ class RouletteWebsocket extends Extension {
             // }
             
             try {
-                if (!Array.isArray(request.requestedProtocols) || !request.requestedProtocols[1] || request.requestedProtocols[0] != 'access_code') {
+                if (!Array.isArray(request.requestedProtocols) 
+                    || !request.requestedProtocols[1] 
+                    || request.requestedProtocols[0] != 'access_code'
+                ) {
                     return request.reject(1002, 'Invalid requestedProtocols');
                 }
-                console.log(request);
+                // console.log(request);
                 let code = request.requestedProtocols[1].toUpperCase();
                 let player = this.players.find(player => player.code == code);
                 // console.log(player)
@@ -103,11 +106,8 @@ class RouletteWebsocket extends Extension {
                     switch (key) {
                         case 'bet':
                             data = data.bet;
-                            let gambleCommand = this.client.modules
-                                .find(m => m.name == 'Commands').commands
-                                .find(command => command.settings.slug == 'gamble');
-                            // console.log(gambleCommand);
-                            let res = gambleCommand.roulette(null, [null, data.place, data.bet], player.user_id, player.guild_id);
+                            let gambleExtension = core.getExtension('GambleExtension');
+                            let res = gambleExtension.roulette(null, [null, data.place, data.bet], player.user_id, player.guild_id);
                             this.tableBets = res;
                             this.sendMessageToAll({bets: this.tableBets});
                         break;
@@ -124,6 +124,12 @@ class RouletteWebsocket extends Extension {
         });
     }
 
+    commands() {
+        return [
+            require('./commands/auth'),
+        ]
+    }
+
     sendMessageToAll(data) {
         this.connections.forEach((client) => {
             client.sendUTF(JSON.stringify(data));
@@ -133,10 +139,9 @@ class RouletteWebsocket extends Extension {
     async sendConnectedPlayers () {
         let connectedPlayers = [];
         for await (const connection of this.connections) {
-            await this.client.users.fetch(connection.player.user_id).then(u => {
-                // console.log(u);
+            await core.client.users.fetch(connection.player.user_id).then(u => {
                 connectedPlayers.push({
-                    voicepoint: connection.player.voice_profile.voicepoint,
+                    voicepoint: connection.player.voice_profile.voicepoints,
                     username: u.username,   
                     tag: u.discriminator,
                     avatar: u.avatar,

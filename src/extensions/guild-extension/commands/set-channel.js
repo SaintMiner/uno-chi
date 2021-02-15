@@ -5,7 +5,6 @@ function setChannel(message, args) {
     let guild = core.findGuild(message.guild.id);
     let alert = args.alert ? args.alert[0] : null;
     let roulette = args.roulette ? args.roulette[0] : null;
-    console.log(roulette);
     if (alert) {
         if (!message.guild.channels.resolve(alert)) return;
         guild.channels.alert = alert;

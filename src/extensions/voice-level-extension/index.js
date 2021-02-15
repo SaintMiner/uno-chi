@@ -110,7 +110,7 @@ class VoiceLevelExtension extends Extension {
             }
         }
         
-        return experience;
+        return Math.round(experience);
     }
 
     getNextLevelExperienceCount(level) {
