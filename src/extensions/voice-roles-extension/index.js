@@ -28,7 +28,7 @@ class VoiceRoleExtension extends Extension {
     }
 
     saveLocal(voiceRole) {
-        if (voiceRole.template) {
+        if (voiceRole.isTemplate) {
             this.voiceRoles.push(voiceRole);
         }
     }
@@ -38,12 +38,19 @@ class VoiceRoleExtension extends Extension {
         await record.saveAsync().catch(err => error(`[${this.name}] ${err}`));
     }
 
-    getTemplate(guild_id = '', level = 0, add_roles = [], remove_roles = []) {
+    async delete(voiceRole) {
+        await this.voiceRolesModel.deleteAsync({guild_id: voiceRole.guild_id, level: voiceRole.level}, (err) => {
+            if(err) console.log(err);
+        });
+    }
+
+    getTemplate(guild_id = '', level = 0) {
         return {
             guild_id: guild_id,
             level: level,
-            add_roles: add_roles,
-            remove_roles: remove_roles
+            add_roles: [],
+            remove_roles: [],
+            isTemplate: true,
         };
     }
 

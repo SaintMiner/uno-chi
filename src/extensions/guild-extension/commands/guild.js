@@ -1,3 +1,8 @@
+let set = require('./set');
+let channel = require('./channel');
+
+set.childrens.push(channel);
+
 const command = {
     slug: 'guild',
     description: null,
@@ -12,7 +17,7 @@ const command = {
     isPrivate: false,
 
     execute: null,
-    childrens: [],
+    childrens: [ set ],
 }
 
 module.exports = command;

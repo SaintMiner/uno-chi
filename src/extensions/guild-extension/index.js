@@ -1,8 +1,6 @@
 const Extension = require('@core/classes/extension');
 const { info, warn, error, log } = require('pretty-console-logs');
 
-const setChannelCommand = require('./commands/set-channel');
-
 class GuildExtension extends Extension {
     constructor() {
         super();
@@ -16,8 +14,7 @@ class GuildExtension extends Extension {
 
     commands() {
         return [
-            setChannelCommand,
-            require('./commands/channel'),
+            require('./commands/guild'),
         ]
     }
 

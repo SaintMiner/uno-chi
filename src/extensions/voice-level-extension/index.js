@@ -2,8 +2,6 @@ const Extension = require('@core/classes/extension');
 
 const { info, warn, error, log } = require('pretty-console-logs');
 
-const setVoice = require('./commands/set-voice');
-
 class VoiceLevelExtension extends Extension {
     
     
@@ -31,9 +29,9 @@ class VoiceLevelExtension extends Extension {
         }, this.saveInterval);
     }
 
-    command() {
+    commands() {
         return [
-            setVoice,
+            require('./commands/voice'),
         ]
     }
 

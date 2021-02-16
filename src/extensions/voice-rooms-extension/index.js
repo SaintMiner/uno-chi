@@ -1,6 +1,8 @@
 const Extension = require('@core/classes/extension');
 const setVoiceRoom = require('./commands/set-voice-room');
 
+const { info, warn, error, log } = require('pretty-console-logs');
+
 class VoiceRoomExtension extends Extension {
     constructor() {
         super();
@@ -30,6 +32,12 @@ class VoiceRoomExtension extends Extension {
         await record.saveAsync().catch(err => error(`[${this.name}] ${err}`));
     }
 
+    async delete(voiceRoom) {
+        await this.voiceRoomsModel.deleteAsync({guild_id: voiceRoom.guild_id, room_id: voiceRoom.room_id}, (err) => {
+            if(err) console.log(err);
+        });
+    }
+
     saveLocal(voiceRoom) {
         if (voiceRoom.isTemplate) {
             this.voiceRooms.push(voiceRoom);
@@ -53,7 +61,7 @@ class VoiceRoomExtension extends Extension {
             guild_id: guild_id,
             room_id: room_id,
             settings: {
-                experience: null,
+                experience: 0,
             },
             isTemplate: true
         }

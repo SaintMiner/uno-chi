@@ -1,8 +1,23 @@
-let guild = require('./guild');
-let set = require('./set');
+function action(message, args, overage) {
+    console.log(overage);
+    const guildExtension = core.getExtension('GuildExtension');
 
-function action() {
-    console.log('some action');
+    let guild = core.findGuild(message.guild.id);
+    let alert = args.alert ? args.alert[0] : null;
+    let roulette = args.roulette ? args.roulette[0] : null;
+
+    if (alert) {
+        if (!message.guild.channels.resolve(alert)) return;
+        guild.channels.alert = alert;
+    }
+    
+    if (roulette) {
+        if (!message.guild.channels.resolve(roulette)) return;
+        guild.channels.roulette = roulette;
+    }
+
+    guildExtension.saveLocal(guild);
+    guildExtension.save(guild);
 }
 
 const command = {
@@ -22,7 +37,4 @@ const command = {
     childrens: [],
 }
 
-set.childrens.push(command);
-guild.childrens.push(set);
-
-module.exports = guild;
+module.exports = command;
