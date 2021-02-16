@@ -34,6 +34,7 @@ class GambleExtension extends Extension {
     commands() {
         return [
             rouletteCommand,
+            require('./commands/gamble')
         ]
     }
 
