@@ -17,6 +17,7 @@ class GuildExtension extends Extension {
     commands() {
         return [
             setChannelCommand,
+            require('./commands/channel'),
         ]
     }
 
