@@ -14,6 +14,7 @@ class VoiceProfileExtension extends Extension {
     commands() {
         return [
             require('./commands/info'),
+            require('./commands/top'),
         ];
     }
 

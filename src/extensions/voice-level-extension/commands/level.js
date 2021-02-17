@@ -28,16 +28,19 @@ function removeLevel(message, args, overage) {
 }
 
 let remove = {
+    permissions: ['ADMINISTRATOR'],
     slug: 'remove',
     execute: removeLevel,
 }
 
 let create = {
+    permissions: ['ADMINISTRATOR'],
     slug: 'create',
     execute: createLevel,
 }
 
 let command = {
+    permissions: ['ADMINISTRATOR'],
     slug: 'level',
     childrens: [ create, remove ],
 }

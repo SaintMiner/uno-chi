@@ -1,7 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
 function action(message) {
-    const voiceProfileExtension = core.getExtension('VoiceProfileExtension');
     let member = message.mentions.members.first();
     if (!member) {
         member = message.member;

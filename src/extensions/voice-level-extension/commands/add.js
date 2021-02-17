@@ -27,16 +27,19 @@ function addVoiceXp(message, args, overage) {
 }
 
 let voicepoints = {
+    permissions: ['ADMINISTRATOR'],
     slug: 'voicepoints',
     execute: addVoicePoints,
 }
 
 let voicexp = {
+    permissions: ['ADMINISTRATOR'],
     slug: 'voicexp',
     execute: addVoiceXp,
 }
 
 let command = {
+    permissions: ['ADMINISTRATOR'],
     slug: 'add',
     childrens: [ voicexp, voicepoints ],
 }

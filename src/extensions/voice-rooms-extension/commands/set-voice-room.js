@@ -28,7 +28,7 @@ let room = {
 
     usages: [],
     aliases: [],
-    permissions: [],
+    permissions: ['ADMINISTRATOR'],
     whiteListedUsers: [],
 
     isHidden: false,

@@ -42,30 +42,31 @@ class Command {
                 }
             });
         }
-        
-
-        
+                        
         if (!hasGuildPermission) {
             return message.channel.send(`Your guild does't have permission for this command! Сontact with your administrators.`);
         }
         
-        // if (this.isPrivate) {
-        //     if (!this.canExecutePrivate(this.message.author.id)) {
-        //         return this.reply(__('YOU_DONT_HAVE_PERMISSION'))
-        //     };
-        // }
-        
         if (!message.member.hasPermission(this.permissions)) {
-            return;
+            return message.channel.send(__('YOU_DONT_HAVE_PERMISSION'));
         }
-        if (this.executeCustom) {
+
+        if (this.isPrivate) {
+            if (!this.canExecutePrivate(message.author.id)) {
+                return message.channel.send(__('YOU_DONT_HAVE_PERMISSION'))
+            };
+        }
+                
+        if (this.executeCustom) {            
             this.executeCustom(message, args, overage);
         }
     }
     
-    // canExecutePrivate(user_id) {
-    //     return this.whiteListedUsers.find(user => user == user_id) || this.client.systemAdministrators.find(user => user == user_id);
-    // }
+    canExecutePrivate(user_id) {
+        let isSysAdmin = core.configuration.systemAdministrators.some(user => user == user_id);
+        let isWhiteListed = this.whiteListedUsers.some(user => user == user_id);
+        return isSysAdmin || isWhiteListed;
+    }
 
     loadSettings(settings) {
         this.rawSettings = settings;

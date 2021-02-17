@@ -10,7 +10,7 @@ const command = {
 
     usages: [],
     aliases: [],
-    permissions: [],
+    permissions: ['ADMINISTRATOR'],
     whiteListedUsers: [],
 
     isHidden: false,

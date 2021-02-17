@@ -1,5 +1,4 @@
 function action(message, args, overage) {
-    console.log(overage);
     const guildExtension = core.getExtension('GuildExtension');
 
     let guild = core.findGuild(message.guild.id);
@@ -27,7 +26,7 @@ const command = {
 
     usages: [],
     aliases: [],
-    permissions: [],
+    permissions: ['ADMINISTRATOR'],
     whiteListedUsers: [],
 
     isHidden: false,

@@ -63,6 +63,7 @@ function removeRoom(message, args, overage) {
 }
 
 let remove = {
+    permissions: ['ADMINISTRATOR'],
     slug: 'remove',
     execute: removeRoom,
 }
@@ -73,6 +74,7 @@ let info = {
 }
 
 let create = {
+    permissions: ['ADMINISTRATOR'],
     slug: 'create',
     execute: createRoom,
 }
