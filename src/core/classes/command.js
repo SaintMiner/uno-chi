@@ -27,13 +27,17 @@ class Command {
         
         let hasGuildPermission = false;
         
+        if (!this.extensions.length) {
+            hasGuildPermission = true;
+        }
+
         this.extensions.forEach(extension => {
             if (core.extensionManager.extensions.get(extension).isPublic) {
                 hasGuildPermission = true;
             }
         })
 
-        if (guild.extensions && !hasGuildPermission) {        
+        if (guild.extensions && !hasGuildPermission) {                   
             hasGuildPermission = this.extensions.some(extension => {
                 if (guild.extensions) {
                     if (guild.extensions[extension]) {                  
@@ -82,7 +86,7 @@ class Command {
         this.isPrivate = settings.isPrivate || false;
         this.category = settings.category || 'Uncategorized';
         this.executeCustom = settings.execute;
-        this.extensions = settings.extensions;
+        this.extensions = settings.extensions || [];
         if (Array.isArray(settings.childrens)) {
             this.childrens = settings.childrens.map(children => new Command(children));
         } else {

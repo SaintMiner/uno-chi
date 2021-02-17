@@ -4,6 +4,7 @@ const { I18n } = require('i18n');
 const { info } = require('pretty-console-logs');
 
 const Basic = require('./classes/basic');
+const Command = require('./classes/command');
 
 const ConfigurationLoader = require('./configuration-loader');
 const ExtensionManager = require('./extension-manager');
@@ -40,9 +41,13 @@ class UnoCore extends Basic{
             this.commandBuilder.build(extension.commands(), extension.name);
         });
 
-        this.commandManager.initialize();
+        this.commandManager.initialize();        
+        this.commandManager.addCommand(new Command(require('../commands/uno')));
         this.commandManager.mergeAll();
+
     }
+
+
         
 }
 
