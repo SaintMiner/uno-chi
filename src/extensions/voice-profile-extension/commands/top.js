@@ -21,7 +21,7 @@ function topVoicePoints(message) {
     profiles.some(profile => {
         let member = message.guild.members.resolve(profile.user_id);
         if (member) {
-            embed.addField(`#${place} ${member.user.tag}`, `${profile.voicepoints} ВП`);
+            embed.addField(`#${place} ${member.user.tag}`, `${profile.voicepoints} VP`);
             place++;
         }
 
@@ -131,6 +131,7 @@ const voicepoints = {
 
 const command = {
     slug: 'top',
+    execute: topVoiceLevel,
     childrens: [ voicepoints, voicelevel, time ]
 }
 

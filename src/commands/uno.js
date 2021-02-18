@@ -4,11 +4,11 @@ function uno(message) {
     let embed = new MessageEmbed()
         .setColor("#580ad6")
         .setThumbnail(core.client.user.avatarURL())
-        .setTitle(`Информация обо мне`)
+        .setTitle(`UnoCard`)
         .setTimestamp();
 
-    embed.addField('Версия', core.configuration.core_version, true);
-    embed.addField('Дата запуска', core.launchedAt, true);
+    embed.addField('UnoCore version', core.configuration.core_version, true);
+    embed.addField('Launched at', core.launchedAt, true);
 
     message.channel.send(embed);
 }

@@ -32,6 +32,7 @@ function gambleRPS(message, args, overage) {
     const voiceProfileExtension = core.getExtension('VoiceProfileExtension');
     random.use(seedrandom(`nleebsu-${new Date().getTime()}`));
 
+    let multiplier = 2;
     let profile = voiceProfileExtension.findVoiceProfile(message.author.id, message.guild.id);
     let bet = +overage[0];
     let userChoose = overage[1];
@@ -51,19 +52,19 @@ function gambleRPS(message, args, overage) {
     message.channel.send(botChoose);
 
     if (botChoose == '🖐️' && userChoose == '✌️') {
-        profile.voicepoints += bet*3;
+        profile.voicepoints += bet*multiplier;
     } else if (botChoose == '🖐️' && userChoose == '✊') {
         profile.voicepoints -= bet;
     }
 
     if (botChoose == '✌️' && userChoose == '✊') {
-        profile.voicepoints += bet*3;
+        profile.voicepoints += bet*multiplier;
     } else if (botChoose == '✌️' && userChoose == '🖐️') {
         profile.voicepoints -= bet;
     }
 
     if (botChoose == '✊' && userChoose == '🖐️') {
-        profile.voicepoints += bet*3;
+        profile.voicepoints += bet*multiplier;
     } else if (botChoose == '✊' && userChoose == '✌️') {
         profile.voicepoints -= bet;
     }
