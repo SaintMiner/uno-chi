@@ -106,7 +106,6 @@ class CommandManager extends Basic {
             .filter(part => !!part);
             
         let argumentsIndex = parts.findIndex(part => /-\D+/g.test(part));
-        console.log(argumentsIndex);
         if (argumentsIndex > -1) {
             let rawArguments = parts.splice(argumentsIndex);
             let selectedAttribute = null;
