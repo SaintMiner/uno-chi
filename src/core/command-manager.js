@@ -105,13 +105,13 @@ class CommandManager extends Basic {
             .split(/ +/g)
             .filter(part => !!part);
             
-        let argumentsIndex = parts.findIndex(part => part.startsWith(argumentPrefix));
-
+        let argumentsIndex = parts.findIndex(part => /-\D+/g.test(part));
+        console.log(argumentsIndex);
         if (argumentsIndex > -1) {
             let rawArguments = parts.splice(argumentsIndex);
             let selectedAttribute = null;
             rawArguments.forEach(arg => {
-                if (arg.startsWith(argumentPrefix)) {
+                if (/-\D+/g.test(arg)) {
                     selectedAttribute = arg.substring(1);
                     args[selectedAttribute] = null;
                 } else if (selectedAttribute) {
