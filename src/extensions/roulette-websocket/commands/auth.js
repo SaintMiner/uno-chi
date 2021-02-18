@@ -15,12 +15,12 @@ function execute(message, args) {
 function validateAuth(message, voice_profile) {
     
     if (!voice_profile) {
-        message.channel.send('Для начала стань частью системы...');
+        core.sendLocalizedError(message, `BECOME_A_MEMBER_OF_SYSTEM`);
         return;
     }
     let player = core.getExtension('RouletteWebsocket').players.find(player => player.user_id == voice_profile.user_id && player.guild_id == voice_profile.guild_id);
     if (player) {
-        message.channel.send('Ты уже получил код!');
+        core.sendLocalizedError(message, `CODE_WAS_RECEIVE`);
         return;
     }
 

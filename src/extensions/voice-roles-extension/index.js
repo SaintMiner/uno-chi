@@ -13,7 +13,7 @@ class VoiceRoleExtension extends Extension {
 
     commands() {
         return [
-            setVoiceRoles,
+            
         ]
     }
 

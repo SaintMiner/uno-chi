@@ -13,7 +13,7 @@ class VoiceRoomExtension extends Extension {
 
     commands() {
         return [
-            setVoiceRoom,
+            
         ]
     }
 

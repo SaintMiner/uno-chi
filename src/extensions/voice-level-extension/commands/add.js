@@ -3,11 +3,12 @@ function addVoicePoints(message, args, overage) {
     let who = message.mentions.members.first();
     let voicePointsAmount = overage[1];
 
-    if (!who || isNaN(voicePointsAmount)) return;
-
+    if (!who) return core.sendLocalizedError(message, `WHO_MUST_BE_SPECIFIED`);
+    if (isNaN(voicePointsAmount)) return core.sendLocalizedError(message, `ADD_VOICEPOINTS_AMOUNT_MUST_BE_SPECIFIED`);
+    
     let profile = voiceProfileExtension.findVoiceProfile(who.id, message.guild.id);
 
-    if (!profile) return;
+    if (!profile) return core.sendLocalizedError(message, `VOICE_PROFILE_NOT_FOUND`);
 
     profile.voicepoints += Math.round(voicePointsAmount);
 }
@@ -17,11 +18,12 @@ function addVoiceXp(message, args, overage) {
     let who = message.mentions.members.first();
     let xpAmount = overage[1];
 
-    if (!who || isNaN(xpAmount)) return;
+    if (!who) return core.sendLocalizedError(message, `WHO_MUST_BE_SPECIFIED`);
+    if (isNaN(xpAmount)) return core.sendLocalizedError(message, `ADD_EXPERIENCE_AMOUNT_MUST_BE_SPECIFIED`);
 
     let profile = voiceProfileExtension.findVoiceProfile(who.id, message.guild.id);
 
-    if (!profile) return;
+    if (!profile) return core.sendLocalizedError(message, `VOICE_PROFILE_NOT_FOUND`);
 
     profile.experience += Math.round(xpAmount);
 }

@@ -20,7 +20,7 @@ function roll(message, temp, args) {
                             for (let i = 1; i <= multiplier; i++) {
                                 let dice = +r.replace('d', '');
                                 if (dice > 10000) {
-                                    throw this.dropError(message, 'Dice can\'t be more than 10000');                                
+                                    throw message.channel.send('Dice can\'t be more than 10000');                                
                                 }
                                 temp = Math.floor(Math.random() * dice) + 1;
                                 rollsResult.push(temp);
@@ -37,7 +37,7 @@ function roll(message, temp, args) {
                         }
                     } else {
                         if (+r > 100) {
-                            throw this.dropError(message, 'Multiplier can\'t be more than 100');                            
+                            throw message.channel.send('Multiplier can\'t be more than 100');                            
                         }
                         rollsResult.push(+r);
                         multiplier = +r;

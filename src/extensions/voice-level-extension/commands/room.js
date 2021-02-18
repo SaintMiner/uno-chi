@@ -3,15 +3,15 @@ const { MessageEmbed } = require('discord.js');
 function createRoom(message, args) {
     const voiceRoomExtension = core.getExtension('VoiceRoomExtension');
     
-    if (!args.id) return;
-    if (!args.exp) return;
+    if (!args.id) return core.sendLocalizedError(message, `ROOM_ID_MUST_BE_SPECIFIED`);
+    if (!args.exp) return core.sendLocalizedError(message, `EXPERIENCE_MUST_BE_SPECIFIED`);
 
     let room_id = args.id[0];
     let experience = args.exp[0];
     let mining = args.mining ? args.mining[0] : 0;
 
-    if (!message.guild.channels.resolve(room_id)) return;
-    if (isNaN(experience)) return;
+    if (!message.guild.channels.resolve(room_id)) return core.sendLocalizedError(message, `CHANNEL_NOT_FOUND`);
+    if (isNaN(experience)) return core.sendLocalizedError(message, `EXPERIENCE_MUST_BE_A_NUMBER`);
 
 
     let room = voiceRoomExtension.findVoiceRoom(message.guild.id, room_id);
@@ -32,7 +32,7 @@ function getRoomInfo(message, args, overage) {
 
     let room_id = overage[0];
     let room = voiceRoomExtension.findVoiceRoom(message.guild.id, room_id);
-    if (room.isTemplate) return;
+    if (room.isTemplate) return core.sendLocalizedError(message, `ROOM_IS_NOT_PART_OF_VOICE_SYSTEM`);;
     let channel = message.guild.channels.resolve(room.room_id);
 
     let memberCount = channel.members.filter(member => !member.bot).size;
@@ -57,7 +57,7 @@ function removeRoom(message, args, overage) {
 
     let room_id = overage[0];
     let room = voiceRoomExtension.findVoiceRoom(message.guild.id, room_id);
-    if (room.isTemplate) return;
+    if (room.isTemplate) return core.sendLocalizedError(message, `ROOM_IS_NOT_PART_OF_VOICE_SYSTEM`);
 
     voiceRoomExtension.delete(room);
 }

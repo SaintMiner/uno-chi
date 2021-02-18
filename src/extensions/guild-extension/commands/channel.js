@@ -6,12 +6,20 @@ function action(message, args, overage) {
     let roulette = args.roulette ? args.roulette[0] : null;
 
     if (alert) {
-        if (!message.guild.channels.resolve(alert)) return;
+        let channel = message.guild.channels.resolve(alert);
+
+        if (!channel) return core.sendLocalizedError(message, `CHANNEL_NOT_FOUND`);
+        if (channel.type != 'text') return core.sendLocalizedError(message, `CHANNEL_MUST_BE_TEXT`);
+
         guild.channels.alert = alert;
     }
     
     if (roulette) {
-        if (!message.guild.channels.resolve(roulette)) return;
+        let channel = message.guild.channels.resolve(roulette);
+
+        if (!channel) return core.sendLocalizedError(message, `CHANNEL_NOT_FOUND`);
+        if (channel.type != 'text') return core.sendLocalizedError(message, `CHANNEL_MUST_BE_TEXT`);
+        
         guild.channels.roulette = roulette;
     }
 
