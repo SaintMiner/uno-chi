@@ -17,5 +17,14 @@
 	"GENIOUS": "GENIOUS",
 	"GIVE_ARGS_ERROR": "GIVE_ARGS_ERROR",
 	"VOICEPOINTS_MUST_BE_GREATER_THAN_0": "VOICEPOINTS_MUST_BE_GREATER_THAN_0",
-	"NOT_ENOUGH_VOICEPOINTS": "NOT_ENOUGH_VOICEPOINTS"
+	"NOT_ENOUGH_VOICEPOINTS": "NOT_ENOUGH_VOICEPOINTS",
+	"Level {{level}} ({{experience}}} XP)\n                Progress to the next level: {{progress}}%\n                Time spent: {{time_spents}}\n                Voice Points: {{voicepoints}}\n                ": "Level {{level}} ({{experience}}} XP)\n                Progress to the next level: {{progress}}%\n                Time spent: {{time_spents}}\n                Voice Points: {{voicepoints}}\n                ",
+	"User stats {{tag}}": "User stats {{tag}}",
+	"VOICE": "VOICE",
+	"TEXT": "TEXT",
+	"DATA_MISSING": "DATA_MISSING",
+	"VISITORS": "VISITORS",
+	"MINING": "MINING",
+	"Voice room information \"{{name}}\"": "Voice room information \"{{name}}\"",
+	"XP per {{tick}} seconds": "XP per {{tick}} seconds"
 }

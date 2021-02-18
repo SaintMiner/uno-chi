@@ -9,11 +9,19 @@ function action(message) {
     let voiceProfile = core.findVoiceProfile(member.id, member.guild.id);
     let textProdile;
 
-
+    let title = __(
+        { 
+            phrase: `User stats {{tag}}`,
+            locale: core.getGuildLanguage(message.guild.id) 
+        },
+        {
+            tag: member.user.tag
+        }
+    );
     let embed = new MessageEmbed()
         .setColor("#580ad6")
         .setThumbnail(member.user.avatarURL())
-        .setTitle(`Статистика пользователя ${member.user.tag}`)            
+        .setTitle(title)            
         .setTimestamp();
 
     if (member.nickname) {
@@ -30,22 +38,40 @@ function action(message) {
         let minutes = (`0` + (Math.floor(totalSeconds / 60))).slice(-2);
         let seconds = (`0` + (totalSeconds % 60)).slice(-2);
         let timeString =`${days} Дней ${hours}:${minutes}:${seconds}`;
-        let stats =
-        `Уровень ${voiceProfile.level} (${Math.floor(voiceProfile.experience)} XP)
-        Прогресс до след. уровня: ${Math.floor(voiceProfile.experience/nextLevel*100)}%
-        Времени затрачено: ${timeString}
-        Voice Points: ${voiceProfile.voicepoints}
-        `;
+
+        let stats = __(
+            { 
+                phrase: `Level {{level}} ({{experience}}} XP)
+                Progress to the next level: {{progress}}%
+                Time spent: {{time_spents}}
+                Voice Points: {{voicepoints}}
+                `,
+                locale: core.getGuildLanguage(message.guild.id) 
+            },
+            {
+                level: voiceProfile.level,
+                experience: Math.floor(voiceProfile.experience),
+                progress: Math.floor(voiceProfile.experience/nextLevel*100),
+                time_spents: timeString,
+                voicepoints: voiceProfile.voicepoints
+            }
+        );
+        // let stats =
+        // `Уровень ${voiceProfile.level} (${Math.floor(voiceProfile.experience)} XP)
+        // Прогресс до след. уровня: ${Math.floor(voiceProfile.experience/nextLevel*100)}%
+        // Времени затрачено: ${timeString}
+        // Voice Points: ${voiceProfile.voicepoints}
+        // `;
         
-        embed.addField('Голосовой', stats);
+        embed.addField(__('VOICE'), stats);
     } else {
-        embed.addField('Голосовой', 'Данные отсутсвуют');
+        embed.addField(__('VOICE'), __('DATA_MISSING'));
     }
 
     if (textProdile) {
         
     } else {
-        embed.addField('Текстовый', 'Данные отсутсвуют');
+        embed.addField(__('TEXT'), __('DATA_MISSING'));
     }
 
 

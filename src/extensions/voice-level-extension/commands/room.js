@@ -37,16 +37,35 @@ function getRoomInfo(message, args, overage) {
 
     let memberCount = channel.members.filter(member => !member.bot).size;
     let embed = new MessageEmbed();
-    let stats = '';
-    stats += `Посетителей: ${memberCount}\n`;
-    stats += `XP в ${core.configuration.voice_tick} секунд: ${room.settings.experience}\n`;
+    
+    let visitorFieldTitle = __({ phrase: `VISITORS`, locale: core.getGuildLanguage(message.guild.id)});
+    let miningFieldTitle = __({ phrase: `MINING`, locale: core.getGuildLanguage(message.guild.id)});
+    let title = __(
+        { 
+            phrase: `Voice room information "{{name}}"`,
+            locale: core.getGuildLanguage(message.guild.id) 
+        },
+        {
+            name: channel.name
+        }
+    );
+    let xpPerTickFieldTitle = __(
+        { 
+            phrase: `XP per {{tick}} seconds`,
+            locale: core.getGuildLanguage(message.guild.id) 
+        },
+        {
+            tick: core.configuration.voice_tick
+        }
+    );
+    
     embed.setColor("#580ad6")
-        .setTitle(`Информация о голосовой комнате "${channel.name}"`)
-        .addField('Посетителей', memberCount, true)
-        .addField(`XP в ${core.configuration.voice_tick} секунд`, room.settings.experience, true);
+        .setTitle(title)
+        .addField(visitorFieldTitle, memberCount, true)
+        .addField(xpPerTickFieldTitle, room.settings.experience, true);
         
     if (room.settings.mining) {
-        embed.addField(`Выпекаининг`, room.settings.mining, true);
+        embed.addField(miningFieldTitle, room.settings.mining, true);
     }
 
     message.channel.send(embed);
