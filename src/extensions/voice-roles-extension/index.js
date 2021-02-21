@@ -29,6 +29,7 @@ class VoiceRoleExtension extends Extension {
 
     saveLocal(voiceRole) {
         if (voiceRole.isTemplate) {
+            voiceRole.isTemplate = false;
             this.voiceRoles.push(voiceRole);
         }
     }

@@ -12,6 +12,8 @@ function createLevel(message, args) {
 
     VoiceRoleExtension.save(levelRoles);
     VoiceRoleExtension.saveLocal(levelRoles);
+
+    core.sendSuccessful(message);
 }
 
 function removeLevel(message, args, overage) {
@@ -24,6 +26,8 @@ function removeLevel(message, args, overage) {
     if (levelRoles.isTemplate) return core.sendLocalizedError(message, `LEVEL_NOT_FOUND`);
 
     VoiceRoleExtension.delete(levelRoles);
+
+    core.sendSuccessful(message);
 
 }
 

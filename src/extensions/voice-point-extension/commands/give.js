@@ -20,6 +20,8 @@ function give(message, args, overage) {
 
     profile.voicepoints -= voicepoints;
     giveToProfile.voicepoints += voicepoints;
+
+    core.sendSuccessful(message);
 }
 
 const command = {

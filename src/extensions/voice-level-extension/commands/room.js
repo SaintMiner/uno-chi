@@ -9,8 +9,10 @@ function createRoom(message, args) {
     let room_id = args.id[0];
     let experience = args.exp[0];
     let mining = args.mining ? args.mining[0] : 0;
+    let channel = message.guild.channels.resolve(room_id);
 
-    if (!message.guild.channels.resolve(room_id)) return core.sendLocalizedError(message, `CHANNEL_NOT_FOUND`);
+    if (!channel) return core.sendLocalizedError(message, `CHANNEL_NOT_FOUND`);
+    if (channel.type != 'voice') return core.sendLocalizedError(message, `CHANNEL_MUST_BE_VOICE`);
     if (isNaN(experience)) return core.sendLocalizedError(message, `EXPERIENCE_MUST_BE_A_NUMBER`);
 
 
@@ -24,7 +26,7 @@ function createRoom(message, args) {
     voiceRoomExtension.save(room);
     voiceRoomExtension.saveLocal(room);
 
-
+    core.sendSuccessful(message);
 }
 
 function getRoomInfo(message, args, overage) {
@@ -32,7 +34,7 @@ function getRoomInfo(message, args, overage) {
 
     let room_id = overage[0];
     let room = voiceRoomExtension.findVoiceRoom(message.guild.id, room_id);
-    if (room.isTemplate) return core.sendLocalizedError(message, `ROOM_IS_NOT_PART_OF_VOICE_SYSTEM`);;
+    if (room.isTemplate) return core.sendLocalizedError(message, `ROOM_IS_NOT_PART_OF_VOICE_SYSTEM`);
     let channel = message.guild.channels.resolve(room.room_id);
 
     let memberCount = channel.members.filter(member => !member.bot).size;
@@ -79,6 +81,8 @@ function removeRoom(message, args, overage) {
     if (room.isTemplate) return core.sendLocalizedError(message, `ROOM_IS_NOT_PART_OF_VOICE_SYSTEM`);
 
     voiceRoomExtension.delete(room);
+
+    core.sendSuccessful(message);
 }
 
 let remove = {

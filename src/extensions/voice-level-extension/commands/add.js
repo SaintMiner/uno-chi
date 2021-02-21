@@ -11,6 +11,8 @@ function addVoicePoints(message, args, overage) {
     if (!profile) return core.sendLocalizedError(message, `VOICE_PROFILE_NOT_FOUND`);
 
     profile.voicepoints += Math.round(voicePointsAmount);
+
+    core.sendSuccessful(message);
 }
 
 function addVoiceXp(message, args, overage) {
@@ -26,6 +28,8 @@ function addVoiceXp(message, args, overage) {
     if (!profile) return core.sendLocalizedError(message, `VOICE_PROFILE_NOT_FOUND`);
 
     profile.experience += Math.round(xpAmount);
+
+    core.sendSuccessful(message);
 }
 
 let voicepoints = {

@@ -40,6 +40,7 @@ class VoiceRoomExtension extends Extension {
 
     saveLocal(voiceRoom) {
         if (voiceRoom.isTemplate) {
+            voiceRoom.isTemplate = false;
             this.voiceRooms.push(voiceRoom);
         }
     }

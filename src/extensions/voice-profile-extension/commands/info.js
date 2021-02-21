@@ -7,12 +7,16 @@ function action(message) {
     }
 
     let voiceProfile = core.findVoiceProfile(member.id, member.guild.id);
-    let textProdile;
+    let textProfile = core.findTextProfile(member.id, member.guild.id);
+    let lang = core.getGuildLanguage(message.guild.id);
+    if (textProfile.isTemplate) {
+        textProfile = null;
+    }
 
     let title = __(
         { 
             phrase: `User stats {{tag}}`,
-            locale: core.getGuildLanguage(message.guild.id) 
+            locale: lang 
         },
         {
             tag: member.user.tag
@@ -37,16 +41,15 @@ function action(message) {
         totalSeconds %= 3600;
         let minutes = (`0` + (Math.floor(totalSeconds / 60))).slice(-2);
         let seconds = (`0` + (totalSeconds % 60)).slice(-2);
-        let timeString =`${days} Дней ${hours}:${minutes}:${seconds}`;
-
+        let timeString =`${days} ${__({phrase: 'DAYS', locale: lang})} ${hours}:${minutes}:${seconds}`;
         let stats = __(
             { 
-                phrase: `Level {{level}} ({{experience}}} XP)
+                phrase: `Level {{level}} ({{experience}}) XP)
                 Progress to the next level: {{progress}}%
                 Time spent: {{time_spents}}
                 Voice Points: {{voicepoints}}
                 `,
-                locale: core.getGuildLanguage(message.guild.id) 
+                locale: lang
             },
             {
                 level: voiceProfile.level,
@@ -63,15 +66,31 @@ function action(message) {
         // Voice Points: ${voiceProfile.voicepoints}
         // `;
         
-        embed.addField(__('VOICE'), stats);
+        embed.addField(__({phrase: 'VOICE', locale: lang}), stats);
     } else {
-        embed.addField(__('VOICE'), __('DATA_MISSING'));
+        embed.addField(__({phrase: 'VOICE', locale: lang}), __('DATA_MISSING'));
     }
 
-    if (textProdile) {
-        
+    if (textProfile) {
+        let textNextLevel = textProfile.level*20+(textProfile.level-1)*20;
+        let stats = __(
+            { 
+                phrase: `Level {{level}} ({{experience}}) XP)
+                Progress to the next level: {{progress}}%
+                Message count: {{message_count}}
+                `,
+                locale: lang
+            },
+            {
+                level: textProfile.level,
+                experience: Math.floor(textProfile.experience),
+                progress: Math.floor(textProfile.experience/textNextLevel*100),
+                message_count: textProfile.message_count
+            }
+        );
+        embed.addField(__({phrase: 'TEXT', locale: lang}), stats);
     } else {
-        embed.addField(__('TEXT'), __('DATA_MISSING'));
+        embed.addField(__({phrase: 'TEXT', locale: lang}), __('DATA_MISSING'));
     }
 
 

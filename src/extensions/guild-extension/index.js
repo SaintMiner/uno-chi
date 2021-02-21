@@ -12,6 +12,29 @@ class GuildExtension extends Extension {
         core.findGuild = (guild_id) => this.findGuild(guild_id);
         core.getGuildLanguage = (guild_id) =>  this.getGuildLanguage(guild_id);
         core.sendLocalizedError = (message, error) =>  this.sendLocalizedError(message, error);
+        core.sendSuccessful = (message) => this.sendSuccessful(message);
+        core.alertGuild = (guild_id, text) => this.alertGuild(guild_id, text);
+
+        core.client.on('guildCreate', async guild => {
+            let newGuild = this.findGuild(guild.id);
+            this.saveLocal(newGuild);
+            this.save(newGuild);
+        });
+    }
+
+    alertGuild(guild_id, text) {
+        let guild = this.findGuild(guild_id);
+        
+        if (!text) return;
+        if (!guild) return;
+        if (!guild.channels) return;
+        if (!guild.channels.alert) return;        
+
+        let channel = core.client.channels.resolve(guild.channels.alert);
+        if (!channel) return;
+
+        channel.send(text);
+
     }
 
     commands() {
@@ -39,6 +62,7 @@ class GuildExtension extends Extension {
 
     saveLocal(guild) {
         if (guild.template) {
+            guild.template = false;
             this.guilds.push(guild);
         }
     }
@@ -68,6 +92,10 @@ class GuildExtension extends Extension {
 
     sendLocalizedError(message, error) {
         message.channel.send(__({ phrase: error, locale: this.getGuildLanguage(message.guild.id) }));
+    }
+
+    sendSuccessful(message) {
+        message.channel.send('✅ Seems to be successful');
     }
 
     getGuilds() {

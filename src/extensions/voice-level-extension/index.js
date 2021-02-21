@@ -24,6 +24,7 @@ class VoiceLevelExtension extends Extension {
                 }
             });
         }, this.tickInterval);
+        
         setInterval(() => {
             this.voiceProfileExtension.saveAll();;
         }, this.saveInterval);
@@ -41,7 +42,7 @@ class VoiceLevelExtension extends Extension {
             const rooms = this.voiceRoomExtension.getGuildVoiceRooms(guild.guild_id);
             rooms.forEach(room => this.tickVoiceRoom(room, guild));
         })
-        .catch(err => error(`${err}. GuildID: [${guild.guild_id}]`));        
+        .catch(err => {return});
     }
 
     tickVoiceRoom(room, guild) {
@@ -94,6 +95,19 @@ class VoiceLevelExtension extends Extension {
             profile.level++;
             profile.voicepoints += 10 * profile.level;
             this.voiceRoleExtension.processUserByLevel(member, profile.level);
+
+            let levelUpMessage = __(
+                { 
+                    phrase: `<@{{mention}}> has reached {{level}} level on voice system`,
+                    locale: core.getGuildLanguage(message.guild.id) 
+                },
+                {
+                    mention: message.author.id,
+                    level: profile.level,
+                }
+            );
+
+            core.alertGuild(message.guild.id, levelUpMessage);
         }
     }
 
