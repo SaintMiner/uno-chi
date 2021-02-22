@@ -40,5 +40,7 @@
 	"<@{{mention}}> has reached {{level}} level on text system": "<@{{mention}}> has reached {{level}} level on text system",
 	"Level {{level}} ({{experience}}) XP)\n                Progress to the next level: {{progress}}%\n                Message count: {{message_count}}\n                ": "Level {{level}} ({{experience}}) XP)\n                Progress to the next level: {{progress}}%\n                Message count: {{message_count}}\n                ",
 	"Level {{level}} ({{experience}}) XP)\n                Progress to the next level: {{progress}}%\n                Time spent: {{time_spents}}\n                Voice Points: {{voicepoints}}\n                ": "Level {{level}} ({{experience}}) XP)\n                Progress to the next level: {{progress}}%\n                Time spent: {{time_spents}}\n                Voice Points: {{voicepoints}}\n                ",
-	"DAYS": "Days"
+	"DAYS": "Days",
+	"<@{{mention}}> has reached {{level}} level on voice system": "<@{{mention}}> has reached {{level}} level on voice system",
+	"EXPERIENCE_OUT_OF_RANGE": "Experience range: [-100; 100]"
 }

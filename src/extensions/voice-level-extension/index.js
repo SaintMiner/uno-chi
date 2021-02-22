@@ -48,11 +48,12 @@ class VoiceLevelExtension extends Extension {
     tickVoiceRoom(room, guild) {
         core.client.channels.fetch(room.room_id).then(channel => {
             channel.members.forEach(member => this.tickMember(member, room, guild));
-        }).catch(err => {});
+        }).catch(err => {error(err)});
     }
 
     tickMember(member, room, guild) {
         let profile = this.voiceProfileExtension.findVoiceProfile(member.id, guild.guild_id);
+        let locale = core.getGuildLanguage(guild.guild_id);
         
         if (profile) {
             profile.experience += this.getVoiceRoomExperience(room);
@@ -94,20 +95,18 @@ class VoiceLevelExtension extends Extension {
             profile.experience -= this.getNextLevelExperienceCount(profile.level);
             profile.level++;
             profile.voicepoints += 10 * profile.level;
-            this.voiceRoleExtension.processUserByLevel(member, profile.level);
-
             let levelUpMessage = __(
                 { 
                     phrase: `<@{{mention}}> has reached {{level}} level on voice system`,
-                    locale: core.getGuildLanguage(message.guild.id) 
+                    locale: locale
                 },
                 {
-                    mention: message.author.id,
+                    mention: profile.user_id,
                     level: profile.level,
                 }
             );
-
-            core.alertGuild(message.guild.id, levelUpMessage);
+            core.alertGuild(guild.guild_id, levelUpMessage);
+            this.voiceRoleExtension.processUserByLevel(member, profile.level);
         }
     }
 

@@ -39,5 +39,7 @@
 	"CHANNEL_MUST_BE_VOICE": "Канал должен быть голосовым!",
 	"<@{{mention}}> has reached {{level}} level on text system": "<@{{mention}}> достиг {{level}} уровня в тестовой системе!",
 	"Level {{level}} ({{experience}}) XP)\n                Progress to the next level: {{progress}}%\n                Message count: {{message_count}}\n                ": "Уровень {{level}} ({{experience}}) XP)\n                Прогресс до след. уровня: {{progress}}%\n                Всего сообщений: {{message_count}}\n                ",
-	"DAYS": "Дней"
+	"DAYS": "Дней",
+	"EXPERIENCE_OUT_OF_RANGE": "Диапазон опыта: [-100; 100]",
+	"<@{{mention}}> has reached {{level}} level on voice system": "<@{{mention}}> достиг {{level}} уровня в голосовой системе!"
 }

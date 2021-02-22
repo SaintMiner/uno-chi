@@ -17,6 +17,7 @@ class GuildExtension extends Extension {
 
         core.client.on('guildCreate', async guild => {
             let newGuild = this.findGuild(guild.id);
+            newGuild.settings.is_active = 'true';
             this.saveLocal(newGuild);
             this.save(newGuild);
         });
@@ -25,13 +26,13 @@ class GuildExtension extends Extension {
     alertGuild(guild_id, text) {
         let guild = this.findGuild(guild_id);
         
-        if (!text) return;
-        if (!guild) return;
-        if (!guild.channels) return;
-        if (!guild.channels.alert) return;        
+        if (!text) return console.log(1);
+        if (!guild) return console.log(2);
+        if (!guild.channels) return console.log(3);
+        if (!guild.channels.alert) return console.log(4);        
 
         let channel = core.client.channels.resolve(guild.channels.alert);
-        if (!channel) return;
+        if (!channel) return console.log(5);
 
         channel.send(text);
 
@@ -83,10 +84,9 @@ class GuildExtension extends Extension {
     getGuildLanguage(guild_id) {
         let guild = this.findGuild(guild_id);
 
-        if (!guild.settings || guild.template) return;
+        if (!guild.settings || guild.template) return 'en';
 
         let language = guild.settings.language || 'en';
-
         return language;
     }
 

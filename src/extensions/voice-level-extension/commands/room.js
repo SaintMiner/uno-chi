@@ -14,6 +14,7 @@ function createRoom(message, args) {
     if (!channel) return core.sendLocalizedError(message, `CHANNEL_NOT_FOUND`);
     if (channel.type != 'voice') return core.sendLocalizedError(message, `CHANNEL_MUST_BE_VOICE`);
     if (isNaN(experience)) return core.sendLocalizedError(message, `EXPERIENCE_MUST_BE_A_NUMBER`);
+    if (experience > 100 || experience < -100) return core.sendLocalizedError(message, `EXPERIENCE_OUT_OF_RANGE`);
 
 
     let room = voiceRoomExtension.findVoiceRoom(message.guild.id, room_id);
@@ -77,9 +78,13 @@ function removeRoom(message, args, overage) {
     const voiceRoomExtension = core.getExtension('VoiceRoomExtension');
 
     let room_id = overage[0];
-    let room = voiceRoomExtension.findVoiceRoom(message.guild.id, room_id);
+    let room = voiceRoomExtension.findVoiceRoom(message.guild.id, room_id);    
     if (room.isTemplate) return core.sendLocalizedError(message, `ROOM_IS_NOT_PART_OF_VOICE_SYSTEM`);
-
+    
+    let roomIndex = voiceRoomExtension.voiceRooms.indexOf(room);
+    if (roomIndex > -1) {
+        voiceRoomExtension.voiceRooms.splice(roomIndex, 1);
+    }
     voiceRoomExtension.delete(room);
 
     core.sendSuccessful(message);
