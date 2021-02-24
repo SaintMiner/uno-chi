@@ -25,14 +25,14 @@ class GuildExtension extends Extension {
 
     alertGuild(guild_id, text) {
         let guild = this.findGuild(guild_id);
-        
-        if (!text) return console.log(1);
-        if (!guild) return console.log(2);
-        if (!guild.channels) return console.log(3);
-        if (!guild.channels.alert) return console.log(4);        
+
+        if (!text) return;
+        if (!guild) return;
+        if (!guild.channels) return;
+        if (!guild.channels.alert) return;
 
         let channel = core.client.channels.resolve(guild.channels.alert);
-        if (!channel) return console.log(5);
+        if (!channel) return;
 
         channel.send(text);
 
