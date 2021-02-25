@@ -1,4 +1,41 @@
-# how to set up voice system
+# Table of contents
+
+* [Requirements](#Requirements)
+* [Installation](#Installation)
+* [Usage](#Usage)
+    * [How to set up voice system](#How-to-set-up-voice-system)  
+
+# Requirements
+
+* node.js v12.19.0
+* discord.js ^12.5.1
+* Apache cassandra 3.3 - 4.0
+
+# Installation
+
+Clone
+
+```bash
+$ git clone https://github.com/SaintMiner/uno-chi.git
+```
+
+Install packages
+
+```bash
+$ npm i
+```
+
+Run
+
+```
+$ npm run start
+
+# on development
+$ npm run dev
+```
+
+# Usage
+### How to set up voice system
 
 1) Set the alert channel
 
