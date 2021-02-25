@@ -12,23 +12,110 @@ class RouletteWebsocket extends Extension {
         this.players = [];
         this.tableBets = [];
         this.server = http.createServer((request, response) => {
-            const { headers, method, url } = request;
+            const { headers, method, url, message } = request;
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader('Content-Type', 'application/json');
             response.setHeader("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS");
             response.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-            switch (url) {
+            // const ur = new URL(headers.host+url);
+            const { pathname, search, searchParams } = new URL(`http://${headers.host}${url}`);            
+            let body = [];
+            // console.log(new URL(href));
+            switch (pathname) {
+                case '/getvp':
+                    if (request.method == 'GET') {
+                        request.on('data', (chunk) => {
+                            body.push(chunk);
+                        }).on('end',async () => {
+                            body = JSON.parse(Buffer.concat(body).toString());
+                            let user_id = searchParams.get('user_id');
+                            let guild_id = searchParams.get('guild_id');
+
+                            if (!user_id || !guild_id) {
+                                response.writeHead(400);
+                                response.write('Specify user_id and guild_id');
+                                response.end();
+                                return;
+                            }
+                            let voiceProfile = core.findVoiceProfile(user_id, guild_id);
+
+                            if (!voiceProfile) {
+                                response.writeHead(400);
+                                response.write('Voice profile not found');
+                                response.end();
+                                return;
+                            }
+                            response.writeHead(200);
+                            response.write(JSON.stringify(voiceProfile));
+                            response.end();
+                        });
+                    } else{
+                        response.writeHead(400);
+                        response.write('This is GET method');
+                        response.end();
+                    }
+                break;
+                case '/vpadd':
+                    if (request.method == 'POST') {
+                        request.on('data', (chunk) => {
+                            body.push(chunk);
+                        }).on('end',async () => {
+                            try {
+                                body = JSON.parse(Buffer.concat(body).toString());
+                            } catch (e) {
+                                response.writeHead(400);
+                                response.write('Not valid JSON');
+                                response.end();
+                                return;
+                            }
+
+                            let user_id = body.user_id;
+                            let guild_id = body.guild_id;
+                            let voicepoints = body.voicepoints;
+
+                            if (!user_id || !guild_id || !voicepoints) {
+                                response.writeHead(400);
+                                response.write('Specify user_id, guild_id and voicepoints');
+                                response.end();
+                                return;
+                            }
+
+                            if (isNaN(voicepoints)) {
+                                response.writeHead(400);
+                                response.write('Voicepoints must be a number');
+                                response.end();
+                                return;
+                            }
+
+                            let voiceProfile = core.findVoiceProfile(user_id, guild_id);
+
+                            if (!voiceProfile) {
+                                response.writeHead(400);
+                                response.write('Voice profile not found');
+                                response.end();
+                                return;
+                            }
+
+                            voiceProfile.voicepoints += voicepoints;
+
+                            response.writeHead(200);
+                            response.write('Done!');
+                            response.end();
+                            
+                        });
+                    } else{
+                        response.writeHead(400);
+                        response.write('This is POST method');
+                        response.end();
+                    }
+                break;
                 case '/auth':
                     // console.log((new Date()) + ' Received request for ' + request.url);
                     if (request.method == "POST") {
-                        let body = [];
                         request.on('data', (chunk) => {
                             body.push(chunk);
-                          }).on('end',async () => {
+                        }).on('end',async () => {
                             body = JSON.parse(Buffer.concat(body).toString());
-                            // console.log(body.code);
-                            // console.log(headers.code);
-                            // console.log(body.code);
                             let player = this.players.find(player => player.code == body.code);
                             if (!player) {
                                 response.writeHead(400);

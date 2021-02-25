@@ -24,7 +24,7 @@
 >voice level create -level <Level> -add <Roles> -remove <Roles>
 # Level formula: (10 + level) * 10 * level * level
 
-# to view all level and his roles
+# to view all levels and his roles
 >voice level
 # to remove level
 >voice level remove <id>

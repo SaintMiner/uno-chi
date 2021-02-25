@@ -20,7 +20,7 @@ class UnoCore extends Basic{
     }
     
     initialize() {
-        info(`[${this.launchedAt}] ${this.client.user.tag} has logged in successfully!`);
+        // info(`[${this.launchedAt}] ${this.client.user.tag} has logged in successfully!`);
         
         this.configurationLoader = new ConfigurationLoader();
 
