@@ -1,5 +1,4 @@
 const Extension = require('@core/classes/extension');
-const setVoiceRoom = require('./commands/set-voice-room');
 
 const { info, warn, error, log } = require('pretty-console-logs');
 

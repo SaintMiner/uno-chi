@@ -1,7 +1,7 @@
 let set = require('@commands/set');
 
 function setVoice(message, args, overage) {
-    console.log(overage);
+    
 }
 
 let voice = {
