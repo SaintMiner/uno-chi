@@ -1,6 +1,8 @@
 const extensions = require("../extensions");
 
 function extension(message, args, overage) {
+    const guildExtension = core.getExtension('GuildExtension');
+
     let guild_id = overage[0];
     let add = args.add;
     let remove = args.remove;
@@ -23,6 +25,8 @@ function extension(message, args, overage) {
             delete guild.extensions[ext];
         });
     }
+
+    guildExtension.save(guild);
 
     core.sendSuccessful(message);
 }
