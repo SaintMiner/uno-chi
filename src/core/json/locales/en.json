@@ -42,5 +42,8 @@
 	"Level {{level}} ({{experience}}) XP)\n                Progress to the next level: {{progress}}%\n                Time spent: {{time_spents}}\n                Voice Points: {{voicepoints}}\n                ": "Level {{level}} ({{experience}}) XP)\n                Progress to the next level: {{progress}}%\n                Time spent: {{time_spents}}\n                Voice Points: {{voicepoints}}\n                ",
 	"DAYS": "Days",
 	"<@{{mention}}> has reached {{level}} level on voice system": "<@{{mention}}> has reached {{level}} level on voice system",
-	"EXPERIENCE_OUT_OF_RANGE": "Experience range: [-100; 100]"
+	"EXPERIENCE_OUT_OF_RANGE": "Experience range: [-100; 100]",
+	"GUILD_ID_MUST_BE_DEFINED": "GUILD_ID_MUST_BE_DEFINED",
+	"GUILD_NOT_FOUND": "GUILD_NOT_FOUND",
+	"YOU_DONT_HAVE_PROFILE": "YOU_DONT_HAVE_PROFILE"
 }

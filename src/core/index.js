@@ -43,6 +43,7 @@ class UnoCore extends Basic{
 
         this.commandManager.initialize();        
         this.commandManager.addCommand(new Command(require('../commands/uno')));
+        this.commandManager.addCommand(new Command(require('../commands/extension')));
         this.commandManager.mergeAll();
 
     }
