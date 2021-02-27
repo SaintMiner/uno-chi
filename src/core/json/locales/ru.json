@@ -43,5 +43,6 @@
 	"EXPERIENCE_OUT_OF_RANGE": "Диапазон опыта: [-100; 100]",
 	"<@{{mention}}> has reached {{level}} level on voice system": "<@{{mention}}> достиг {{level}} уровня в голосовой системе!",
 	"<@{{mention}}> now is part of text system": "<@{{mention}}> теперь часть тестовой системы",
-	"<@{{mention}}> now is part of voice system": "<@{{mention}}> теперь часть голосовой системы"
+	"<@{{mention}}> now is part of voice system": "<@{{mention}}> теперь часть голосовой системы",
+	"MINIMAL_BET_100": "Минимальная ставка 100"
 }

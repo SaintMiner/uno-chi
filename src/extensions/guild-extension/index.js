@@ -14,6 +14,7 @@ class GuildExtension extends Extension {
         core.sendLocalizedError = (message, error) =>  this.sendLocalizedError(message, error);
         core.sendSuccessful = (message) => this.sendSuccessful(message);
         core.alertGuild = (guild_id, text) => this.alertGuild(guild_id, text);
+        core.rouletteAlertGuild = (guild_id, content) => this.rouletteAlertGuild(guild_id, content);
 
         core.client.on('guildCreate', async guild => {
             let newGuild = this.findGuild(guild.id);
@@ -36,6 +37,20 @@ class GuildExtension extends Extension {
 
         channel.send(text);
 
+    }
+
+    rouletteAlertGuild(guild_id, content) {
+        let guild = this.findGuild(guild_id);
+
+        if (!content) return;
+        if (!guild) return;
+        if (!guild.channels) return;
+        if (!guild.channels.alert) return;
+
+        let channel = core.client.channels.resolve(guild.channels.roulette);
+        if (!channel) return;
+
+        channel.send(content);
     }
 
     commands() {

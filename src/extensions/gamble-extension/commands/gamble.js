@@ -1,32 +1,6 @@
 const random = require('random');
 const seedrandom = require('seedrandom');
-
-function gambleRoll(message, args, overage) {
-    const voiceProfileExtension = core.getExtension('VoiceProfileExtension');
-    let betRoll = +overage[0];
-    let profile = voiceProfileExtension.findVoiceProfile(message.author.id, message.guild.id);
-    
-    random.use(seedrandom(`nleebsu-${new Date().getTime()}`));
-
-    if (isNaN(betRoll)) return core.sendLocalizedError(message, `BET_MUST_BE_A_NUMBER`);
-    if (betRoll < 100) return core.sendLocalizedError(message, `MINIMAL_BET_100`);
-    if (!profile) return core.sendLocalizedError(message, `YOU_DONT_HAVE_PROFILE`);
-    if (profile.voicepoints < betRoll) return core.sendLocalizedError(message, `NOT_ENOUGH_VOICEPOINTS`);
-
-    let userRoll = random.int(1, betRoll);
-    let botRoll = random.int(1, betRoll);
-    
-    message.channel.send(`Твой бросок ${userRoll}\nМой бросок: ${botRoll}`);
-
-    if (userRoll > botRoll) {
-        profile.voicepoints += betRoll;
-        message.channel.send(`Ты выйграл ${betRoll}`);
-    } else if (userRoll < botRoll) {
-        profile.voicepoints -= betRoll;
-        message.channel.send(`Ты проиграл ${betRoll}`);
-    }
-
-}
+const { gambleDice } = require('../dice');
 
 function gambleRPS(message, args, overage) {
     const voiceProfileExtension = core.getExtension('VoiceProfileExtension');
@@ -120,14 +94,14 @@ let rps = {
     execute: gambleRPS
 }
 
-let roll = {
-    slug: 'roll',
-    execute: gambleRoll
+let dice = {
+    slug: 'dice',
+    execute: gambleDice
 }
 
 let command = {
     slug: 'gamble',    
-    childrens: [ roll, rps ],
+    childrens: [ dice, rps ],
 }
 
 module.exports = command;
