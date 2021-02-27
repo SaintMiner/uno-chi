@@ -23,11 +23,7 @@ function extension(message, args, overage) {
             delete guild.extensions[ext];
         });
     }
-    
-    console.log(guild);
-    
 
-    
     core.sendSuccessful(message);
 }
 

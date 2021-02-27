@@ -41,5 +41,7 @@
 	"Level {{level}} ({{experience}}) XP)\n                Progress to the next level: {{progress}}%\n                Message count: {{message_count}}\n                ": "Уровень {{level}} ({{experience}}) XP)\n                Прогресс до след. уровня: {{progress}}%\n                Всего сообщений: {{message_count}}\n                ",
 	"DAYS": "Дней",
 	"EXPERIENCE_OUT_OF_RANGE": "Диапазон опыта: [-100; 100]",
-	"<@{{mention}}> has reached {{level}} level on voice system": "<@{{mention}}> достиг {{level}} уровня в голосовой системе!"
+	"<@{{mention}}> has reached {{level}} level on voice system": "<@{{mention}}> достиг {{level}} уровня в голосовой системе!",
+	"<@{{mention}}> now is part of text system": "<@{{mention}}> теперь часть тестовой системы",
+	"<@{{mention}}> now is part of voice system": "<@{{mention}}> теперь часть голосовой системы"
 }

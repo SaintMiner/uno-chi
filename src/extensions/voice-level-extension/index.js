@@ -89,6 +89,17 @@ class VoiceLevelExtension extends Extension {
             profile.guild_id = guild.guild_id;
             profile.experience = this.getVoiceRoomExperience(room);
             this.voiceProfileExtension.voiceProfiles.push(profile);
+            let partOfVoiceSystemMessage = __(
+                { 
+                    phrase: `<@{{mention}}> now is part of voice system`,
+                    locale: locale
+                },
+                {
+                    mention: profile.user_id,
+                    level: profile.level,
+                }
+            );
+            core.alertGuild(guild.guild_id, partOfVoiceSystemMessage);
         }
 
         if (profile.experience >= this.getNextLevelExperienceCount(profile.level)) {

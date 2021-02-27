@@ -75,6 +75,17 @@ class TextProfileExtension extends Extension {
     saveLocal(textProfile) {
         if (textProfile.isTemplate) {
             textProfile.isTemplate = false;
+            let partOfSystemMessage = __(
+                { 
+                    phrase: `<@{{mention}}> now is part of text system`,
+                    locale: core.getGuildLanguage(textProfile.guild_id) 
+                },
+                {
+                    mention: textProfile.user_id,                    
+                }
+            );
+
+            core.alertGuild(textProfile.guild_id, partOfSystemMessage);
             this.textProfiles.push(textProfile);
         }
     }

@@ -45,5 +45,7 @@
 	"EXPERIENCE_OUT_OF_RANGE": "Experience range: [-100; 100]",
 	"GUILD_ID_MUST_BE_DEFINED": "GUILD_ID_MUST_BE_DEFINED",
 	"GUILD_NOT_FOUND": "GUILD_NOT_FOUND",
-	"YOU_DONT_HAVE_PROFILE": "YOU_DONT_HAVE_PROFILE"
+	"YOU_DONT_HAVE_PROFILE": "YOU_DONT_HAVE_PROFILE",
+	"<@{{mention}}> now is part of text system": "<@{{mention}}> now is part of text system",
+	"<@{{mention}}> now is part of voice system": "<@{{mention}}> now is part of voice system"
 }

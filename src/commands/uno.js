@@ -16,6 +16,8 @@ function uno(message) {
     embed.addField('Launched at', core.launchedAt, true);
     embed.addField('Baked by', bakers, true);
 
+    embed.addField('Serve on', `${core.client.guilds.cache.size} servers`, true);
+
     message.channel.send(embed);
 }
 
