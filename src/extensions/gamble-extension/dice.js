@@ -50,6 +50,7 @@ function startDiceGame(guild_id) {
         players: [],
     }
     diceGames[game.guild_id] = game;
+    core.rouletteAlertGuild(game.guild_id, `Игра в кости будет запущена через 7.753 секунд`);
     setTimeout(() => {playDiceGame(game)}, 7753);
     return game;
 }
