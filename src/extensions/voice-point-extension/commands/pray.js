@@ -28,7 +28,7 @@ function pray(message) {
                     message.channel.send('Знаешь я крайне польщена, что другой бог молится мне...');
                 }
             }
-            profile.voicepoint += (pray + profile.pray_streak*10);
+            profile.voicepoints += (pray + profile.pray_streak*10);
             return message.channel.send(`Держи ${pray} и ${profile.pray_streak*10} за ежедневные молитвы!`);
         } else {
             return message.channel.send('Ты сегодня уже получил своё.');
