@@ -35,6 +35,8 @@ $ npm run dev
 ```
 
 # Usage
+## [Invite](https://discord.com/api/oauth2/authorize?client_id=524950550261923871&permissions=8&scope=bot)
+
 ### How to set up voice system
 
 1) Set the alert channel
