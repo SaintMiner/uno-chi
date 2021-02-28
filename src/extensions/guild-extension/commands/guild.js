@@ -8,7 +8,7 @@ function setLanguage(message, args, overage) {
     let choosed = overage[0];
     let guild = guildExtension.findGuild(message.guild.id);
 
-    if (!languages.includes(choosed)) return message.channel.send(`Avaibled languages: ${languages}`);
+    if (!languages.includes(choosed)) return message.channel.send(`Available languages: ${languages}`);
     
     guild.settings.language = choosed;
 

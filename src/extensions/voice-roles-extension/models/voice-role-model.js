@@ -11,6 +11,10 @@ module.exports = {
             type: "list",
             typeDef: "<varchar>"
         },
+        settings: {
+            type: "map",
+            typeDef: "<varchar, varchar>"
+        },
         level : "int"  
     },
     key:["guild_id", "level"]

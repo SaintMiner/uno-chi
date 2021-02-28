@@ -10,6 +10,7 @@ class VoiceLevelExtension extends Extension {
         this.voiceProfileExtension = core.getExtension('VoiceProfileExtension');
         this.voiceRoleExtension = core.getExtension('VoiceRoleExtension');
         this.voiceRoomExtension = core.getExtension('VoiceRoomExtension');
+        this.customRolesExtension = core.getExtension('CustomRolesExtension');
 
         this.tickInterval = core.configuration.voice_tick * 1000;
         this.saveInterval = 5 * 60 * 1000;
@@ -65,6 +66,25 @@ class VoiceLevelExtension extends Extension {
                 profile.time_spents.global = 0;
             }
 
+            member.roles.cache.forEach(role => {
+                let customRole = this.customRolesExtension.findCustomRole(guild.guild_id, role.id)
+                if (!customRole.isTemplate) {
+                    if (customRole.settings.baking) {
+                        if (profile.time_spents['baking']) {
+                            profile.time_spents['baking'] += +core.configuration.voice_tick;
+                        } else {
+                            profile.time_spents['baking'] = +core.configuration.voice_tick;
+                        }
+
+                        let miningPayDay = 1 * 60 * 60;
+                        if (profile.time_spents['baking'] >= miningPayDay) {
+                            profile.time_spents['baking'] -= miningPayDay;
+                            profile.voicepoints += +profile.level
+                        }
+                    }
+                }
+            });
+            
             if (+room.settings.mining) {
                 if (profile.time_spents[room.room_id]) {
                     profile.time_spents[room.room_id] += +core.configuration.voice_tick;

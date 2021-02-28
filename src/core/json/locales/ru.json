@@ -44,5 +44,8 @@
 	"<@{{mention}}> has reached {{level}} level on voice system": "<@{{mention}}> достиг {{level}} уровня в голосовой системе!",
 	"<@{{mention}}> now is part of text system": "<@{{mention}}> теперь часть тестовой системы",
 	"<@{{mention}}> now is part of voice system": "<@{{mention}}> теперь часть голосовой системы",
-	"MINIMAL_BET_100": "Минимальная ставка 100"
+	"MINIMAL_BET_100": "Минимальная ставка 100",
+	"ROLE_ID_MUST_BE_DEFINED": "ROLE_ID_MUST_BE_DEFINED",
+	"ROLE_DOES_NOT_EXISTS": "ROLE_DOES_NOT_EXISTS",
+	"CUSTOM_ROLE_DOES_NOT_EXISTS": "CUSTOM_ROLE_DOES_NOT_EXISTS"
 }
