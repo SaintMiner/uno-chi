@@ -44,17 +44,19 @@ function topVoiceLevel(message) {
         if (a.experience > b.experience) return -1;
     })
 
+    let place = 1;
     let embed = new MessageEmbed()
         .setColor("#580ad6")
         .setTitle(`Локальный топ`)
         .setDescription('Голосовая система')
         .setTimestamp();
-    let place = 1;
 
     profiles.some(profile => {
         let member = message.guild.members.resolve(profile.user_id);
         if (member) {
-            embed.addField(`#${place} ${member.user.tag}`, `Уровень ${profile.level} (${profile.experience} XP)`);
+            let nextLevel = (10+profile.level)*10*profile.level*profile.level;
+            let percentage = Math.floor(profile.experience/nextLevel*100);
+            embed.addField(`#${ place } ${ member.user.tag }`, `Уровень ${ profile.level } (${ profile.experience } XP) (${ percentage }%)`);
             place++;
         }
 
