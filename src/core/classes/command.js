@@ -61,7 +61,7 @@ class Command {
             };
         }
 
-        if (this.canExecutePrivate(message.author.id)) {
+        if (!this.canExecutePrivate(message.author.id)) {
             let isRightChannel = this.checkChannel(message, guild);
             
             if (!isRightChannel) {
