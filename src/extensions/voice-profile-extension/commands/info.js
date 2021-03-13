@@ -112,6 +112,7 @@ const command = {
 
     execute: action,
     childrens: [],
+    channels: ['command', 'roulette']
 }
 
 module.exports = command;

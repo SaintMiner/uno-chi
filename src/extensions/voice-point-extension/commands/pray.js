@@ -40,7 +40,8 @@ function pray(message) {
 
 const command = {
     slug: 'pray',
-    execute: pray
+    execute: pray,
+    channels: ['command', 'roulette']
 }
 
 module.exports = command;

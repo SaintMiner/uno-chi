@@ -13,16 +13,36 @@ function gambleRPS(message, args, overage) {
 
     if (!profile) return core.sendLocalizedError(message, `YOU_DONT_HAVE_PROFILE`);
     if (isNaN(bet)) return core.sendLocalizedError(message, `BET_MUST_BE_A_NUMBER`);
+    if (bet > 10000) return core.sendLocalizedError(message, `MAX_10000`);
     if (!userChoose) return core.sendLocalizedError(message, `RPS_MUST_BE_DEFINED`);
     if (bet <= 0) return core.sendLocalizedError(message, `MINIMAL_BET_1`);
     if (profile.voicepoints < bet) return core.sendLocalizedError(message, `NOT_ENOUGH_VOICEPOINTS`);
-    if (userChoose != '🖐️' && userChoose != '✊' && userChoose != '✌️') return core.sendLocalizedError(message, `RPS_NOT_CORRECT`);
+    let availabledChoises = ['🖐️', '✊', '✌️', 'r', 'p', 's'];
+    if (!availabledChoises.includes(userChoose)) return core.sendLocalizedError(message, `RPS_NOT_CORRECT`);
 
     let botChoose = random.int(1, 3);
-    if (botChoose == 1) botChoose = '🖐️';
-    if (botChoose == 2) botChoose = '✊';
-    if (botChoose == 3) botChoose = '✌️';
+    let botChooseEmoji;
+    if (botChoose == 1) botChooseEmoji = '🖐️';
+    if (botChoose == 2) botChooseEmoji = '✊';
+    if (botChoose == 3) botChooseEmoji = '✌️';
+    
+    switch (userChoose) {
+        case "r":
+        case "✊":
+            userChoose = 2;
+            break;
 
+        case "p":
+            case "🖐️":
+            userChoose = 1;
+            break;
+        
+        case "s":
+        case "✌️":
+            userChoose = 3;
+            break;
+    }
+    
     let won = __(
         { 
             phrase: `{{botChoose}} You won {{bet}}`,
@@ -30,7 +50,7 @@ function gambleRPS(message, args, overage) {
         },
         {
             bet: bet,
-            botChoose: botChoose
+            botChoose: botChooseEmoji
         }
     );
 
@@ -41,7 +61,7 @@ function gambleRPS(message, args, overage) {
         },
         {
             bet: bet,
-            botChoose: botChoose
+            botChoose: botChooseEmoji
         }
     );
 
@@ -51,52 +71,62 @@ function gambleRPS(message, args, overage) {
             locale: core.getGuildLanguage(message.guild.id) 
         },
         {
-            botChoose: botChoose
+            botChoose: botChooseEmoji
         }
     );
+    
+    let state = getState(userChoose, botChoose);
 
-    if (botChoose == '🖐️' && userChoose == '✌️') {
-        profile.voicepoints += bet*multiplier;
+    if (state == "win") {
+        profile.voicepoints += bet;
         message.channel.send(won);
-    } else if (botChoose == '🖐️' && userChoose == '✊') {
+    } else if (state == "lose") {
         profile.voicepoints -= bet;
         message.channel.send(lose);
-    } else if (botChoose == userChoose && '🖐️' == userChoose && '🖐️' == botChoose) {
+    } else if (state == "draw") {
         message.channel.send(draw);
     }
 
-    if (botChoose == '✌️' && userChoose == '✊') {
-        profile.voicepoints += bet*multiplier;
-        message.channel.send(won);
-    } else if (botChoose == '✌️' && userChoose == '🖐️') {
-        profile.voicepoints -= bet;
-        message.channel.send(lose);
-    } else if (botChoose == userChoose && '✌️' == userChoose && '✌️' == botChoose) {
-        message.channel.send(draw);
-    }
+    // if (botChoose == '✌️' && userChoose == '✊') {
+    //     profile.voicepoints += bet;
+    //     message.channel.send(won);
+    // } else if (botChoose == '✌️' && userChoose == '🖐️') {
+    //     profile.voicepoints -= bet;
+    //     message.channel.send(lose);
+    // } else if (botChoose == userChoose && '✌️' == userChoose && '✌️' == botChoose) {
+    //     message.channel.send(draw);
+    // }
 
-    if (botChoose == '✊' && userChoose == '🖐️') {
-        profile.voicepoints += bet*multiplier;
-        message.channel.send(won);
-    } else if (botChoose == '✊' && userChoose == '✌️') {
-        profile.voicepoints -= bet;
-        message.channel.send(lose);
-    } else if (botChoose == userChoose && '✊' == userChoose && '✊' == botChoose) {
-        message.channel.send(draw);
-    }
+    // if (botChoose == '✊' && userChoose == '🖐️') {
+    //     profile.voicepoints += bet;
+    //     message.channel.send(won);
+    // } else if (botChoose == '✊' && userChoose == '✌️') {
+    //     profile.voicepoints -= bet;
+    //     message.channel.send(lose);
+    // } else if (botChoose == userChoose && '✊' == userChoose && '✊' == botChoose) {
+    //     message.channel.send(draw);
+    // }
 
 
     
 }
 
+function getState(userChoose, botChoose) {
+    if (userChoose == botChoose) return "draw";
+    if (userChoose+1 == botChoose || (userChoose == 3 && botChoose == 1)) return "win";
+    return "lose";
+}
+
 let rps = {
     slug: 'rps',
-    execute: gambleRPS
+    execute: gambleRPS,
+    channels: ['roulette']
 }
 
 let dice = {
     slug: 'dice',
-    execute: gambleDice
+    execute: gambleDice,
+    channels: ['roulette']
 }
 
 let command = {

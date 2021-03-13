@@ -26,6 +26,7 @@ let roulette = {
 
     execute: startRoulette,
     childrens: [],
+    channels: ['roulette']
 }
 
 let gamble = {
@@ -45,6 +46,7 @@ let gamble = {
     childrens: [
         roulette
     ],
+    channels: ['roulette']
 }
 
 module.exports = gamble;

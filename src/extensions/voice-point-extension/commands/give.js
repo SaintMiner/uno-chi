@@ -26,7 +26,8 @@ function give(message, args, overage) {
 
 const command = {
     slug: 'give',
-    execute: give
+    execute: give,
+    channels: ['command', 'roulette']
 }
 
 module.exports = command;

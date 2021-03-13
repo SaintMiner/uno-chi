@@ -119,22 +119,26 @@ const textlevel = {
 const time = {
     slug: 'time',
     execute: topTime,
+    channels: ['command', 'roulette']
 }
 
 const voicelevel = {
     slug: 'voicelevel',
     execute: topVoiceLevel,
+    channels: ['command', 'roulette']
 }
 
 const voicepoints = {
     slug: 'voicepoints',
     execute: topVoicePoints,
+    channels: ['command', 'roulette']
 }
 
 const command = {
     slug: 'top',
     execute: topVoiceLevel,
-    childrens: [ voicepoints, voicelevel, time ]
+    childrens: [ voicepoints, voicelevel, time ],
+    channels: ['command', 'roulette']
 }
 
 module.exports = command

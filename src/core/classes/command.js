@@ -60,6 +60,14 @@ class Command {
                 return message.channel.send(__('YOU_DONT_HAVE_PERMISSION'))
             };
         }
+
+        if (this.canExecutePrivate(message.author.id)) {
+            let isRightChannel = this.checkChannel(message, guild);
+            
+            if (!isRightChannel) {
+                return;
+            }
+        }
                 
         if (this.executeCustom) {            
             this.executeCustom(message, args, overage);
@@ -87,12 +95,48 @@ class Command {
         this.category = settings.category || 'Uncategorized';
         this.executeCustom = settings.execute;
         this.extensions = settings.extensions || [];
+        this.channels = settings.channels || [];
         if (Array.isArray(settings.childrens)) {
             this.childrens = settings.childrens.map(children => new Command(children));
         } else {
             this.childrens = [];
         }
         this.executeCustom = settings.execute;
+    }
+
+    checkChannel(message, guild) {
+        if (this.channels.length) {
+            let messageChannel = message.channel.id;
+            let isSetted = false;
+            
+            this.channels.forEach(channel => {
+                if (Object.keys(guild.channels).includes(channel)) {
+                    if (guild.channels[channel] != '0') {
+                        isSetted = true;
+                    }
+                }
+            });
+
+            if (isSetted) {
+                const filtered = Object.keys(guild.channels)
+                    .filter(key => this.channels.includes(key))
+                    .reduce((obj, key) => {
+                        return {
+                        ...obj,
+                        [key]: guild.channels[key]
+                        };
+                    }, {});
+                    
+                if (!Object.values(filtered).includes(messageChannel)) {
+                    let channels = Object.values(filtered).map(channel => `<#${channel}>`).join(' or ');
+                    message.channel.send('You => '+channels);
+                    return false;
+                }
+            }
+            
+            
+        }
+        return true;
     }
 
     // getCommandHelp() {        

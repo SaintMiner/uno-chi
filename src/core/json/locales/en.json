@@ -48,5 +48,9 @@
 	"YOU_DONT_HAVE_PROFILE": "YOU_DONT_HAVE_PROFILE",
 	"<@{{mention}}> now is part of text system": "<@{{mention}}> now is part of text system",
 	"<@{{mention}}> now is part of voice system": "<@{{mention}}> now is part of voice system",
-	"MINIMAL_BET_100": "Minimal bet 100"
+	"MINIMAL_BET_100": "Minimal bet 100",
+	"{{botChooseEmoji}} You won {{bet}}": "{{botChooseEmoji}} You won {{bet}}",
+	"{{botChooseEmoji}} You lose {{bet}}": "{{botChooseEmoji}} You lose {{bet}}",
+	"{{botChooseEmoji}} Draw": "{{botChooseEmoji}} Draw",
+	"MAX_10000": "Max 10000"
 }

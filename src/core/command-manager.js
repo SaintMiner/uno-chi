@@ -12,16 +12,14 @@ class CommandManager extends Basic {
             if (!message.guild) return;
             if (message.author.bot) return;
             if (!message.content.startsWith(core.configuration.prefix)) return;
-
             let commandment = message.content
                 .toLowerCase()
                 .slice(core.configuration.prefix.length)
                 .trim()
                 .split(/ +/g)
                 .filter(part => !!part);
-            
-            if (!commandment.length) return;
-            
+                
+            if (!commandment.length) return;            
             let instruction = this.getExecutionInstruction(message.content);
             this.callCommand(message, instruction);
         });
@@ -37,7 +35,7 @@ class CommandManager extends Basic {
         let list = parent ? parent.childrens : this.commands;
 
         let command = null;
-
+        
         command = list.find(command => command.slug == slug);
         if (instruction.commandment[1] && command) {
             instruction.commandment = instruction.commandment.slice(1);
@@ -48,7 +46,7 @@ class CommandManager extends Basic {
             instruction.commandment = instruction.commandment.slice(1);
         }
 
-        if (command) {
+        if (command) {            
             command.execute(message, instruction.args, instruction.commandment);
         }        
         
@@ -126,6 +124,7 @@ class CommandManager extends Basic {
 
         return {commandment, args};
     }
+    
 }
 
 module.exports = CommandManager;
