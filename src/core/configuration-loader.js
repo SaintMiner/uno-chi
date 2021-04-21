@@ -16,6 +16,7 @@ class ConfigurationLoader extends Basic {
         this.configuration.voice_tick = process.env.VOICE_TICK;
         this.configuration.server_port = process.env.SERVER_PORT;
         this.configuration.core_version = process.env.CORE_VERSION;
+        this.configuration.api_token = process.env.API_TOKEN;
     }
 
 }

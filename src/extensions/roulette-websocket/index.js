@@ -27,9 +27,17 @@ class RouletteWebsocket extends Extension {
                         request.on('data', (chunk) => {
                             body.push(chunk);
                         }).on('end',async () => {
-                            body = JSON.parse(Buffer.concat(body).toString());
-                            let user_id = searchParams.get('user_id');
-                            let guild_id = searchParams.get('guild_id');
+                            try {
+                                body = JSON.parse(Buffer.concat(body).toString());
+                            } catch (e) {
+                                response.writeHead(400);
+                                response.write('Not valid JSON');
+                                response.end();
+                                return;
+                            }
+                            
+                            let user_id = body.user_id;
+                            let guild_id = body.guild_id;                            
 
                             if (!user_id || !guild_id) {
                                 response.writeHead(400);
@@ -65,6 +73,15 @@ class RouletteWebsocket extends Extension {
                             } catch (e) {
                                 response.writeHead(400);
                                 response.write('Not valid JSON');
+                                response.end();
+                                return;
+                            }
+
+                            let api_token = body.api_token;
+
+                            if (core.configuration.api_token != api_token) {
+                                response.writeHead(400);
+                                response.write('Api token (╯°□°）╯︵ ┻━┻');
                                 response.end();
                                 return;
                             }
@@ -111,36 +128,52 @@ class RouletteWebsocket extends Extension {
                 break;
                 case '/auth':
                     // console.log((new Date()) + ' Received request for ' + request.url);
-                    if (request.method == "POST") {
-                        request.on('data', (chunk) => {
-                            body.push(chunk);
-                        }).on('end',async () => {
-                            body = JSON.parse(Buffer.concat(body).toString());
-                            let player = this.players.find(player => player.code == body.code);
-                            if (!player) {
-                                response.writeHead(400);
-                                response.write('Invalid code');
-                                response.end();
-                            } else {
-                                response.writeHead(200);
-                                await core.client.users.fetch(player.user_id).then(p => {
-                                    let response_data = {
-                                        voicepoint: player.voice_profile.voicepoint,
-                                        tag: p.tag,
-                                        avatar: p.avatar,
-                                        user_id: p.id,
-                                    }
-                                    response.write(JSON.stringify(response_data));
-                                });
-                                response.end();
-                            }
-                        });
-                    } else if(request.method == "OPTIONS") {
+                    if (request.method == "GET") {
                         response.writeHead(200);
+                        response.write('Done!');
                         response.end();
                     } else {
                         response.writeHead(400);
-                        response.write('This is POST method');
+                        response.write('This is GET method');
+                        response.end();
+                    }
+                    
+                break;
+                case '/profiles':
+                    // console.log((new Date()) + ' Received request for ' + request.url);
+                    if (request.method == "GET") {
+                        request.on('data', (chunk) => {
+                            body.push(chunk);
+                        }).on('end',async () => {
+                            try {
+                                body = JSON.parse(Buffer.concat(body).toString());
+                            } catch (e) {
+                                response.writeHead(400);
+                                response.write('Not valid JSON');
+                                response.end();
+                                return;
+                            }
+
+                            let api_token = body.api_token;
+
+                            if (core.configuration.api_token != api_token) {
+                                response.writeHead(400);
+                                response.write('Api token (╯°□°）╯︵ ┻━┻');
+                                response.end();
+                                return;
+                            }
+                            
+                            response.writeHead(200);
+                            // JSON.stringify(voiceProfile);
+                            let voiceProfileExtension = core.getExtension('VoiceProfileExtension');
+                            voiceProfileExtension.fetchVoiceProfiles();
+                            response.write(JSON.stringify(voiceProfileExtension.voiceProfiles));
+                            response.end();
+                            
+                        });
+                    } else {
+                        response.writeHead(400);
+                        response.write('This is GET method');
                         response.end();
                     }
                     
