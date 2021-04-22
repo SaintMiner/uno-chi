@@ -128,13 +128,36 @@ class RouletteWebsocket extends Extension {
                 break;
                 case '/auth':
                     // console.log((new Date()) + ' Received request for ' + request.url);
-                    if (request.method == "GET") {
+                    if (request.method == "POST") {
+                        request.on('data', (chunk) => {
+                            body.push(chunk);
+                        }).on('end',async () => {
+                            body = JSON.parse(Buffer.concat(body).toString());
+                            let player = this.players.find(player => player.code == body.code);
+                            if (!player) {
+                                response.writeHead(400);
+                                response.write('Invalid code');
+                                response.end();
+                            } else {
+                                response.writeHead(200);
+                                await core.client.users.fetch(player.user_id).then(p => {
+                                    let response_data = {
+                                        voicepoint: player.voice_profile.voicepoint,
+                                        tag: p.tag,
+                                        avatar: p.avatar,
+                                        user_id: p.id,
+                                    }
+                                    response.write(JSON.stringify(response_data));
+                                });
+                                response.end();
+                            }
+                        });
+                    } else if(request.method == "OPTIONS") {
                         response.writeHead(200);
-                        response.write('Done!');
                         response.end();
                     } else {
                         response.writeHead(400);
-                        response.write('This is GET method');
+                        response.write('This is POST method');
                         response.end();
                     }
                     
