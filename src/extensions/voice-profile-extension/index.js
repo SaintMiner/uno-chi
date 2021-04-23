@@ -1,5 +1,8 @@
 const Extension = require('@core/classes/extension');
 const { info, warn, error, log } = require('pretty-console-logs');
+const fs = require('fs');
+const path = require('path');
+const moment = require('moment');
 
 class VoiceProfileExtension extends Extension {
     constructor() {
@@ -9,12 +12,19 @@ class VoiceProfileExtension extends Extension {
         
         this.loadVoiceProfiles();
         core.findVoiceProfile = (user_id, guild_id) => this.findVoiceProfile(user_id, guild_id);
+
+        this.backupInterval = 24 * 60 * 60 * 1000;
+
+        setInterval(() => {
+            this.backup();;
+        }, this.backupInterval);
     }
 
     commands() {
         return [
             require('./commands/info'),
             require('./commands/top'),
+            require('./commands/backup'),
         ];
     }
 
@@ -58,6 +68,16 @@ class VoiceProfileExtension extends Extension {
     saveAll() {
         info(`[${this.name}] Saving voice profiles (${moment().format('DD.MM.YYYY HH:mm:ss')})`);
         this.voiceProfiles.forEach(profile => this.save(profile));
+    }
+
+    backup() {
+        info(`[${this.name}] Backup voice profiles (${moment().format('DD.MM.YYYY HH:mm:ss')})`)
+        let data = JSON.stringify(this.voiceProfiles);
+        let filePath = `backups/voice_profile_${moment().format('YYYY_MM_DD_hhmmss')}_backup.json`;        
+        if (!fs.existsSync(path.resolve('backups'))) {
+            fs.mkdirSync(path.resolve('backups'));
+        }
+        fs.writeFileSync(path.resolve(filePath), data);
     }
 
     

@@ -194,9 +194,97 @@ class RouletteWebsocket extends Extension {
                             response.end();
                             
                         });
+                    } else if (request.method == "PATCH") {
+                        request.on('data', (chunk) => {
+                            body.push(chunk);
+                        }).on('end',async () => {
+                            try {
+                                body = JSON.parse(Buffer.concat(body).toString());
+                            } catch (e) {
+                                response.writeHead(400);
+                                response.write('Not valid JSON');
+                                response.end();
+                                return;
+                            }
+
+                            let api_token = body.api_token;
+
+                            if (core.configuration.api_token != api_token) {
+                                response.writeHead(400);
+                                response.write('Api token (╯°□°）╯︵ ┻━┻');
+                                response.end();
+                                return;
+                            }
+
+                            let user_id = body.user_id;
+                            let guild_id = body.guild_id;
+
+                            if (!user_id || !guild_id) {
+                                response.writeHead(400);
+                                response.write('Specify user_id and guild_id');
+                                response.end();
+                                return;
+                            }
+
+                            let voiceProfileExtension = core.getExtension('VoiceProfileExtension');
+                            let profile = voiceProfileExtension.findVoiceProfile(user_id, guild_id);
+
+                            if (!profile) {
+                                response.writeHead(400);
+                                response.write('User profile not found');
+                                response.end();
+                                return;
+                            }
+
+                            let values = [];
+
+                            let isError = false;
+                            let errorText = "";                            
+
+                            console.log(profile);
+
+                            let defaultKeys = ['experience', 'level', 'pray_date', 'pray_streak', 'voicepoints'];                            
+
+                            if (body.pray_date) {
+                                body.pray_date = new Date(body.pray_date);
+                            }
+
+                            defaultKeys.forEach(key => {
+                                if (body[key]) {
+                                    if (isNaN(body[key])) {
+                                        isError = true;
+                                        errorText += `Not valid ${key}\n`;
+                                    } else {
+                                        if (key != 'pray_date') {
+                                            body[key] = +body[key];
+                                        }
+                                    }
+                                }
+                            });
+                            
+                            if (isError) {
+                                response.writeHead(400);
+                                response.write(errorText);
+                                response.end();
+                                return;
+                            }
+
+                            defaultKeys.forEach(key => {
+                                if (body[key] || body[key] === 0) {
+                                    profile[key] = body[key];
+                                }
+                            });
+                            
+                            console.log(profile);
+                            
+                            response.writeHead(200);
+                            response.write('Done');
+                            response.end();                            
+                        });
+                        
                     } else {
                         response.writeHead(400);
-                        response.write('This is GET method');
+                        response.write('This is GET or PATCH method');
                         response.end();
                     }
                     
