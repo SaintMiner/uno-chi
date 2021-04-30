@@ -189,7 +189,7 @@ class RouletteWebsocket extends Extension {
                             response.writeHead(200);
                             // JSON.stringify(voiceProfile);
                             let voiceProfileExtension = core.getExtension('VoiceProfileExtension');
-                            voiceProfileExtension.fetchVoiceProfiles();
+                            // voiceProfileExtension.fetchVoiceProfiles();
                             response.write(JSON.stringify(voiceProfileExtension.voiceProfiles));
                             response.end();
                             
