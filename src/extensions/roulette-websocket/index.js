@@ -48,7 +48,7 @@ class RouletteWebsocket extends Extension {
                             let voiceProfile = core.findVoiceProfile(user_id, guild_id);
 
                             if (!voiceProfile) {
-                                response.writeHead(400);
+                                response.writeHead(404);
                                 response.write('Voice profile not found');
                                 response.end();
                                 return;
@@ -80,7 +80,7 @@ class RouletteWebsocket extends Extension {
                             let api_token = body.api_token;
 
                             if (core.configuration.api_token != api_token) {
-                                response.writeHead(400);
+                                response.writeHead(401);
                                 response.write('Api token (╯°□°）╯︵ ┻━┻');
                                 response.end();
                                 return;
@@ -107,7 +107,7 @@ class RouletteWebsocket extends Extension {
                             let voiceProfile = core.findVoiceProfile(user_id, guild_id);
 
                             if (!voiceProfile) {
-                                response.writeHead(400);
+                                response.writeHead(404);
                                 response.write('Voice profile not found');
                                 response.end();
                                 return;
@@ -180,7 +180,7 @@ class RouletteWebsocket extends Extension {
                             let api_token = body.api_token;
 
                             if (core.configuration.api_token != api_token) {
-                                response.writeHead(400);
+                                response.writeHead(401);
                                 response.write('Api token (╯°□°）╯︵ ┻━┻');
                                 response.end();
                                 return;
@@ -210,7 +210,7 @@ class RouletteWebsocket extends Extension {
                             let api_token = body.api_token;
 
                             if (core.configuration.api_token != api_token) {
-                                response.writeHead(400);
+                                response.writeHead(401);
                                 response.write('Api token (╯°□°）╯︵ ┻━┻');
                                 response.end();
                                 return;
@@ -230,7 +230,7 @@ class RouletteWebsocket extends Extension {
                             let profile = voiceProfileExtension.findVoiceProfile(user_id, guild_id);
 
                             if (!profile) {
-                                response.writeHead(400);
+                                response.writeHead(404);
                                 response.write('User profile not found');
                                 response.end();
                                 return;
