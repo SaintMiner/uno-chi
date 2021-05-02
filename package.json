@@ -1,6 +1,6 @@
 {
-  "name": "uno-chi-v2",
-  "version": "3.0.0",
+  "name": "uno-chi",
+  "version": "4.0.0",
   "description": "",
   "main": "src/bot.js",
   "scripts": {
