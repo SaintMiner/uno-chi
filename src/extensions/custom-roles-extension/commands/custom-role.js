@@ -13,6 +13,10 @@ function createCustomRole(message, args, overage) {
         customRole.settings.baking = 'true';
     }
 
+    if (args.hasOwnProperty('farmer')) {
+        customRole.settings.farmer = 'true';
+    }
+
     CustomRolesExtension.save(customRole);
 
     core.sendSuccessful(message);

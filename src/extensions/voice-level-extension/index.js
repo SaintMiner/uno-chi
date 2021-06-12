@@ -57,7 +57,8 @@ class VoiceLevelExtension extends Extension {
         let locale = core.getGuildLanguage(guild.guild_id);
         
         if (profile) {
-            profile.experience += this.getVoiceRoomExperience(room);
+            let experienceToAdd = this.getVoiceRoomExperience(room);
+            
             if (!profile.time_spents) {
                 profile.time_spents = {};
             }
@@ -68,6 +69,7 @@ class VoiceLevelExtension extends Extension {
 
             member.roles.cache.forEach(role => {
                 let customRole = this.customRolesExtension.findCustomRole(guild.guild_id, role.id)
+                
                 if (!customRole.isTemplate) {
                     if (customRole.settings.baking) {
                         if (profile.time_spents['baking']) {
@@ -82,8 +84,15 @@ class VoiceLevelExtension extends Extension {
                             profile.voicepoints += +profile.level
                         }
                     }
+
+                    if (customRole.settings.farmer) {
+                        
+                        experienceToAdd = Math.sqrt(experienceToAdd);
+                        
+                    }
                 }
             });
+            profile.experience += experienceToAdd;
             
             if (+room.settings.mining) {
                 if (profile.time_spents[room.room_id]) {
