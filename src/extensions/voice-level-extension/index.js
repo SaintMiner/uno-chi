@@ -107,7 +107,7 @@ class VoiceLevelExtension extends Extension {
                                     user_id: profile.user_id,
                                     guild_id: profile.guild_id,
                                 },
-                                amount: profile.level,
+                                amount: +profile.level,
                                 reason: "Baking pay day",
                             });                            
                         }
@@ -140,7 +140,7 @@ class VoiceLevelExtension extends Extension {
                             user_id: profile.user_id,
                             guild_id: profile.guild_id,
                         },
-                        amount: room.settings.mining,
+                        amount: +room.settings.mining,
                         reason: `Room mining: ${room.room_id}`,
                     }); 
                 }
@@ -180,7 +180,7 @@ class VoiceLevelExtension extends Extension {
                     user_id: profile.user_id,
                     guild_id: profile.guild_id,
                 },
-                amount: room.settings.mining,
+                amount: 10 * profile.level,
                 reason: `level up`,
             }); 
 

@@ -34,7 +34,7 @@ async function give(message, args, overage) {
             user_id: giveToProfile.user_id,
             guild_id: giveToProfile.guild_id,
         },
-        amount: 111,
+        amount: voicepoints,
         reason: "give",
     });
 
