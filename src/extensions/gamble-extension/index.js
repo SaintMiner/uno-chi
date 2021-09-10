@@ -6,6 +6,8 @@ const { info, warn, error, log } = require('pretty-console-logs');
 const Extension = require('@core/classes/extension');
 const rouletteCommand = require('./commands/gamble-roulette');
 
+const { transaction, show } = require('../voice-level-extension/rest');
+
 class GambleExtension extends Extension {
     
     constructor() {
@@ -38,9 +40,9 @@ class GambleExtension extends Extension {
         ]
     }
 
-    roulette(message, args, user_id, guild_id) {
+    async roulette(message, args, user_id, guild_id) {
         if (!this.voiceProfileExtension || !this.guildExtension) return;
-        let voice_profile = this.voiceProfileExtension.findVoiceProfile(user_id, guild_id);
+        let voice_profile = await show(guild_id, user_id);
         if (!voice_profile) return message.channel.send('Ты кто?');
         if (!this.validateRouletteBet(message, args, voice_profile)) return 'Validation error';
         
@@ -57,7 +59,16 @@ class GambleExtension extends Extension {
         }
 
         
-        voice_profile.voicepoints -= args[2];
+        // voice_profile.voicepoints -= args[2];
+        await transaction({
+            from: {
+                user_id: voice_profile.user_id,
+                guild_id: voice_profile.guild_id,
+            },
+            to: "self",
+            amount: +args[2],
+            reason: "Roulette bet",
+        });
         
 
         this.bets.push({
@@ -134,7 +145,16 @@ class GambleExtension extends Extension {
                                     for await (const profile of guildWinners) {
                                         let voice_profile = this.voiceProfileExtension.findVoiceProfile(profile.user_id, profile.guild_id);                                            
                                         let prize = profile.bet * this.multipliers[profile.place];
-                                        voice_profile.voicepoints += prize;
+                                        // voice_profile.voicepoints += prize;
+                                        await transaction({
+                                            from: "self",
+                                            to: {
+                                                user_id: profile.user_id,
+                                                guild_id: profile.guild_id,
+                                            },
+                                            amount: prize,
+                                            reason: `Roulette prize | Roulette: ${colorSquare} ${number} | Place: ${profile.place} | Bet: ${profile.bet}`,
+                                        });
                                         await guild.members.fetch(profile.user_id).then(m => {
                                             info.addField(`${m.user.tag}`, `Поставил: \`${profile.bet}\` Получил: \`${prize}\``);
                                         }).catch(err => error(err));

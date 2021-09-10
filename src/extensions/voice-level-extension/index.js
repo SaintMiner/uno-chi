@@ -2,6 +2,8 @@ const Extension = require('@core/classes/extension');
 
 const { info, warn, error, log } = require('pretty-console-logs');
 
+const { show, update, transaction } = require('./rest.js');
+
 class VoiceLevelExtension extends Extension {
     
     
@@ -26,9 +28,9 @@ class VoiceLevelExtension extends Extension {
             });
         }, this.tickInterval);
         
-        setInterval(() => {
-            this.voiceProfileExtension.saveAll();;
-        }, this.saveInterval);
+        // setInterval(() => {
+        //     this.voiceProfileExtension.saveAll();;
+        // }, this.saveInterval);
     }
 
     commands() {
@@ -52,9 +54,25 @@ class VoiceLevelExtension extends Extension {
         }).catch(err => {error(err)});
     }
 
-    tickMember(member, room, guild) {
-        let profile = this.voiceProfileExtension.findVoiceProfile(member.id, guild.guild_id);
+    async tickMember(member, room, guild) {
+        let profile = await show(guild.guild_id, member.id);
+        // console.log(profile);
+        // let profile = this.voiceProfileExtension.findVoiceProfile(member.id, guild.guild_id);
         let locale = core.getGuildLanguage(guild.guild_id);
+
+        if (profile.isNew) {
+            let partOfVoiceSystemMessage = __(
+                { 
+                    phrase: `<@{{mention}}> now is part of voice system`,
+                    locale: locale
+                },
+                {
+                    mention: profile.user_id,
+                    level: profile.level,
+                }
+            );
+            core.alertGuild(guild.guild_id, partOfVoiceSystemMessage);
+        }
         
         if (profile) {
             let experienceToAdd = this.getVoiceRoomExperience(room);
@@ -81,7 +99,17 @@ class VoiceLevelExtension extends Extension {
                         let miningPayDay = 1 * 60 * 60;
                         if (profile.time_spents['baking'] >= miningPayDay) {
                             profile.time_spents['baking'] -= miningPayDay;
-                            profile.voicepoints += +profile.level
+
+                            // profile.voicepoints += +profile.level
+                            transaction({
+                                from: "self",
+                                to: {
+                                    user_id: profile.user_id,
+                                    guild_id: profile.guild_id,
+                                },
+                                amount: profile.level,
+                                reason: "Baking pay day",
+                            });                            
                         }
                     }
 
@@ -92,7 +120,7 @@ class VoiceLevelExtension extends Extension {
                     }
                 }
             });
-            profile.experience += experienceToAdd;
+            profile.experience += experienceToAdd;            
             
             if (+room.settings.mining) {
                 if (profile.time_spents[room.room_id]) {
@@ -105,36 +133,57 @@ class VoiceLevelExtension extends Extension {
 
                 if (profile.time_spents[room.room_id] >= miningPayDay) {
                     profile.time_spents[room.room_id] -= miningPayDay;
-                    profile.voicepoints += +room.settings.mining
+                    // profile.voicepoints += +room.settings.mining
+                    transaction({
+                        from: "self",
+                        to: {
+                            user_id: profile.user_id,
+                            guild_id: profile.guild_id,
+                        },
+                        amount: room.settings.mining,
+                        reason: `Room mining: ${room.room_id}`,
+                    }); 
                 }
             }
 
             profile.time_spents.global += +core.configuration.voice_tick;
             
-        } else {
-            profile = {};
-            Object.assign(profile, this.voiceProfileExtension.getVoiceProfileTemplate());
-            profile.user_id = member.id;
-            profile.guild_id = guild.guild_id;
-            profile.experience = this.getVoiceRoomExperience(room);
-            this.voiceProfileExtension.voiceProfiles.push(profile);
-            let partOfVoiceSystemMessage = __(
-                { 
-                    phrase: `<@{{mention}}> now is part of voice system`,
-                    locale: locale
-                },
-                {
-                    mention: profile.user_id,
-                    level: profile.level,
-                }
-            );
-            core.alertGuild(guild.guild_id, partOfVoiceSystemMessage);
         }
+        // else {
+        //     profile = {};
+        //     Object.assign(profile, this.voiceProfileExtension.getVoiceProfileTemplate());
+        //     profile.user_id = member.id;
+        //     profile.guild_id = guild.guild_id;
+        //     profile.experience = this.getVoiceRoomExperience(room);
+        //     this.voiceProfileExtension.voiceProfiles.push(profile);
+        //     let partOfVoiceSystemMessage = __(
+        //         { 
+        //             phrase: `<@{{mention}}> now is part of voice system`,
+        //             locale: locale
+        //         },
+        //         {
+        //             mention: profile.user_id,
+        //             level: profile.level,
+        //         }
+        //     );
+        //     core.alertGuild(guild.guild_id, partOfVoiceSystemMessage);
+        // }
 
         if (profile.experience >= this.getNextLevelExperienceCount(profile.level)) {
             profile.experience -= this.getNextLevelExperienceCount(profile.level);
             profile.level++;
-            profile.voicepoints += 10 * profile.level;
+
+            // profile.voicepoints += 10 * profile.level;
+            transaction({
+                from: "self",
+                to: {
+                    user_id: profile.user_id,
+                    guild_id: profile.guild_id,
+                },
+                amount: room.settings.mining,
+                reason: `level up`,
+            }); 
+
             let levelUpMessage = __(
                 { 
                     phrase: `<@{{mention}}> has reached {{level}} level on voice system`,
@@ -148,6 +197,7 @@ class VoiceLevelExtension extends Extension {
             core.alertGuild(guild.guild_id, levelUpMessage);
             this.voiceRoleExtension.processUserByLevel(member, profile.level);
         }
+        update(profile);
     }
 
     getVoiceRoomExperience(room) {

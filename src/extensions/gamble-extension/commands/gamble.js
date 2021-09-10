@@ -2,12 +2,14 @@ const random = require('random');
 const seedrandom = require('seedrandom');
 const { gambleDice } = require('../dice');
 
-function gambleRPS(message, args, overage) {
-    const voiceProfileExtension = core.getExtension('VoiceProfileExtension');
+const { transaction, show } = require('../../voice-level-extension/rest');
+
+async function gambleRPS(message, args, overage) {
+    
     random.use(seedrandom(`nleebsu-${new Date().getTime()}`));
 
-    let multiplier = 2;
-    let profile = voiceProfileExtension.findVoiceProfile(message.author.id, message.guild.id);
+    
+    let profile = await show(message.guild.id, message.author.id);
     let bet = +overage[0];
     let userChoose = overage[1];
 
@@ -78,37 +80,33 @@ function gambleRPS(message, args, overage) {
     let state = getState(userChoose, botChoose);
 
     if (state == "win") {
-        profile.voicepoints += bet;
+        // profile.voicepoints += bet;
+        await transaction({
+            from: "self",
+            to: {
+                user_id: profile.user_id,
+                guild_id: profile.guild_id,
+            },
+            amount: bet,
+            reason: "RPS win",
+        });
         message.channel.send(won);
     } else if (state == "lose") {
-        profile.voicepoints -= bet;
+        // profile.voicepoints -= bet;
+        await transaction({
+            from: {
+                user_id: profile.user_id,
+                guild_id: profile.guild_id,
+            },
+            to: "self",
+            amount: bet,
+            reason: "RPS lose",
+        });
         message.channel.send(lose);
     } else if (state == "draw") {
         message.channel.send(draw);
     }
 
-    // if (botChoose == '✌️' && userChoose == '✊') {
-    //     profile.voicepoints += bet;
-    //     message.channel.send(won);
-    // } else if (botChoose == '✌️' && userChoose == '🖐️') {
-    //     profile.voicepoints -= bet;
-    //     message.channel.send(lose);
-    // } else if (botChoose == userChoose && '✌️' == userChoose && '✌️' == botChoose) {
-    //     message.channel.send(draw);
-    // }
-
-    // if (botChoose == '✊' && userChoose == '🖐️') {
-    //     profile.voicepoints += bet;
-    //     message.channel.send(won);
-    // } else if (botChoose == '✊' && userChoose == '✌️') {
-    //     profile.voicepoints -= bet;
-    //     message.channel.send(lose);
-    // } else if (botChoose == userChoose && '✊' == userChoose && '✊' == botChoose) {
-    //     message.channel.send(draw);
-    // }
-
-
-    
 }
 
 function getState(userChoose, botChoose) {

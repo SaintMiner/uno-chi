@@ -1,13 +1,17 @@
-function give(message, args, overage) {
-    const voiceProfileExtension = core.getExtension('VoiceProfileExtension');
+const { transaction, show } = require('../../voice-level-extension/rest');
 
+async function give(message, args, overage) {    
     let mention = message.mentions.members.first();
 
     if (!mention) return core.sendLocalizedError(message, `WHO_MUST_BE_SPECIFIED`);
     if (message.author.id == mention.user.id) return core.sendLocalizedError(message, `GENIOUS`);
 
-    let profile = voiceProfileExtension.findVoiceProfile(message.author.id, message.guild.id);
-    let giveToProfile = voiceProfileExtension.findVoiceProfile(mention.user.id, message.guild.id);
+    // let profile = voiceProfileExtension.findVoiceProfile(message.author.id, message.guild.id);
+    // let giveToProfile = voiceProfileExtension.findVoiceProfile(mention.user.id, message.guild.id);
+    console.log('debugger');
+    let profile = await show(message.guild.id, message.author.id);
+    let giveToProfile = await show(message.guild.id, mention.user.id);
+    
     let voicepoints = overage[1];
 
     if (!profile || !giveToProfile || !voicepoints) return core.sendLocalizedError(message, `GIVE_ARGS_ERROR`);    
@@ -20,6 +24,19 @@ function give(message, args, overage) {
 
     profile.voicepoints -= voicepoints;
     giveToProfile.voicepoints += voicepoints;
+
+    await transaction({
+        from: {
+            user_id: profile.user_id,
+            guild_id: profile.guild_id,
+        },
+        to: {
+            user_id: giveToProfile.user_id,
+            guild_id: giveToProfile.guild_id,
+        },
+        amount: 111,
+        reason: "give",
+    });
 
     core.sendSuccessful(message);
 }

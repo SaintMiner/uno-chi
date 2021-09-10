@@ -32,6 +32,10 @@ function addVoiceXp(message, args, overage) {
     core.sendSuccessful(message);
 }
 
+function stopper(message) {
+    message.channel.send("temporary disabled :3 MNE LENJ");
+}
+
 let voicepoints = {
     permissions: ['ADMINISTRATOR'],
     slug: 'voicepoints',
@@ -47,7 +51,8 @@ let voicexp = {
 let command = {
     permissions: ['ADMINISTRATOR'],
     slug: 'add',
-    childrens: [ voicexp, voicepoints ],
+    execute: stopper
+    // childrens: [ voicexp, voicepoints ],
 }
 
 module.exports = command;

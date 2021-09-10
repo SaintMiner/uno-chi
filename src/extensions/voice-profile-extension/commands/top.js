@@ -1,15 +1,9 @@
 const { MessageEmbed } = require('discord.js');
 
-function topVoicePoints(message) {
-    const voiceProfileExtension = core.getExtension('VoiceProfileExtension');
-    if (!voiceProfileExtension) return;
-    
-    let profiles = voiceProfileExtension.voiceProfiles.filter(profile => profile.guild_id == message.guild.id);
+const { levelTop, timeTop, pointsTop } = require('../../voice-level-extension/rest');
 
-    profiles = profiles.sort((a, b) => {
-        if (a.voicepoints < b.voicepoints) return 1;
-        if (a.voicepoints > b.voicepoints) return -1;
-    })
+async function topVoicePoints(message) {
+    let profiles = await pointsTop(message.guild.id);
 
     let embed = new MessageEmbed()
         .setColor("#580ad6")
@@ -31,26 +25,15 @@ function topVoicePoints(message) {
     message.channel.send(embed);
 }
 
-function topVoiceLevel(message) {
-    const voiceProfileExtension = core.getExtension('VoiceProfileExtension');
-    if (!voiceProfileExtension) return;
-    
-    let profiles = voiceProfileExtension.voiceProfiles.filter(profile => profile.guild_id == message.guild.id);
-
-    profiles = profiles.sort((a, b) => {
-        if (a.level < b.level) return 1;
-        if (a.level > b.level) return -1;
-        if (a.experience < b.experience) return 1;
-        if (a.experience > b.experience) return -1;
-    })
-
-    let place = 1;
+async function topVoiceLevel(message) {    
+    let profiles = await levelTop(message.guild.id);
     let embed = new MessageEmbed()
         .setColor("#580ad6")
         .setTitle(`Локальный топ`)
         .setDescription('Голосовая система')
         .setTimestamp();
 
+    let place = 1;
     profiles.some(profile => {
         let member = message.guild.members.resolve(profile.user_id);
         if (member) {
@@ -66,22 +49,8 @@ function topVoiceLevel(message) {
     message.channel.send(embed);
 }
 
-function topTime(message) {
-    const voiceProfileExtension = core.getExtension('VoiceProfileExtension');
-    if (!voiceProfileExtension) return;
-    
-    let profiles = voiceProfileExtension.voiceProfiles.filter(profile => {
-        if (profile.guild_id == message.guild.id && profile.time_spents) {
-            if (profile.time_spents.global) {
-                return true;
-            }
-        }        
-    });
-
-    profiles = profiles.sort((a, b) => {
-        if (a.time_spents.global < b.time_spents.global) return 1;
-        if (a.time_spents.global > b.time_spents.global) return -1;        
-    })
+async function topTime(message) {    
+    let profiles = await timeTop(message.guild.id);
 
     let embed = new MessageEmbed()
         .setColor("#580ad6")
@@ -89,11 +58,11 @@ function topTime(message) {
         .setDescription('Общее время')
         .setTimestamp();
     let place = 1;
-
+    
     profiles.some(profile => {
         let member = message.guild.members.resolve(profile.user_id);
         if (member) {
-            let totalSeconds = profile.time_spents.global;
+            let totalSeconds = profile.timespent.global;
             let days = Math.floor(totalSeconds / (3600 * 24));
             totalSeconds %= 60 * 60 * 24;
             let hours = (`0` + (Math.floor(totalSeconds / 3600))).slice(-2);

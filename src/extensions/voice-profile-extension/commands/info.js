@@ -1,12 +1,14 @@
 const { MessageEmbed } = require('discord.js');
 
-function action(message) {
+const { show } = require('../../voice-level-extension/rest');
+
+async function action(message) {
     let member = message.mentions.members.first();
     if (!member) {
         member = message.member;
     }
 
-    let voiceProfile = core.findVoiceProfile(member.id, member.guild.id);
+    let voiceProfile = await show(member.guild.id, member.id);    
     let textProfile = core.findTextProfile(member.id, member.guild.id);
     let lang = core.getGuildLanguage(message.guild.id);
     if (textProfile.isTemplate) {

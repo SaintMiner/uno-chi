@@ -1,9 +1,13 @@
 const random = require('random');
 const seedrandom = require('seedrandom');
 
-function pray(message) {
-    let profile = core.findVoiceProfile(message.author.id, message.guild.id);
-    if (profile) {
+const { transaction, show } = require('../../voice-level-extension/rest');
+
+async function pray(message) {    
+
+    let profile = await show(message.guild.id, message.member.id);
+    
+    if (profile) {        
         random.use(seedrandom(`nleebsu-${new Date().getTime()}`));
         let pray = random.int(0, 500);
         let now = new Date();
@@ -28,7 +32,16 @@ function pray(message) {
                     message.channel.send('Знаешь я крайне польщена, что другой бог молится мне...');
                 }
             }
-            profile.voicepoints += (pray + profile.pray_streak*10);
+            // profile.voicepoints += (pray + profile.pray_streak*10);
+            await transaction({
+                from: "self",
+                to: {
+                    user_id: profile.user_id,
+                    guild_id: profile.guild_id,
+                },
+                amount: (pray + profile.pray_streak*10),
+                reason: "test",
+            });
             return message.channel.send(`Держи ${pray} и ${profile.pray_streak*10} за ежедневные молитвы!`);
         } else {
             return message.channel.send('Ты сегодня уже получил своё.');
