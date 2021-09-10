@@ -28,7 +28,8 @@ exports.show = async (guild_id, user_id) => {
         if (err?.response?.status == 404) {            
             profile = await this.create(guild_id, user_id);
         } else {
-            console.error(err);
+            error(err);
+            // console.error(err);
         }
     });    
     return {        
@@ -82,6 +83,7 @@ exports.transaction = (params) => {
     core.api.post('transaction', params).then(response => {
         console.log(response.data);
     }).catch(error => {
-        console.log(error.response);
+        error(err);
+        // console.log(error.response);
     });
 }
