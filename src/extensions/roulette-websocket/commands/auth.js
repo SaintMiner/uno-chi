@@ -1,5 +1,5 @@
 const { show } = require('../../voice-level-extension/rest');
-function execute(message, args) {
+async function execute(message, args) {
     let code = Math.random().toString(36).substring(2, 18).toUpperCase();
     // let voice_profile = core.findVoiceProfile(message.author.id, message.guild.id);
     let voice_profile = await show(message.guild.id, message.author.id);
