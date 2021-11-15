@@ -305,7 +305,7 @@ class RouletteWebsocket extends Extension {
             autoAcceptConnections: false
         });
 
-        this.wsServer.on('request', async (request) => {
+        this.wsServer.on('request', (request) => {
             // if (!originIsAllowed(request.origin)) {
             //     // Make sure we only accept requests from an allowed origin
             //     request.reject();
@@ -332,7 +332,7 @@ class RouletteWebsocket extends Extension {
                 connection.player = player;
                 this.connections.push(connection);
                 this.sendConnectedPlayers();
-                connection.on('message', (message) => {
+                connection.on('message', async (message) => {
                     let data = JSON.parse(message.utf8Data);
                     let key = Object.keys(data)[0].toLowerCase();
                     switch (key) {
