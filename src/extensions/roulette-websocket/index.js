@@ -2,6 +2,7 @@ const Extension = require('@core/classes/extension');
 
 const WebSocketServer = require('websocket').server;
 const http = require('http');
+const { show, update, transaction } = require('../voice-level-extension/rest');
 
 class RouletteWebsocket extends Extension {
     constructor(client) {
@@ -45,7 +46,7 @@ class RouletteWebsocket extends Extension {
                                 response.end();
                                 return;
                             }
-                            let voiceProfile = core.findVoiceProfile(user_id, guild_id);
+                            let voiceProfile = await show(guild_id, user_id);
 
                             if (!voiceProfile) {
                                 response.writeHead(404);
@@ -104,7 +105,7 @@ class RouletteWebsocket extends Extension {
                                 return;
                             }
 
-                            let voiceProfile = core.findVoiceProfile(user_id, guild_id);
+                            let voiceProfile = await show(guild_id, user_id);
 
                             if (!voiceProfile) {
                                 response.writeHead(404);
@@ -227,7 +228,7 @@ class RouletteWebsocket extends Extension {
                             }
 
                             let voiceProfileExtension = core.getExtension('VoiceProfileExtension');
-                            let profile = voiceProfileExtension.findVoiceProfile(user_id, guild_id);
+                            let profile = await show(guild_id, user_id);
 
                             if (!profile) {
                                 response.writeHead(404);
