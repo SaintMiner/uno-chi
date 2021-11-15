@@ -1,6 +1,8 @@
+const { show } = require('../../voice-level-extension/rest');
 function execute(message, args) {
     let code = Math.random().toString(36).substring(2, 18).toUpperCase();
-    let voice_profile = core.findVoiceProfile(message.author.id, message.guild.id);
+    // let voice_profile = core.findVoiceProfile(message.author.id, message.guild.id);
+    let voice_profile = await show(message.guild.id, message.author.id);
     if (!validateAuth(message, voice_profile)) return;
     // message.channel.send(`${message.guild.name}: \`${code}\``);
     message.author.send(`${message.guild.name}: \`${code}\``);
