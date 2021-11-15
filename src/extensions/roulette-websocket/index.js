@@ -372,7 +372,7 @@ class RouletteWebsocket extends Extension {
         let connectedPlayers = [];
         for await (const connection of this.connections) {
             await core.client.users.fetch(connection.player.user_id).then(async u => {
-                let voice_profile = await show(player.guild_id, player.user_id);
+                let voice_profile = await show(connection.player.guild_id, connection.player.user_id);
                 connectedPlayers.push({
                     voicepoint: voice_profile.voicepoints,
                     username: u.username,   
