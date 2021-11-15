@@ -305,7 +305,7 @@ class RouletteWebsocket extends Extension {
             autoAcceptConnections: false
         });
 
-        this.wsServer.on('request', (request) => {
+        this.wsServer.on('request', async (request) => {
             // if (!originIsAllowed(request.origin)) {
             //     // Make sure we only accept requests from an allowed origin
             //     request.reject();
@@ -339,7 +339,7 @@ class RouletteWebsocket extends Extension {
                         case 'bet':
                             data = data.bet;
                             let gambleExtension = core.getExtension('GambleExtension');
-                            let res = gambleExtension.roulette(null, [null, data.place, data.bet], player.user_id, player.guild_id);
+                            let res = await gambleExtension.roulette(null, [null, data.place, data.bet], player.user_id, player.guild_id);
                             this.tableBets = res;
                             this.sendMessageToAll({bets: this.tableBets});
                         break;
