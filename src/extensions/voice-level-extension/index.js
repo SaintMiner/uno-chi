@@ -197,6 +197,7 @@ class VoiceLevelExtension extends Extension {
             core.alertGuild(guild.guild_id, levelUpMessage);
             this.voiceRoleExtension.processUserByLevel(member, profile.level);
         }
+        profile.text = null;
         update(profile);
     }
 

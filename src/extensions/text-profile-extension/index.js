@@ -1,20 +1,37 @@
 const Extension = require('@core/classes/extension');
 
 const { info, warn, error, log } = require('pretty-console-logs');
+const { show, update } = require('../voice-level-extension/rest');
 
 class TextProfileExtension extends Extension {
     constructor() {
         super();
-        this.textProfilesModel = require('./models/text-profile-model');
-        this.textProfiles = [];
-        this.loadTextProfiles();
-
-        core.client.on('message', message => {
+        core.client.on('message', async message => {
             if (!message.guild) return;
             if (message.author.bot) return;
             if (message.content.startsWith(core.configuration.prefix)) return;
             
-            let profile = this.findTextProfile(message.author.id, message.guild.id);
+            let profile = await show(message.guild.id, message.author.id);
+            if (!profile.text) {
+                profile.text = {
+                    level: 1,
+                    experience: 0,
+                    message_count: 0,
+                }
+
+                let partOfSystemMessage = __(
+                    { 
+                        phrase: `<@{{mention}}> now is part of text system`,
+                        locale: core.getGuildLanguage(message.guild.id) 
+                    },
+                    {
+                        mention: message.author.id,                    
+                    }
+                );
+    
+                core.alertGuild(message.guild.id, partOfSystemMessage);
+            }
+            profile = profile.text;
 
             profile.message_count++;
             profile.experience++;
@@ -37,73 +54,12 @@ class TextProfileExtension extends Extension {
                 core.alertGuild(message.guild.id, levelUpMessage);
             }
             
-            this.saveLocal(profile);
+            update({
+                guild_id: message.guild.id,
+                user_id: message.author.id,
+                text: profile
+            })
         });
-
-        this.saveInterval = 5 * 60 * 1000;
-
-        setInterval(() => {
-            this.saveAll();;
-        }, this.saveInterval);
-
-        core.findTextProfile = (user_id, guild_id) => this.findTextProfile(user_id, guild_id);
-    }
-
-    async loadTextProfiles() {
-        this.textProfilesModel = core.getConnection().loadSchema('TextProfilesModel', this.textProfilesModel);
-        await this.textProfilesModel.syncDBAsync().catch(err => {throw err});
-        await this.fetchTextProfiles();
-    }
-
-    async fetchTextProfiles() {
-        await this.textProfilesModel.findAsync({}, {raw: true}).then(result => this.textProfiles = result);
-    }
-
-    findTextProfile(user_id, guild_id) {
-        let profile = this.textProfiles.find(tp => tp.user_id == user_id && tp.guild_id == guild_id);
-        if (!profile) {
-            profile = this.getTemplate(user_id, guild_id);
-        }
-        return profile;
-    }
-
-    async save(textProfile) {
-        let record = new this.textProfilesModel(textProfile);
-        await record.saveAsync().catch(err => error(`[${this.name}] ${err}`));
-    }
-
-    saveLocal(textProfile) {
-        if (textProfile.isTemplate) {
-            textProfile.isTemplate = false;
-            let partOfSystemMessage = __(
-                { 
-                    phrase: `<@{{mention}}> now is part of text system`,
-                    locale: core.getGuildLanguage(textProfile.guild_id) 
-                },
-                {
-                    mention: textProfile.user_id,                    
-                }
-            );
-
-            core.alertGuild(textProfile.guild_id, partOfSystemMessage);
-            this.textProfiles.push(textProfile);
-        }
-    }
-
-    saveAll() {
-        info(`[${this.name}] Saving text profiles (${moment().format('DD.MM.YYYY HH:mm:ss')})`);
-        this.textProfiles.forEach(profile => this.save(profile));
-    }
-
-    getTemplate(user_id, guild_id) {
-        return {
-            user_id: user_id,
-            guild_id: guild_id,
-            experience: 0,
-            level: 1,
-            message_count: 0,
-            isTemplate: true
-        }
     }
 
     nextLevelExperience(level) {

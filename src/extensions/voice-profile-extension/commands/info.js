@@ -9,11 +9,9 @@ async function action(message) {
     }
 
     let voiceProfile = await show(member.guild.id, member.id);    
-    let textProfile = core.findTextProfile(member.id, member.guild.id);
-    let lang = core.getGuildLanguage(message.guild.id);
-    if (textProfile.isTemplate) {
-        textProfile = null;
-    }
+    // let textProfile = core.findTextProfile(member.id, member.guild.id);
+    let textProfile = voiceProfile.text;
+    let lang = core.getGuildLanguage(message.guild.id);    
 
     let title = __(
         { 
@@ -61,13 +59,6 @@ async function action(message) {
                 voicepoints: voiceProfile.voicepoints
             }
         );
-        // let stats =
-        // `Уровень ${voiceProfile.level} (${Math.floor(voiceProfile.experience)} XP)
-        // Прогресс до след. уровня: ${Math.floor(voiceProfile.experience/nextLevel*100)}%
-        // Времени затрачено: ${timeString}
-        // Voice Points: ${voiceProfile.voicepoints}
-        // `;
-        
         embed.addField(__({phrase: 'VOICE', locale: lang}), stats);
     } else {
         embed.addField(__({phrase: 'VOICE', locale: lang}), __('DATA_MISSING'));

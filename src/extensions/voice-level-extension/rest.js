@@ -33,6 +33,7 @@ exports.show = async (guild_id, user_id) => {
         }
     });    
     return {        
+        text: profile.text,
         user_id: profile.user_id,
         guild_id: profile.guild_id,
         pray: profile.pray ? profile.pray : {},
