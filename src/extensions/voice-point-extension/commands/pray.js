@@ -32,6 +32,9 @@ async function pray(message) {
                     message.channel.send('Знаешь я крайне польщена, что другой бог молится мне...');
                 }
             }
+
+            profile.pray.total++;
+
             // profile.voicepoints += (pray + profile.pray_streak*10);
             await update(profile);
 
