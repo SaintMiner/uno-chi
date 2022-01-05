@@ -64,19 +64,19 @@ exports.add = (guild_id, user_id, data) => {
 
 exports.levelTop = async (guild_id) => {
     let top = [];
-    top = await core.api.get(`/profile/${guild_id}/level-top`);
+    top = await core.api.get(`/profile/${guild_id}/top?by=levels`);
     return top.data ?? [];
 }
 
 exports.timeTop = async (guild_id) => {
     let top = [];
-    top = await core.api.get(`/profile/${guild_id}/time-top`);
+    top = await core.api.get(`/profile/${guild_id}/top?by=time`);
     return top.data ?? [];
 }
 
 exports.pointsTop = async (guild_id) => {
     let top = [];
-    top = await core.api.get(`/profile/${guild_id}/points-top`);
+    top = await core.api.get(`/profile/${guild_id}/top?by=points`);
     return top.data ?? [];
 }
 
